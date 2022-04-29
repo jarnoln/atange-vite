@@ -16,17 +16,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Collective } from '../types'
+import { useCollectiveStore } from '../stores/CollectiveStore'
 
-const collectiveList : Collective[] = []
-collectiveList.push({ name: 'jla', title: 'JLA'})
-collectiveList.push({ name: 'jsa', title: 'JSA'})
-collectiveList.push({ name: 'section8', title: 'Section 8'})
-const collectives = ref(collectiveList);
+const collectiveStore = useCollectiveStore()
 
+collectiveStore.addCollective({ name: 'jla', title: 'JLA'})
+collectiveStore.addCollective({ name: 'jsa', title: 'JSA'})
+collectiveStore.addCollective({ name: 'section8', title: 'Section 8'})
+
+const collectives = ref(collectiveStore.collectives)
 function deleteCollective(collective: Collective) {
-    const index = collectives.value.indexOf(collective)
-    if (index > -1) {
-        collectives.value.splice(index, 1)
-    }
+    collectiveStore.deleteCollective(collective)
 }
 </script>
