@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="table">
     <thead>
       <tr>
         <th>Collectives: {{ collectives.length }}</th>
