@@ -1,12 +1,10 @@
-<script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import CollectiveList from './components/CollectiveList.vue'
-</script>
-
 <template>
   <div class="container">
-    <CollectiveList />
+    <ul>
+      <li><router-link to="/">Home</router-link></li>
+      <li><router-link to="/hello">Hello</router-link></li>
+    </ul>
+    <router-view></router-view>
   </div>
 </template>
 

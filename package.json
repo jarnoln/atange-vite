@@ -12,7 +12,8 @@
   "dependencies": {
     "happy-dom": "^3.1.0",
     "pinia": "^2.0.13",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@pinia/testing": "^0.0.11",

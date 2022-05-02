@@ -7,7 +7,8 @@
     </thead>
     <tbody>
       <tr v-for="collective in collectives">
-        <td> {{ collective.title }} </td> <td> <button @click="deleteCollective(collective)">Delete {{ collective.title }}</button></td>
+        <td> {{ collective.title }} </td>
+        <td> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
       </tr>
     </tbody>
   </table>
