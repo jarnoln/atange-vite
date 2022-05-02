@@ -34,6 +34,11 @@ const count = ref(0)
 </template>
 
 <style scoped>
+body {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  text-align: center;
+}
+
 a {
   color: #42b983;
 }
