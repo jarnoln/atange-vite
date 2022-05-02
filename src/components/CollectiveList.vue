@@ -2,12 +2,12 @@
   <table>
     <thead>
       <tr>
-        <th>Collective</th>
+        <th>Collectives: {{ collectives.length }}</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="collective in collectives">
-        <td> {{ collective.title }} </td> <td> <button @click="deleteCollective(collective)">Delete</button></td>
+        <td> {{ collective.title }} </td> <td> <button @click="deleteCollective(collective)">Delete {{ collective.title }}</button></td>
       </tr>
     </tbody>
   </table>

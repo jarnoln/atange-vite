@@ -4,7 +4,7 @@ import { assert, describe, expect, test } from 'vitest'
 import HelloWorld from '../../src/components/HelloWorld.vue'
 
 
-test('increments value on click', async () => {
+test('increments count on click', async () => {
     // The render method returns a collection of utilities to query your component.
     const {getByText} = render(HelloWorld)
   
