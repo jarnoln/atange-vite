@@ -17,6 +17,11 @@
 </template>
 
 <style scoped>
+.container {
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
 #navbar {
   width: 100%;
   background-color: navy;
