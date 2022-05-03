@@ -7,7 +7,7 @@
     </thead>
     <tbody>
       <tr v-for="collective in collectives">
-        <td> {{ collective.title }} </td>
+        <td> <router-link :to="{ name: 'collective', params: { collectiveName: collective.name }}">{{ collective.title }}</router-link> </td>
         <td> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
       </tr>
     </tbody>
@@ -15,17 +15,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Collective } from '../types'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 
 const collectiveStore = useCollectiveStore()
-
-collectiveStore.addCollective({ name: 'jla', title: 'JLA'})
-collectiveStore.addCollective({ name: 'jsa', title: 'JSA'})
-collectiveStore.addCollective({ name: 'section8', title: 'Section 8'})
-
 const collectives = ref(collectiveStore.collectives)
+
+onMounted(() => {
+  collectiveStore.addExampleCollectives()
+})
+
 function deleteCollective(collective: Collective) {
     collectiveStore.deleteCollective(collective)
 }
