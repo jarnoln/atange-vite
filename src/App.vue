@@ -1,26 +1,50 @@
 <template>
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="active" to="/">Home</router-link>
-          </li>
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="active" to="/hello">Hello</router-link>
-          </li>
-        </ul>
-        <ul class="navbar-nav justify-content-end">
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="active" to="/login">Login</router-link>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <nav id="navbar">
+    <ul classid="right-links">
+      <li>
+        <router-link active-class="active" to="/">Home</router-link>
+      </li>
+    </ul>
+    <ul id="left-links">
+      <li>
+        <router-link active-class="active" to="/login">Login</router-link>
+      </li>
+    </ul>
   </nav>
-
   <div class="container">
     <router-view></router-view>
   </div>
 </template>
+
+<style scoped>
+#navbar {
+  width: 100%;
+  background-color: navy;
+  display: flex;
+  justify-content: space-between;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  padding-left: 1rem;
+}
+
+#left-links {
+  padding-right: 2rem;
+}
+
+a {
+  text-decoration: none;
+  color: grey;
+  padding: 1rem;
+}
+
+a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+a.active {
+  color: white;
+}
+</style>
