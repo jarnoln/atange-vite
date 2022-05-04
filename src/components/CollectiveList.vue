@@ -1,8 +1,8 @@
 <template>
-  <table class="table">
+  <table>
     <thead>
       <tr>
-        <th>Collectives: {{ collectives.length }}</th>
+        <th id="collective-count">Collectives: {{ collectives.length }}</th>
       </tr>
     </thead>
     <tbody>
