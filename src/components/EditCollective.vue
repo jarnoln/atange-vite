@@ -30,6 +30,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
+import { validateStringLongEnough } from '../utils/validators'
 
 const currentName = ref('')
 const currentTitle = ref('')
@@ -48,21 +49,13 @@ function submitForm() {
 
 function validateName() {
   console.log('validateName:', currentName.value)
-  if (currentName.value.length < 1) {
-    nameValidateError.value = 'Name needs to be at least 3 characters long'
-  } else {
-    nameValidateError.value = ''
-  }
+  nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
   isNameValidated.value = true
 }
 
 function validateTitle() {
   console.log('validateTitle:', currentTitle.value)
-  if (currentTitle.value.length < 1) {
-    titleValidateError.value = 'Title needs to be at least 3 characters long'
-  } else {
-    titleValidateError.value = ''
-  }
+  titleValidateError.value = validateStringLongEnough('Title', currentTitle.value, 3)
   isTitleValidated.value = true
 }
 
