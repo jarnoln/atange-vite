@@ -11,6 +11,9 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
             return (collectiveName: string) => {
                 state.collectives.find((collective) => collective.name === collectiveName)
             }
+        },
+        getCollectiveNames: (state) => {
+            return state.collectives.map(collective => collective.name)
         }
     },
     actions: {

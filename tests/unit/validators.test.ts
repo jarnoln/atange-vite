@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { validateStringLongEnough } from '../../src/utils/validators'
+import { validateStringLongEnough, validateStringNotDuplicate } from '../../src/utils/validators'
 
 
 describe('validateStringLongEnough()', () => {
@@ -34,5 +34,24 @@ describe('validateStringLongEnough()', () => {
         }
         expect(resultFn).toThrow(Error)
         expect(resultFn).toThrow(/minLength should be a positive number/)
+    })
+})
+
+describe('validateStringNotDuplicate()', () => {
+    it('should be invalid if string already in array', () => {
+        const inputValue: string = 'superman'
+        const userNames: string[] = ['batman', 'superman']
+
+        const result = validateStringNotDuplicate(inputValue, userNames)
+
+        expect(result).toBe('superman is already in use')
+    }),
+    it('should be valid if string not already in array', () => {
+        const inputValue: string = 'aquaman'
+        const userNames: string[] = ['batman', 'superman']
+
+        const result = validateStringNotDuplicate(inputValue, userNames)
+
+        expect(result).toBe('')
     })
 })

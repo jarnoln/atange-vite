@@ -7,3 +7,10 @@ export function validateStringLongEnough(inputName: string, inputValue: string, 
   }
   return ''
 }
+
+export function validateStringNotDuplicate(inputValue: string, previousInputs: string[]) {
+  if (previousInputs.indexOf(inputValue) === -1) {
+    return ''
+  }
+  return inputValue + ' is already in use'
+}

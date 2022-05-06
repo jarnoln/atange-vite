@@ -30,7 +30,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { validateStringLongEnough } from '../utils/validators'
+import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 
 const currentName = ref('')
 const currentTitle = ref('')
@@ -50,6 +50,12 @@ function submitForm() {
 function validateName() {
   console.log('validateName:', currentName.value)
   nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
+  if (nameValidateError.value === '') {
+    const collectiveNames = collectiveStore.collectives.map(collective => collective.name)
+    // const collectiveNames = collectiveStore.getCollectiveNames()
+    console.log('collectiveNames', collectiveNames)
+    nameValidateError.value = validateStringNotDuplicate(currentName.value, collectiveNames)
+  }
   isNameValidated.value = true
 }
 
