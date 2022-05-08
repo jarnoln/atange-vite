@@ -7,7 +7,8 @@ function storeCollectives(collectiveData: Collective[]) {
   collectiveData.forEach(item => {
     collectiveStore.addCollective({
         name: item.name,
-        title: item.title
+        title: item.title,
+        description: ''
     })
   })
 }

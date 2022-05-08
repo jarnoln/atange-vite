@@ -9,6 +9,9 @@
       <li>
         <router-link active-class="active" to="/login">Login</router-link>
       </li>
+      <li>
+        <router-link active-class="active" to="/register">Register</router-link>
+      </li>
     </ul>
   </nav>
   <div class="container">
