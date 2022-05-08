@@ -1,6 +1,8 @@
 import { assert, beforeEach, describe, expect, it, vi, vitest } from 'vitest'
-import { EventService, outerFetchCollectives } from '../../src/services/EventService.ts'
 import { createTestingPinia } from '@pinia/testing'
+import { EventService, fetchCollectives } from '../../src/services/EventService.ts'
+import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+
 const collectivesResponseData = [
   { name: 'jla', title: 'JLA'}
 ]
@@ -23,13 +25,17 @@ const testFetch = vi.fn((url, options) => {
 vi.stubGlobal('fetch', testFetch)
 
 createTestingPinia({
-  createSpy: vitest.fn,
+  createSpy: vitest.fn
+  // stubActions: false
 })
 
 describe('Test EventService:fetchCollectives', () => {
     it('calls fetch with proper URL', () => {
         console.log('EventService:', EventService)
-        outerFetchCollectives()
+        const store = useCollectiveStore()
+        expect(store.selectedCollective).toBe(undefined)
+        expect(store.collectives.length).toBe(0)
+        fetchCollectives()
         expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
     })
 })

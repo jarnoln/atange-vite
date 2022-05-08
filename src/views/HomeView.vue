@@ -5,16 +5,16 @@
   <router-link :to="{ name: 'create-collective' }">Create new collective</router-link>
   </p>
   <p>
-    <button @click="fetchCollectives()">Fetch collectives</button>
+    <button @click="fetchCollectivesClicked()">Fetch collectives</button>
   </p>
 </template>
 
 <script setup lang="ts">
 import CollectiveList from '../components/CollectiveList.vue'
-import EventService from '../services/EventService'
+import { fetchCollectives } from '../services/EventService'
 
 
-function fetchCollectives() {
-  EventService.fetchCollectives()
+function fetchCollectivesClicked() {
+  fetchCollectives()
 }
 </script>
