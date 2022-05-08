@@ -23,3 +23,19 @@ export function fetchCollectives() {
       .then(response => response.json())
       .then(data => storeCollectives(data))
 }
+
+export function createCollective(collective: Collective) {
+  const server: string = 'http://127.0.0.1:8000'
+  const path: string = '/api/collective/' + collective.name + '/'
+  const url = server + path
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(collective)
+  }
+  fetch(url, options)
+    .then(response => response.json())
+    .then(data => console.log(data))
+}
