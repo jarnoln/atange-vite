@@ -31,6 +31,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
+import { createCollective } from '../services/EventService'
 
 const currentName = ref('')
 const currentTitle = ref('')
@@ -43,7 +44,8 @@ const router = useRouter()
 
 function submitForm() {
   console.log('Tadaa!', currentName.value, currentTitle.value)
-  collectiveStore.addCollective({ name: currentName.value, title: currentTitle.value })
+  collectiveStore.addCollective({ name: currentName.value, title: currentTitle.value, description: '' })
+  createCollective({ name: currentName.value, title: currentTitle.value, description: '' })
   router.push({ name: 'collective', params: { collectiveName: currentName.value }})
 }
 

@@ -28,12 +28,18 @@ export function createCollective(collective: Collective) {
   const server: string = 'http://127.0.0.1:8000'
   const path: string = '/api/collective/' + collective.name + '/'
   const url = server + path
+  const dataOut = {
+    name: collective.name,
+    title: collective.title,
+    description: collective.description,
+    is_visible: true,
+  }
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(collective)
+    body: JSON.stringify(dataOut)
   }
   fetch(url, options)
     .then(response => response.json())
