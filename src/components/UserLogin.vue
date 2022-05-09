@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { login, register } from '../services/EventService'

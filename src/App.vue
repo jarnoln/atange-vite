@@ -14,17 +14,36 @@
       </li>
     </ul>
   </nav>
+  <div id="notifications" :class="notificationsClasses">
+    {{ getNotification() }}
+  </div>
   <div class="container">
     <router-view></router-view>
   </div>
 </template>
 
-<style scoped>
-.container {
-  margin-left: 4rem;
-  margin-right: 4rem;
-}
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useSessionStore } from './stores/SessionStore';
 
+const sessionStore = useSessionStore()
+const notificationsClasses = ref(['invisible'])
+
+function getNotification() {
+  if (sessionStore.registerInProgress) {
+    notificationsClasses.value = ['green']
+    return 'Registering...'
+  }
+  if (sessionStore.loginInProgress) {
+    notificationsClasses.value = ['green']
+    return 'Logging in...'
+  }
+  notificationsClasses.value = ['invisible']
+  return 'Placeholder'
+}
+</script>
+
+<style scoped>
 #navbar {
   width: 100%;
   background-color: navy;
@@ -54,5 +73,23 @@ a:hover {
 
 a.active {
   color: white;
+}
+
+.container {
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
+#notifications {
+  padding: 5px;
+}
+
+#notifications.green {
+  color: #003300;
+  background-color: #bbffbb;
+}
+#notifications.invisible {
+  color: rgba(0, 0, 0, 0);
+  background-color:rgba(0, 0, 0, 0);
 }
 </style>

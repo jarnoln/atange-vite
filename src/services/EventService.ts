@@ -80,7 +80,12 @@ export function login(username: string, password: string) {
     body: JSON.stringify(dataOut)
   }
   fetch(url, options)
-    .then(response => response.json())
+    .then(response => {
+      console.log(response.status)
+      if (response.status === 200) {
+        return response.json()
+      }
+    })
     .then(data => {
       console.log(data)
       const token = data['auth_token']
