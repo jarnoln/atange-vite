@@ -1,6 +1,9 @@
 import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useSessionStore } from '../stores/SessionStore'
 import { Collective } from '../types'
 
+
+const server: string = 'http://127.0.0.1:8000'
 
 function storeCollectives(collectiveData: Collective[]) {
   const collectiveStore = useCollectiveStore()
@@ -17,7 +20,6 @@ function storeCollectives(collectiveData: Collective[]) {
 // so moved functionality out here so that can test until can
 // figure out way to test method
 export function fetchCollectives() {
-  const server: string = 'http://127.0.0.1:8000'
   const path: string = '/api/collectives/'
   const url = server + path
   fetch(url)
@@ -26,7 +28,6 @@ export function fetchCollectives() {
 }
 
 export function createCollective(collective: Collective) {
-  const server: string = 'http://127.0.0.1:8000'
   const path: string = '/api/collective/' + collective.name + '/'
   const url = server + path
   const dataOut = {
@@ -45,4 +46,45 @@ export function createCollective(collective: Collective) {
   fetch(url, options)
     .then(response => response.json())
     .then(data => console.log(data))
+}
+
+export function register(username: string, password: string) {
+  const url = server + '/auth/users/'
+  const dataOut = {
+    username: username,
+    password: password
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataOut)
+  }
+  fetch(url, options)
+    .then(response => response.json())
+    .then(data => console.log(data))
+}
+
+export function login(username: string, password: string) {
+  const url = server + '/auth/token/login/'
+  const dataOut = {
+    username: username,
+    password: password
+  }
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataOut)
+  }
+  fetch(url, options)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      const token = data['auth_token']
+      const sessionStore = useSessionStore()
+      sessionStore.login(username, token)
+    })
 }

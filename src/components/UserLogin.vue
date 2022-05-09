@@ -23,7 +23,7 @@
       />
       <p v-if="passwordValidateError">{{ passwordValidateError }}</p>
     </div>
-    <button :disabled="!isFormValid()">Register</button>
+    <button :disabled="!isFormValid()" style="text-transform: capitalize">{{ getTitle() }}</button>
   </form>
 </template>
 
@@ -32,7 +32,7 @@ import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
-// import { registerUser } from '../services/EventService'
+import { login, register } from '../services/EventService'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
@@ -51,10 +51,10 @@ function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
       sessionStore.registerInProgress = true
-     // register
+      register(currentUsername.value, currentPassword.value)
   } else {
       sessionStore.loginInProgress = true
-      // login
+      login(currentUsername.value, currentPassword.value)
   }
   // router.push({ name: 'collective', params: { collectiveName: currentName.value }})
 }

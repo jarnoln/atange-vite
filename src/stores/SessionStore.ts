@@ -1,4 +1,3 @@
-import { userInfo } from 'os'
 import { defineStore } from 'pinia'
 
 export const useSessionStore = defineStore('SessionStore', {
@@ -9,14 +8,16 @@ export const useSessionStore = defineStore('SessionStore', {
         registerInProgress: false   // True when register information sent to server but reply not received yet
     }),
     getters: {
-        isLogged: (state) => {
+        isLoggedIn: (state) => {
             return ((state.username.length > 0) && (state.token.length > 0))
         }
     },
     actions: {
         login(username: string, token: string) {
+            console.log('SessionStore: login(', username, token, ')')
             this.username = username
             this.token = token
+            this.loginInProgress = false
         }
     }
 })
