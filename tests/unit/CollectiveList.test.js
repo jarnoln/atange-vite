@@ -1,9 +1,17 @@
 import { nextTick } from 'vue'
 import { render, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
-import { assert, beforeEach, describe, expect, test, vitest } from 'vitest'
+import { beforeEach, describe, expect, test, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
+import { createRouter, createWebHistory } from 'vue-router'
+import { routes } from '../../src/routes'
 import CollectiveList from '../../src/components/CollectiveList.vue'
+
+
+const router = createRouter({
+    history: createWebHistory(), // Use browser built-in history
+    routes: routes
+})
 
 
 describe('Test CollectiveList', () => {
@@ -20,7 +28,12 @@ describe('Test CollectiveList', () => {
 
     test('test using testing library', async () => {
         // The render method returns a collection of utilities to query your component.
-        const { getByText } = render(CollectiveList)
+        const { getByText } = render(CollectiveList,
+            {
+                global: {
+                    plugins: [router]
+                }
+            })
         // getByText returns the first matching node for the provided text, and
         // throws an error if no elements match or if more than one match is found.
         getByText('Collectives: 0')
@@ -42,7 +55,12 @@ describe('Test CollectiveList', () => {
     })
 
     test('test using test utils', async () => {
-        const wrapper = mount(CollectiveList)
+        const wrapper = mount(CollectiveList, {
+            global: {
+                plugins: [router]
+            }
+
+        })
         expect(wrapper.text()).toContain('Collectives: 0')
         const collectiveCountText = wrapper.get('#collective-count')
         expect(collectiveCountText.text()).toEqual('Collectives: 0')
