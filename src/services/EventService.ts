@@ -61,9 +61,30 @@ export function register(username: string, password: string) {
     },
     body: JSON.stringify(dataOut)
   }
+  const sessionStore = useSessionStore()
   fetch(url, options)
-    .then(response => response.json())
-    .then(data => console.log(data))
+    .then(response => {
+      console.log(response.status)
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        console.log('Failed to register. Server returned status code:', response.status)
+        sessionStore.registerInProgress = false
+      }
+      response.json()
+    })
+    .then(data => {
+      sessionStore.registerInProgress = false
+      console.log(data)
+      if (data.username === username) {
+        console.log('New user registered:', data.username)
+      }
+    })
+    .catch(error => {
+      console.log('Something went wrong when tryin to register user:', username)
+      console.log(error)
+      sessionStore.registerInProgress = false
+    })
 }
 
 export function login(username: string, password: string) {
@@ -79,17 +100,25 @@ export function login(username: string, password: string) {
     },
     body: JSON.stringify(dataOut)
   }
+  const sessionStore = useSessionStore()
   fetch(url, options)
     .then(response => {
       console.log(response.status)
       if (response.status === 200) {
         return response.json()
+      } else {
+        console.log('Failed to log in. Server returned status code:', response.status)
+        sessionStore.login('', '')
       }
     })
     .then(data => {
       console.log(data)
       const token = data['auth_token']
-      const sessionStore = useSessionStore()
       sessionStore.login(username, token)
+    })
+    .catch(error => {
+      console.log('Something went wrong when tryin to log in')
+      console.log(error)
+      sessionStore.login('', '')
     })
 }
