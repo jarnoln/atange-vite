@@ -22,7 +22,7 @@
       />
       <p v-if="titleValidateError">{{ titleValidateError }}</p>
     </div>
-    <button :disabled="!isFormValid()">Create</button>
+    <button id="collective-create-button" :disabled="!isFormValid()">Create</button>
   </form>
 </template>
 
