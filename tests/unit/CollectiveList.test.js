@@ -2,6 +2,7 @@ import { nextTick } from 'vue'
 import { render, fireEvent } from '@testing-library/vue'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, test, vitest } from 'vitest'
+import { setActivePinia, createPinia } from 'pinia'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
@@ -13,17 +14,12 @@ const router = createRouter({
     routes: routes
 })
 
+const pinia = createPinia()
+setActivePinia(pinia)
+
 
 describe('Test CollectiveList', () => {
     beforeEach(() => {
-        createTestingPinia({
-            createSpy: vitest.fn,
-            /* intitalState: {
-                collectives: [
-                    { name: 'jla', title: 'JLA' }
-                ]
-            } */
-        })
     })
 
     test('test using testing library', async () => {
@@ -31,12 +27,13 @@ describe('Test CollectiveList', () => {
         const { getByText } = render(CollectiveList,
             {
                 global: {
-                    plugins: [router]
+                    plugins: [router, pinia]
                 }
             })
         // getByText returns the first matching node for the provided text, and
         // throws an error if no elements match or if more than one match is found.
         getByText('Collectives: 0')
+        await nextTick()
         await nextTick()
         getByText('Collectives: 3')
         const button1 = getByText('Delete JSA')
@@ -57,7 +54,7 @@ describe('Test CollectiveList', () => {
     test('test using test utils', async () => {
         const wrapper = mount(CollectiveList, {
             global: {
-                plugins: [router]
+                plugins: [router, pinia]
             }
 
         })

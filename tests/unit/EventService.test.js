@@ -31,7 +31,7 @@ createTestingPinia({
 
 describe('Test EventService:fetchCollectives', () => {
     it('calls fetch with proper URL', () => {
-        console.log('EventService:', EventService)
+        // console.log('EventService:', EventService)
         const store = useCollectiveStore()
         expect(store.selectedCollective).toBe(undefined)
         expect(store.collectives.length).toBe(0)
