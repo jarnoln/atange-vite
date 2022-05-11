@@ -9,5 +9,5 @@ export const routes: Array<RouteRecordRaw> = [
   { path: '/login', name: 'login', component: UserLogin },
   { path: '/register', name: 'register', component: UserLogin },
   { path: '/new', name: 'create-collective', component: EditCollective },
-  { path: '/c/:collectiveName', name: 'collective', component: CollectiveView }
+  { path: '/c/:collectiveName', name: 'collective', component: CollectiveView, props: true }
 ]
