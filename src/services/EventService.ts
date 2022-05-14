@@ -7,11 +7,12 @@ const server: string = 'http://127.0.0.1:8000'
 
 function storeCollectives(collectiveData: Collective[]) {
   const collectiveStore = useCollectiveStore()
+  console.log('Fetched collectives: ', collectiveData.length)
   collectiveData.forEach(item => {
     collectiveStore.addCollective({
-        name: item.name,
-        title: item.title,
-        description: ''
+      name: item.name,
+      title: item.title,
+      description: ''
     })
   })
 }
@@ -48,6 +49,32 @@ export function createCollective(collective: Collective) {
   fetch(url, options)
     .then(response => response.json())
     .then(data => console.log(data))
+}
+
+export function serverDeleteCollective(collective: Collective) {
+  const sessionStore = useSessionStore()
+  const path: string = '/api/collective/' + collective.name + '/'
+  const url = server + path
+  const dataOut = {}
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Token ' + sessionStore.token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataOut)
+  }
+  fetch(url, options)
+    .then(response => {
+      console.log(response.status)
+      if (response.status === 204) {
+        console.log('Collective', collective.name,'deleted from server')
+      }
+    })
+    .catch(error => {
+      console.log('Failed to delete collective:', collective.name)
+      console.log(error)
+    })
 }
 
 export function register(username: string, password: string) {

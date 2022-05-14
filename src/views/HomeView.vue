@@ -1,7 +1,7 @@
 <template>
   <h1>Home</h1>
   <CollectiveList />
-  <p>
+  <p v-if="isLoggedIn">
   <router-link :to="{ name: 'create-collective' }">Create new collective</router-link>
   </p>
   <p>
@@ -10,9 +10,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import CollectiveList from '../components/CollectiveList.vue'
 import { fetchCollectives } from '../services/EventService'
+import { useSessionStore } from '../stores/SessionStore';
 
+const sessionStore = useSessionStore()
+const isLoggedIn = ref(sessionStore.isLoggedIn)
 
 function fetchCollectivesClicked() {
   fetchCollectives()

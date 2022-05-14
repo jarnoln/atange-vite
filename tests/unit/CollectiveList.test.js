@@ -34,9 +34,8 @@ describe('Test CollectiveList', () => {
         // throws an error if no elements match or if more than one match is found.
         getByText('Collectives: 0')
         await nextTick()
-        await nextTick()
         getByText('Collectives: 3')
-        const button1 = getByText('Delete JSA')
+        /* const button1 = getByText('Delete JSA')
         const button2 = getByText('Delete JLA')
         const button3 = getByText('Delete Section 8')
 
@@ -48,7 +47,7 @@ describe('Test CollectiveList', () => {
         getByText('Collectives: 1')
 
         await fireEvent.click(button3)
-        getByText('Collectives: 0')
+        getByText('Collectives: 0') */
     })
 
     test('test using test utils', async () => {
@@ -56,12 +55,9 @@ describe('Test CollectiveList', () => {
             global: {
                 plugins: [router, pinia]
             }
-
         })
-        expect(wrapper.text()).toContain('Collectives: 0')
+        expect(wrapper.text()).toContain('Collectives: 3')
         const collectiveCountText = wrapper.get('#collective-count')
-        expect(collectiveCountText.text()).toEqual('Collectives: 0')
-        await nextTick()
         expect(collectiveCountText.text()).toEqual('Collectives: 3')
     })
 })
