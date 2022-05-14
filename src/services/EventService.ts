@@ -28,6 +28,7 @@ export function fetchCollectives() {
 }
 
 export function createCollective(collective: Collective) {
+  const sessionStore = useSessionStore()
   const path: string = '/api/collective/' + collective.name + '/'
   const url = server + path
   const dataOut = {
@@ -39,6 +40,7 @@ export function createCollective(collective: Collective) {
   const options = {
     method: 'POST',
     headers: {
+      'Authorization': 'Token ' + sessionStore.token,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(dataOut)
