@@ -43,7 +43,7 @@ const collectiveStore = useCollectiveStore()
 const router = useRouter()
 
 function submitForm() {
-  console.log('Tadaa!', currentName.value, currentTitle.value)
+  // console.log('Tadaa!', currentName.value, currentTitle.value)
   collectiveStore.addCollective({ name: currentName.value, title: currentTitle.value, description: '' })
   createCollective({ name: currentName.value, title: currentTitle.value, description: '' })
   router.push({ name: 'collective', params: { collectiveName: currentName.value }})
@@ -62,7 +62,7 @@ function validateName() {
 }
 
 function validateTitle() {
-  console.log('validateTitle:', currentTitle.value)
+  // console.log('validateTitle:', currentTitle.value)
   titleValidateError.value = validateStringLongEnough('Title', currentTitle.value, 3)
   isTitleValidated.value = true
 }
