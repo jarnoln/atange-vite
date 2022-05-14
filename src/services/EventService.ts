@@ -151,3 +151,30 @@ export function login(username: string, password: string) {
       sessionStore.login('', '')
     })
 }
+
+export function serverLogout() {
+  const sessionStore = useSessionStore()
+  const url = server + '/auth/token/logout/'
+  const dataOut = {}
+  const options = {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Token ' + sessionStore.token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dataOut)
+  }
+  fetch(url, options)
+    .then(response => {
+      console.log(response.status)
+      if (response.status === 204) {
+        console.log('Logged out')
+      } else {
+        console.log('Failed to log out. Server returned status code:', response.status)
+      }
+    })
+    .catch(error => {
+      console.log('Something went wrong when tryin to log out')
+      console.log(error)
+    })
+}

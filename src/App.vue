@@ -6,11 +6,17 @@
       </li>
     </ul>
     <ul id="left-links">
-      <li>
+      <li v-if="!isLoggedIn()">
         <router-link active-class="active" to="/login">Login</router-link>
       </li>
-      <li>
+      <li v-if="!isLoggedIn()">
         <router-link active-class="active" to="/register">Register</router-link>
+      </li>
+      <li v-if="isLoggedIn()">
+        <a href="#">{{ getUsername() }}</a>
+      </li>
+      <li v-if="isLoggedIn()">
+        <a href="#" @click="logout()">Logout</a>
       </li>
     </ul>
   </nav>
@@ -24,11 +30,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useSessionStore } from './stores/SessionStore';
+import { useSessionStore } from './stores/SessionStore'
+import { serverLogout } from './services/EventService'
 
 const sessionStore = useSessionStore()
 const notificationsClasses = ref(['invisible'])
 
+function isLoggedIn() {
+  return sessionStore.isLoggedIn
+}
+
+function getUsername() {
+  return sessionStore.username
+}
 function getNotification() {
   if (sessionStore.registerInProgress) {
     notificationsClasses.value = ['green']
@@ -40,6 +54,11 @@ function getNotification() {
   }
   notificationsClasses.value = ['invisible']
   return 'Placeholder'
+}
+
+function logout() {
+  serverLogout()
+  sessionStore.logout()
 }
 </script>
 
