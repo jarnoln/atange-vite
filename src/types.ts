@@ -3,3 +3,9 @@ export interface Collective {
     title: string
     description: string
 }
+
+export interface Notification {
+    id: string,
+    message: string
+    class: string
+}

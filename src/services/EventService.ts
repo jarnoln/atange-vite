@@ -1,5 +1,6 @@
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useSessionStore } from '../stores/SessionStore'
+import { useNotificationStore } from '../stores/NotificationStore'
 import { Collective } from '../types'
 
 
@@ -17,7 +18,7 @@ function storeCollectives(collectiveData: Collective[]) {
   })
 }
 
-// For some reason unit teste were not able to call fetchCollectives
+// For some reason unit tests were not able to call fetchCollectives
 // so moved functionality out here so that can test until can
 // figure out way to test method
 export function fetchCollectives() {
@@ -91,28 +92,31 @@ export function register(username: string, password: string) {
     body: JSON.stringify(dataOut)
   }
   const sessionStore = useSessionStore()
+  const notificationStore = useNotificationStore()
+  notificationStore.notifyRegisteringOn()
+
   fetch(url, options)
     .then(response => {
       console.log(response.status)
       if (response.status === 200) {
         return response.json()
       } else {
-        console.log('Failed to register. Server returned status code:', response.status)
-        sessionStore.registerInProgress = false
+        notificationStore.notifyRegisteringOff()
+        notificationStore.notifyError('Failed to register. Server returned status code:' + response.status)
       }
       response.json()
     })
     .then(data => {
-      sessionStore.registerInProgress = false
       console.log(data)
       if (data.username === username) {
+        notificationStore.notifyRegisteringOff()
         console.log('New user registered:', data.username)
       }
     })
     .catch(error => {
-      console.log('Something went wrong when tryin to register user:', username)
+      notificationStore.notifyRegisteringOff()
+      notificationStore.notifyError('Something went wrong when tryin to register user:' + username)
       console.log(error)
-      sessionStore.registerInProgress = false
     })
 }
 
@@ -130,13 +134,16 @@ export function login(username: string, password: string) {
     body: JSON.stringify(dataOut)
   }
   const sessionStore = useSessionStore()
+  const notificationStore = useNotificationStore()
+  notificationStore.notifyLoggingInOn()
   fetch(url, options)
     .then(response => {
       console.log(response.status)
       if (response.status === 200) {
         return response.json()
       } else {
-        console.log('Failed to log in. Server returned status code:', response.status)
+        notificationStore.notifyLoggingInOff()
+        notificationStore.notifyError('Failed to log in. Server returned status code:' + response.status)
         sessionStore.login('', '')
       }
     })
@@ -144,9 +151,11 @@ export function login(username: string, password: string) {
       console.log(data)
       const token = data['auth_token']
       sessionStore.login(username, token)
+      notificationStore.notifyLoggingInOff()
     })
     .catch(error => {
-      console.log('Something went wrong when tryin to log in')
+      notificationStore.notifyLoggingInOff()
+      notificationStore.notifyError('Something went wrong when tryin to log in')
       console.log(error)
       sessionStore.login('', '')
     })

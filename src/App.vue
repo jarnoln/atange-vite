@@ -20,8 +20,8 @@
       </li>
     </ul>
   </nav>
-  <div id="notifications" :class="notificationsClasses">
-    {{ getNotification() }}
+  <div id="notifications" :class="getNotificationClass()">
+    {{ getNotificationMessage() }}
   </div>
   <div class="container">
     <router-view></router-view>
@@ -30,11 +30,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useSessionStore } from './stores/SessionStore'
-import { serverLogout } from './services/EventService'
+import { useSessionStore } from './stores/SessionStore';
+import { useNotificationStore } from './stores/NotificationStore';
+import { serverLogout } from './services/EventService';
 
 const sessionStore = useSessionStore()
-const notificationsClasses = ref(['invisible'])
+const notificationStore = useNotificationStore()
 
 function isLoggedIn() {
   return sessionStore.isLoggedIn
@@ -43,22 +44,26 @@ function isLoggedIn() {
 function getUsername() {
   return sessionStore.username
 }
-function getNotification() {
-  if (sessionStore.registerInProgress) {
-    notificationsClasses.value = ['green']
-    return 'Registering...'
-  }
-  if (sessionStore.loginInProgress) {
-    notificationsClasses.value = ['green']
-    return 'Logging in...'
-  }
-  notificationsClasses.value = ['invisible']
-  return 'Placeholder'
-}
 
 function logout() {
   serverLogout()
   sessionStore.logout()
+}
+
+function getNotificationMessage() {
+  if (notificationStore.notifications.length === 0) {
+    return 'Placeholder'
+  } else {
+    return notificationStore.notifications[0].message
+  }
+}
+
+function getNotificationClass() {
+  if (notificationStore.notifications.length === 0) {
+    return 'invisible'
+  } else {
+    return notificationStore.notifications[0].class
+  }
 }
 </script>
 
@@ -103,10 +108,20 @@ a.active {
   padding: 5px;
 }
 
-#notifications.green {
+#notifications.info {
+  color: #000033;
+  background-color: #bbbbff;
+}
+#notifications.success {
   color: #003300;
   background-color: #bbffbb;
 }
+
+#notifications.error {
+  color: #330000;
+  background-color: #f55;
+}
+
 #notifications.invisible {
   color: rgba(0, 0, 0, 0);
   background-color:rgba(0, 0, 0, 0);

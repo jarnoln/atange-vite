@@ -30,8 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useSessionStore } from '../stores/SessionStore'
-import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
+import { validateStringLongEnough } from '../utils/validators'
 import { login, register } from '../services/EventService'
 
 const currentUsername = ref('')
@@ -40,7 +39,6 @@ const usernameValidateError = ref('')
 const passwordValidateError = ref('')
 const isUsernameValidated = ref(false)
 const isPasswordValidated = ref(false)
-const sessionStore = useSessionStore()
 const route = useRoute()
 
 function getTitle() {
@@ -50,10 +48,8 @@ function getTitle() {
 function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
-      sessionStore.registerInProgress = true
       register(currentUsername.value, currentPassword.value)
   } else {
-      sessionStore.loginInProgress = true
       login(currentUsername.value, currentPassword.value)
   }
   // router.push({ name: 'collective', params: { collectiveName: currentName.value }})

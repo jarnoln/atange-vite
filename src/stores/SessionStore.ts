@@ -3,9 +3,7 @@ import { defineStore } from 'pinia'
 export const useSessionStore = defineStore('SessionStore', {
   state: () => ({
     username: '',
-    token: '',
-    loginInProgress: false,  // True when login information sent to server but reply not received yet
-    registerInProgress: false   // True when register information sent to server but reply not received yet
+    token: ''
   }),
   getters: {
     isLoggedIn: (state) => {
@@ -17,7 +15,6 @@ export const useSessionStore = defineStore('SessionStore', {
       console.log('SessionStore: login(', username, token, ')')
       this.username = username
       this.token = token
-      this.loginInProgress = false
     },
     logout() {
       this.username = ''
