@@ -31,7 +31,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { validateStringLongEnough } from '../utils/validators'
-import { login, register } from '../services/EventService'
+import { EventService } from '../services/EventService'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
@@ -48,9 +48,9 @@ function getTitle() {
 function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
-      register(currentUsername.value, currentPassword.value)
+      EventService.register(currentUsername.value, currentPassword.value)
   } else {
-      login(currentUsername.value, currentPassword.value)
+      EventService.login(currentUsername.value, currentPassword.value)
   }
   // router.push({ name: 'collective', params: { collectiveName: currentName.value }})
 }

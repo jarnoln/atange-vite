@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { useSessionStore } from '../stores/SessionStore'
-import { serverLogout } from '../services/EventService'
+import { EventService } from '../services/EventService'
 
 const sessionStore = useSessionStore()
 
@@ -37,7 +37,7 @@ function getUsername() {
 }
 
 function logout() {
-  serverLogout()
+  EventService.logout()
   sessionStore.logout()
 }
 </script>

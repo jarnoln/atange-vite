@@ -18,7 +18,7 @@
 import { onMounted, ref } from 'vue'
 import { Collective } from '../types'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { serverDeleteCollective } from '../services/EventService';
+import { EventService } from '../services/EventService';
 import { useSessionStore } from '../stores/SessionStore';
 
 const collectiveStore = useCollectiveStore()
@@ -32,6 +32,6 @@ onMounted(() => {
 
 function deleteCollective(collective: Collective) {
     collectiveStore.deleteCollective(collective)
-    serverDeleteCollective(collective)
+    EventService.deleteCollective(collective)
 }
 </script>
