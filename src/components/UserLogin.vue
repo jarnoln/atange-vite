@@ -23,7 +23,7 @@
       />
       <p v-if="passwordValidateError">{{ passwordValidateError }}</p>
     </div>
-    <button :disabled="!isFormValid()" style="text-transform: capitalize">{{ getTitle() }}</button>
+    <button id="submit-button" :disabled="!isFormValid()" style="text-transform: capitalize">{{ getTitle() }}</button>
   </form>
 </template>
 
