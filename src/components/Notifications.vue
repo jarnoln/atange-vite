@@ -13,7 +13,7 @@ function getNotificationMessage() {
   if (notificationStore.notifications.length === 0) {
     return 'Placeholder'
   } else {
-    return notificationStore.notifications[0].message
+    return notificationStore.latestNotification.message
   }
 }
 
@@ -21,7 +21,7 @@ function getNotificationClass() {
   if (notificationStore.notifications.length === 0) {
     return 'invisible'
   } else {
-    return notificationStore.notifications[0].class
+    return notificationStore.latestNotification.class
   }
 }
 </script>
