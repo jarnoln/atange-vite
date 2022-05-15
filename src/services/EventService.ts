@@ -50,6 +50,7 @@ export const EventService = {
 
     apiClient.post('/auth/token/login/', dataOut)
     .then(response => {
+      console.log(response)
       const token = response.data['auth_token']
       sessionStore.login(username, token)
       notificationStore.notifyLoggingInOff()

@@ -3,52 +3,6 @@ import { createTestingPinia } from '@pinia/testing'
 import { EventService } from '../../src/services/EventService.ts'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 
-const collectivesResponseData = [
-  { name: 'jla', title: 'JLA'}
-]
-
-/// Replace global fetch with mock version which returns some collective data
-const testFetch = vi.fn((url, options) => {
-  return new Promise((resolve, reject) => {
-    if (url.includes('/api/collectives/')) {
-      resolve({
-        ok: true,
-        json() {
-          return new Promise((resolve, reject) => {
-              resolve(collectivesResponseData)
-          })
-        }
-      })
-    } else if (url.includes('/api/collective/jla/')) {
-      resolve({
-        status: 200,
-        json() {
-          return new Promise((resolve, reject) => {
-              resolve({})
-          })
-        }
-      })
-    } else if (url.includes('/auth/')) {
-      resolve({
-        status: 200,
-        json() {
-          return new Promise((resolve, reject) => {
-              resolve({
-                auth_token: 'abcd'
-              })
-          })
-        }
-      })
-    } else {
-      resolve({
-        status: 500
-      })
-    }
-  })
-})
-
-vi.stubGlobal('fetch', testFetch)
-
 
 vi.mock('axios', () => {
   return {
@@ -56,18 +10,28 @@ vi.mock('axios', () => {
       create(options) {
         return {
           get: (url) => {
+            let dataOut = {}
+            if (url === '/api/collectives/') {
+              dataOut = [{ name: 'jla', title: 'JLA', description: '' }]
+            }
             return new Promise((resolve, reject) => {
               resolve({
                 status: 200,
-                data: collectivesResponseData
+                data: dataOut
               })
             })
           },
           post: (url, data) => {
+            let status = 201
+            let dataOut = {}
+            if (url === '/auth/token/login/') {
+              dataOut = { auth_token: 'abcd' }
+              status = 200
+            }
             return new Promise((resolve, reject) => {
               resolve({
-                status: 201,
-                data: []
+                status: status,
+                data: dataOut
               })
             })
           },
