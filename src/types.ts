@@ -8,4 +8,8 @@ export interface Notification {
     id: string,
     message: string
     class: string
+    details: string
+    needAck: boolean
+    ack: boolean
+    delay: number
 }

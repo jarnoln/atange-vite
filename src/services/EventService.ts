@@ -1,8 +1,8 @@
 import axios from 'axios'
 
-import { useCollectiveStore } from '../stores/CollectiveStore'
-import { useSessionStore } from '../stores/SessionStore'
-import { useNotificationStore } from '../stores/NotificationStore'
+import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useSessionStore } from '../stores/SessionStore'
+import { useNotificationStore } from '../stores/NotificationStore'
 import { Collective } from '../types'
 
 
@@ -71,7 +71,6 @@ export const EventService = {
     const notificationStore = useNotificationStore()
     notificationStore.notifyRegisteringOn()
 
-    // const url = server + '/auth/users/'
     const dataOut = {
       username: username,
       password: password
@@ -107,18 +106,20 @@ export const EventService = {
   logout: () => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
-    const dataOut = {}
     const config = {
       headers: {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    apiClient.post('/auth/token/logout/', dataOut, config)
+    notificationStore.notifyWaitOn('logging_out', 'Logging out')
+    apiClient.post('/auth/token/logout/', {}, config)
     .then(response => {
+      notificationStore.notifyWaitOff('logging_out')
       console.log('Logged out')
       console.log(response)
     })
     .catch(error => {
+      notificationStore.notifyWaitOff('logging_out')
       const message = 'Failed to log out. '
       if (error.response) {
         console.log('error.response.data:', error.response.data)
@@ -143,8 +144,10 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
+    notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + collective.title)
     apiClient.post(path, dataOut, config)
     .then(response => {
+      notificationStore.notifyWaitOff('creating_collective')
       console.log('Collective', collective.name, 'created')
       console.log(response)
       if (response.status != 201) {
@@ -152,6 +155,7 @@ export const EventService = {
       }
     })
     .catch(error => {
+      notificationStore.notifyWaitOff('creating_collective')
       const message = 'Failed to create collective: ' + collective.name + '. '
       if (error.response) {
         console.log('error.response.data:', error.response.data)
@@ -170,8 +174,10 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
+    notificationStore.notifyWaitOn('deleting_collective', 'Deleting collective ' + collective.title)
     apiClient.delete(path, config)
     .then(response => {
+      notificationStore.notifyWaitOff('deleting_collective')
       console.log('Collective', collective.name, 'deleted')
       console.log(response)
       if (response.status != 204) {
@@ -179,6 +185,7 @@ export const EventService = {
       }
     })
     .catch(error => {
+      notificationStore.notifyWaitOff('deleting_collective')
       const message = 'Failed to delete collective: ' + collective.name + '. '
       if (error.response) {
         console.log('error.response.data:', error.response.data)
