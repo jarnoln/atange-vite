@@ -15,14 +15,16 @@ export const useNotificationStore = defineStore('NotificationStore', {
           class: '',
           details: '',
           needAck: false,
-          ack: false,
-          delay: 0
+          ack: false
         }
       }
       return this.notifications[count -1]
     }
   },
   actions: {
+    removeNotification(id: string) {
+      this.notifications = this.notifications.filter(notification => notification.id != id)
+    },
     notifyWaitOn(id: string, message: string) {
       // Notifications shown when user needs to wait for some operation to finish (usually connecting to backend)
       // These will be automatically removed when operation is finished
@@ -33,13 +35,11 @@ export const useNotificationStore = defineStore('NotificationStore', {
         class: 'info',
         details: '',
         needAck: false,
-        ack: false,
-        delay: 0
+        ack: false
       })
     },
     notifyWaitOff(id: string) {
-      // Remove notification
-      this.notifications = this.notifications.filter(notification => notification.id != id)
+      this.removeNotification(id)
     },
     notifyRegisteringOn() {
       console.log('NotificationStore:notifyRegisteringOn()')
@@ -57,6 +57,17 @@ export const useNotificationStore = defineStore('NotificationStore', {
       console.log('NotificationStore:notifyLoggingInOff()')
       this.notifyWaitOff('logging_in')
     },
+    notifySuccess(id: string, message: string) {
+      this.notifications.push({
+        id: id,
+        message: message,
+        class: 'success',
+        details: '',
+        needAck: false,
+        ack: false
+      })
+      setTimeout(this.removeNotification, 3000, id)
+    },
     notifyError(message: string) {
       console.log('notifyError:', message)
       this.notifications.push({
@@ -65,8 +76,7 @@ export const useNotificationStore = defineStore('NotificationStore', {
         class: 'error',
         details: '',
         needAck: true,
-        ack: false,
-        delay: 0
+        ack: false
       })
     }
   }

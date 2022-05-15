@@ -11,5 +11,4 @@ export interface Notification {
     details: string
     needAck: boolean
     ack: boolean
-    delay: number
 }

@@ -70,6 +70,13 @@ vi.mock('axios', () => {
                 data: []
               })
             })
+          },
+          delete: (url) => {
+            return new Promise((resolve, reject) => {
+              resolve({
+                status: 204
+              })
+            })
           }
         }
       }

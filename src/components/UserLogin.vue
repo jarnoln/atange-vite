@@ -56,7 +56,6 @@ function submitForm() {
 }
 
 function validateUsername() {
-  console.log('validateUsername:', currentUsername.value)
   if (route.name === 'register') {
     usernameValidateError.value = validateStringLongEnough('Username', currentUsername.value, 3)
   }
@@ -64,7 +63,6 @@ function validateUsername() {
 }
 
 function validatePassword() {
-  console.log('validatePassword:', currentPassword.value)
   if (route.name === 'register') {
     passwordValidateError.value = validateStringLongEnough('Password', currentPassword.value, 6)
   }

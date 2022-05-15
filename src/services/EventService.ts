@@ -53,6 +53,7 @@ export const EventService = {
       const token = response.data['auth_token']
       sessionStore.login(username, token)
       notificationStore.notifyLoggingInOff()
+      notificationStore.notifySuccess('logged_in', 'Logged in')
     })
     .catch(error => {
       notificationStore.notifyLoggingInOff()
@@ -80,7 +81,7 @@ export const EventService = {
     .then(response => {
       notificationStore.notifyRegisteringOff()
       if (response.data['username'] === username ) {
-        console.log('New user registered:', username)
+        notificationStore.notifySuccess('registered', 'Registered new user: ' + username)
       }
     })
     .catch(error => {
@@ -115,6 +116,7 @@ export const EventService = {
     apiClient.post('/auth/token/logout/', {}, config)
     .then(response => {
       notificationStore.notifyWaitOff('logging_out')
+      notificationStore.notifySuccess('logged_out', 'Logged out')
       console.log('Logged out')
       console.log(response)
     })
@@ -148,6 +150,7 @@ export const EventService = {
     apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_collective')
+      notificationStore.notifySuccess('collective_created', 'Created new collective: ' + collective.title)
       console.log('Collective', collective.name, 'created')
       console.log(response)
       if (response.status != 201) {
@@ -178,6 +181,7 @@ export const EventService = {
     apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_collective')
+      notificationStore.notifySuccess('collective_deleted', 'Deleted collective: ' + collective.title)
       console.log('Collective', collective.name, 'deleted')
       console.log(response)
       if (response.status != 204) {
