@@ -183,6 +183,7 @@ export const EventService = {
     })
   },
   deleteCollective: (collective: Collective) => {
+    console.log('EventService:deleteCollective()')
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collective.name + '/'

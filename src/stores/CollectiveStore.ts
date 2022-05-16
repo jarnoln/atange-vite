@@ -26,6 +26,12 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
             this.collectives.push(collective)
         },
         deleteCollective(collective: Collective) {
+            console.log('CollectiveStore:deleteCollective', collective.name)
+            if (this.selectedCollective) {
+                if (collective.name === this.selectedCollective.name) {
+                    this.selectedCollective = undefined
+                }
+            }
             const index = this.collectives.indexOf(collective)
             if (index > -1) {
                 this.collectives.splice(index, 1)
@@ -43,7 +49,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         },
         addExampleCollectives() {
             if (this.collectives.length === 0) {
-                this.addCollective({ name: 'jla', title: 'JLA', description: ''})
+                this.addCollective({ name: 'jla', title: 'JLA', description: 'Justice League of America'})
                 this.addCollective({ name: 'jsa', title: 'JSA', description: ''})
                 this.addCollective({ name: 'section8', title: 'Section 8', description: ''})
             }
