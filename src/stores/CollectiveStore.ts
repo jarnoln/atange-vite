@@ -25,16 +25,18 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
             // console.log('CollectiveStore:addCollective', collective)
             this.collectives.push(collective)
         },
-        deleteCollective(collective: Collective) {
-            console.log('CollectiveStore:deleteCollective', collective.name)
+        deleteCollective(collectiveName: string) {
+            console.log('CollectiveStore:deleteCollective', collectiveName)
             if (this.selectedCollective) {
-                if (collective.name === this.selectedCollective.name) {
+                if (collectiveName === this.selectedCollective.name) {
                     this.selectedCollective = undefined
                 }
             }
-            const index = this.collectives.indexOf(collective)
+            const index = this.collectives.findIndex(collective => collective.name = collectiveName)
             if (index > -1) {
                 this.collectives.splice(index, 1)
+            } else {
+                console.log('CollectiveStore:deleteCollective(', collectiveName, '): no such collective')
             }
         },
         selectCollective(name: string) {

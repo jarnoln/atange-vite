@@ -31,7 +31,7 @@ onMounted(() => {
 })
 
 function deleteCollective(collective: Collective) {
-    collectiveStore.deleteCollective(collective)
+    collectiveStore.deleteCollective(collective.name)
     EventService.deleteCollective(collective)
 }
 </script>
