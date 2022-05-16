@@ -11,14 +11,17 @@ export const useSessionStore = defineStore('SessionStore', {
     }
   },
   actions: {
+    clear() {
+      this.username = '',
+      this.token = ''
+    },
     login(username: string, token: string) {
       console.log('SessionStore: login(', username, token, ')')
       this.username = username
       this.token = token
     },
     logout() {
-      this.username = ''
-      this.token = ''
+      this.clear()
     }
   }
 })

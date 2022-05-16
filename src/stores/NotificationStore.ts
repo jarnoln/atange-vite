@@ -6,6 +6,9 @@ export const useNotificationStore = defineStore('NotificationStore', {
     notifications: [] as Notification[],
   }),
   getters: {
+    count(): number {
+      return this.notifications.length
+    },
     latestNotification(): Notification {
       const count: number = this.notifications.length
       if (count === 0) {
@@ -22,6 +25,9 @@ export const useNotificationStore = defineStore('NotificationStore', {
     }
   },
   actions: {
+    clear() {
+      this.notifications = []
+    },
     removeNotification(id: string) {
       this.notifications = this.notifications.filter(notification => notification.id != id)
     },
@@ -58,6 +64,7 @@ export const useNotificationStore = defineStore('NotificationStore', {
       this.notifyWaitOff('logging_in')
     },
     notifySuccess(id: string, message: string) {
+      console.log('notifySuccess:', id)
       this.notifications.push({
         id: id,
         message: message,

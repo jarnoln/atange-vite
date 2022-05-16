@@ -38,7 +38,6 @@ function getUsername() {
 
 function logout() {
   EventService.logout()
-  sessionStore.logout()
 }
 </script>
 

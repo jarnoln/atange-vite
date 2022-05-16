@@ -17,6 +17,10 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         }
     },
     actions: {
+        clear() {
+            this.collectives = []
+            this.selectedCollective = undefined
+        },
         addCollective(collective: Collective) {
             // console.log('CollectiveStore:addCollective', collective)
             this.collectives.push(collective)

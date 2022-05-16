@@ -50,11 +50,15 @@ export const EventService = {
 
     apiClient.post('/auth/token/login/', dataOut)
     .then(response => {
-      console.log(response)
-      const token = response.data['auth_token']
-      sessionStore.login(username, token)
       notificationStore.notifyLoggingInOff()
-      notificationStore.notifySuccess('logged_in', 'Logged in')
+      if (response.status === 200) {
+        const token = response.data['auth_token']
+        sessionStore.login(username, token)
+        notificationStore.notifySuccess('logged_in', 'Logged in')  
+      } else {
+        notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+        console.log(response.data)
+      }
     })
     .catch(error => {
       notificationStore.notifyLoggingInOff()
@@ -62,7 +66,7 @@ export const EventService = {
         notificationStore.notifyError('Failed to log in. Server returned status code:' + error.response.status)
         console.log(error.response.data)
       } else {
-        notificationStore.notifyError('Something went wrong when tryin to log in')
+        notificationStore.notifyError('Something went wrong when trying to log in')
       }
       console.log(error)
       sessionStore.login('', '')
@@ -83,6 +87,9 @@ export const EventService = {
       notificationStore.notifyRegisteringOff()
       if (response.data['username'] === username ) {
         notificationStore.notifySuccess('registered', 'Registered new user: ' + username)
+      } else {
+        const message = 'Registering: expected username, got ' + response.data['username']
+        notificationStore.notifyError(message)
       }
     })
     .catch(error => {
@@ -116,12 +123,17 @@ export const EventService = {
     notificationStore.notifyWaitOn('logging_out', 'Logging out')
     apiClient.post('/auth/token/logout/', {}, config)
     .then(response => {
+      sessionStore.logout()
       notificationStore.notifyWaitOff('logging_out')
-      notificationStore.notifySuccess('logged_out', 'Logged out')
-      console.log('Logged out')
-      console.log(response)
+      if (response.status === 204) {
+        notificationStore.notifySuccess('logged_out', 'Logged out')
+      } else {
+        notificationStore.notifyError('Logout: Expected status code 204, server returned ' + response.status)
+        console.log(response.data)
+      }
     })
     .catch(error => {
+      sessionStore.logout()  // Even is server logout fails, still going to log out in frontend
       notificationStore.notifyWaitOff('logging_out')
       const message = 'Failed to log out. '
       if (error.response) {
@@ -148,14 +160,15 @@ export const EventService = {
       }
     }
     notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + collective.title)
+    console.log('POST', path, dataOut)
     apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_collective')
-      notificationStore.notifySuccess('collective_created', 'Created new collective: ' + collective.title)
-      console.log('Collective', collective.name, 'created')
-      console.log(response)
-      if (response.status != 201) {
-        console.log('Something went wrong.')
+      if (response.status === 201) {
+        notificationStore.notifySuccess('collective_created', 'Created new collective: ' + collective.title)
+      } else {
+        notificationStore.notifyError('Expected status code 201, server returned code:' + response.status)
+        console.log(response.data)
       }
     })
     .catch(error => {
@@ -182,11 +195,11 @@ export const EventService = {
     apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_collective')
-      notificationStore.notifySuccess('collective_deleted', 'Deleted collective: ' + collective.title)
-      console.log('Collective', collective.name, 'deleted')
-      console.log(response)
-      if (response.status != 204) {
-        console.log('Something went wrong.')
+      if (response.status === 204) {
+        notificationStore.notifySuccess('collective_deleted', 'Deleted collective: ' + collective.title)
+      } else {
+        notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
+        console.log(response.data)
       }
     })
     .catch(error => {
