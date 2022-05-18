@@ -7,11 +7,6 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         selectedCollective: undefined as Collective | undefined
     }),
     getters: {
-        getCollectiveByName: (state) => {
-            return (collectiveName: string) => {
-                state.collectives.find((collective) => collective.name === collectiveName)
-            }
-        },
         getCollectiveNames: (state) => {
             return state.collectives.map(collective => collective.name)
         }

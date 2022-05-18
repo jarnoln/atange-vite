@@ -6,11 +6,11 @@ export const useNotificationStore = defineStore('NotificationStore', {
     notifications: [] as Notification[],
   }),
   getters: {
-    count(): number {
-      return this.notifications.length
+    count(state): number {
+      return state.notifications.length
     },
-    latestNotification(): Notification {
-      const count: number = this.notifications.length
+    latestNotification(state): Notification {
+      const count: number = state.notifications.length
       if (count === 0) {
         return {
           id: '',
@@ -21,7 +21,7 @@ export const useNotificationStore = defineStore('NotificationStore', {
           ack: false
         }
       }
-      return this.notifications[count -1]
+      return state.notifications[count -1]
     }
   },
   actions: {
