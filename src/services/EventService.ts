@@ -28,7 +28,7 @@ function storeCollectives(collectiveData: Collective[]) {
   })
 }
 
-function handleError(error: any, message: string) {
+function handleApiError(error: any, message: string) {
   const notificationStore = useNotificationStore()
   if (error.message) {
     if (error.message === 'Network Error') {
@@ -65,7 +65,7 @@ export const EventService = {
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_collectives')
         const message = 'Failed to fetch collectives. '
-        handleError(error, message)
+        handleApiError(error, message)
       })
   },
   login: (username: string, password: string) => {
@@ -92,13 +92,8 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyLoggingInOff()
-      if (error.response) {
-        notificationStore.notifyError('Failed to log in. Server returned status code:' + error.response.status)
-        console.log(error.response.data)
-      } else {
-        notificationStore.notifyError('Something went wrong when trying to log in')
-      }
-      console.log(error)
+      const message = 'Failed to log in. '
+      handleApiError(error, message)
       sessionStore.login('', '')
     })
   },
@@ -166,12 +161,7 @@ export const EventService = {
       sessionStore.logout()  // Even is server logout fails, still going to log out in frontend
       notificationStore.notifyWaitOff('logging_out')
       const message = 'Failed to log out. '
-      if (error.response) {
-        console.log('error.response.data:', error.response.data)
-        notificationStore.notifyError(message + 'Server returned status code:' + error.response.status)
-      } else {
-        notificationStore.notifyError(message)
-      }
+      handleApiError(error, message)
     })
   },
   createCollective: (collective: Collective) => {
@@ -205,12 +195,7 @@ export const EventService = {
     .catch(error => {
       notificationStore.notifyWaitOff('creating_collective')
       const message = 'Failed to create collective: ' + collective.name + '. '
-      if (error.response) {
-        console.log('error.response.data:', error.response.data)
-        notificationStore.notifyError(message + 'Server returned status code:' + error.response.status)
-      } else {
-        notificationStore.notifyError(message)
-      }
+      handleApiError(error, message)
     })
   },
   deleteCollective: (collective: Collective) => {
@@ -237,12 +222,7 @@ export const EventService = {
     .catch(error => {
       notificationStore.notifyWaitOff('deleting_collective')
       const message = 'Failed to delete collective: ' + collective.name + '. '
-      if (error.response) {
-        console.log('error.response.data:', error.response.data)
-        notificationStore.notifyError(message + 'Server returned status code:' + error.response.status)
-      } else {
-        notificationStore.notifyError(message)
-      }
+      handleApiError(error, message)
     })
   }
 }
