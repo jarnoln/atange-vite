@@ -28,15 +28,45 @@ function storeCollectives(collectiveData: Collective[]) {
   })
 }
 
+function handleError(error: any, message: string) {
+  const notificationStore = useNotificationStore()
+  if (error.message) {
+    if (error.message === 'Network Error') {
+      notificationStore.notifyError(message + 'Could not connect to backend server.')
+    } else {
+      notificationStore.notifyError(message + error.message)
+    }
+  } else if (error.response) {
+    console.log(error.response.data)
+    notificationStore.notifyError(message + 'Server returned status code: ' + error.response.status)
+  } else {
+    notificationStore.notifyError(message)
+  }
+}
+
 export const EventService = {
 // For some reason unit tests were not able to call fetchCollectives
 // so moved functionality out here so that can test until can
 // figure out way to test method
   fetchCollectives: () => {
+    const notificationStore = useNotificationStore()
+    notificationStore.notifyWaitOn('fetching_collectives', 'Fetching collectives')
     const path: string = '/api/collectives/'
-    apiClient.get(path).then(response =>
-      storeCollectives(response.data)
-    )
+    apiClient.get(path)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_collectives')
+        if (response.status === 200) {
+          storeCollectives(response.data)
+        } else {
+          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_collectives')
+        const message = 'Failed to fetch collectives. '
+        handleError(error, message)
+      })
   },
   login: (username: string, password: string) => {
     const sessionStore = useSessionStore()
@@ -54,7 +84,7 @@ export const EventService = {
       if (response.status === 200) {
         const token = response.data['auth_token']
         sessionStore.login(username, token)
-        notificationStore.notifySuccess('logged_in', 'Logged in')  
+        notificationStore.notifySuccess('logged_in', 'Logged in')
       } else {
         notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
         console.log(response.data)
@@ -145,6 +175,7 @@ export const EventService = {
     })
   },
   createCollective: (collective: Collective) => {
+    // Creates collective in the backend. Note: Doesn not add collective in store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collective.name + '/'

@@ -19,6 +19,8 @@ export default {
         if (url === '/auth/token/login/') {
           dataOut = { auth_token: 'abcd' }
           status = 200
+        } else if (url === '/auth/token/logout/') {
+          status = 204
         } else if (url === '/auth/users/') {
           dataOut = { username: dataIn.username }
         }

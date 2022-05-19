@@ -35,9 +35,9 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
             }
         },
         selectCollective(name: string) {
-            console.log('selectCollective(name=', name, ')')
+            // console.log('selectCollective(name=', name, ')')
             let result = this.collectives.find(collective => collective.name === name)
-            console.log('result: ', result)
+            // console.log('result: ', result)
             if (result !== undefined) {
                 this.selectedCollective = result
                 return true

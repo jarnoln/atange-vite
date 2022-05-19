@@ -23,15 +23,14 @@ beforeEach(() => {
 })
 
 describe('Test EventService:fetchCollectives', () => {
-    it('calls fetch with proper URL', async () => {
-        expect(collectiveStore.selectedCollective).toBe(undefined)
-        expect(collectiveStore.collectives.length).toBe(0)
-        await EventService.fetchCollectives()
-        expect(collectiveStore.collectives.length).toBe(1)
-        // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
-    })
+  it('calls fetch with proper URL', async () => {
+    expect(collectiveStore.selectedCollective).toBe(undefined)
+    expect(collectiveStore.collectives.length).toBe(0)
+    await EventService.fetchCollectives()
+    expect(collectiveStore.collectives.length).toBe(1)
+    // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  })
 })
-
 
 describe('Test EventService:login', () => {
   it('sets username and token', async () => {
@@ -63,6 +62,7 @@ describe('Test EventService:logout', () => {
     await EventService.logout()
     expect(sessionStore.username).toBe('')
     expect(sessionStore.token).toBe('')
+    expect(notificationStore.latestNotification.id).toBe('logged_out')
   })
 })
 
@@ -70,10 +70,10 @@ describe('Test EventService:createCollective', () => {
   it('creates collective', async () => {
     expect(collectiveStore.collectives.length).toBe(0)
     expect(notificationStore.count).toBe(0)
-    await EventService.createCollective({name: 'jla', title:'JLA'})
+    await EventService.createCollective({name: 'jla', title:'JLA', description: ''})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_created')
-    // expect(collectiveStore.collectives.length).toBe(1)
+    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
   })
 })
 
