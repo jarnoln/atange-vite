@@ -1,29 +1,47 @@
 <template>
-  <div id="notifications" :class="getNotificationClass()">
-    {{ getNotificationMessage() }}
+  <div id="notifications" :class="getActiveNotification().class">
+    <button
+      id="ack-notification-btn"
+      v-if="isNotificationAckable()"
+      @click="ackNotification(getActiveNotification().id)"
+    >Ack</button>
+    {{ getActiveNotification().message }}
   </div>
 </template>
 
 <script setup lang="ts">
+import { Notification } from '../types'
 import { useNotificationStore } from '../stores/NotificationStore';
 
 const notificationStore = useNotificationStore()
 
-function getNotificationMessage() {
+function getActiveNotification() : Notification {
   if (notificationStore.notifications.length === 0) {
-    return 'Placeholder'
+    return {
+      id: '',
+      message: 'Placeholder',
+      class: 'invisible',
+      details: '',
+      needAck: false,
+      ack: false
+    }
   } else {
-    return notificationStore.latestNotification.message
+    return notificationStore.latestNotification
   }
 }
 
-function getNotificationClass() {
+function isNotificationAckable() {
   if (notificationStore.notifications.length === 0) {
-    return 'invisible'
+    return false
   } else {
-    return notificationStore.latestNotification.class
+    return true
   }
 }
+
+function ackNotification(notificationId: string) {
+  notificationStore.removeNotification(notificationId)
+}
+
 </script>
 
 <style scoped>
