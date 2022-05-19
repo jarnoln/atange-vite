@@ -14,8 +14,8 @@ export const useNotificationStore = defineStore('NotificationStore', {
       if (count === 0) {
         return {
           id: '',
-          message: '',
-          class: '',
+          message: 'placeholder',
+          class: 'invisible',
           details: '',
           needAck: false,
           ack: false

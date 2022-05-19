@@ -1,8 +1,6 @@
 import { setActivePinia, createPinia } from 'pinia'
-import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { useSessionStore } from '../../src/stores/SessionStore'
-
-vi.mock('axios')
 
 const pinia = createPinia()
 setActivePinia(pinia)

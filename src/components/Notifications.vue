@@ -16,18 +16,7 @@ import { useNotificationStore } from '../stores/NotificationStore';
 const notificationStore = useNotificationStore()
 
 function getActiveNotification() : Notification {
-  if (notificationStore.notifications.length === 0) {
-    return {
-      id: '',
-      message: 'Placeholder',
-      class: 'invisible',
-      details: '',
-      needAck: false,
-      ack: false
-    }
-  } else {
-    return notificationStore.latestNotification
-  }
+  return notificationStore.latestNotification
 }
 
 function isNotificationAckable() {
