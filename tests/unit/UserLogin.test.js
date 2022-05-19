@@ -1,10 +1,12 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
-import { describe, expect, test, vitest } from 'vitest'
+import { describe, expect, test, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
 import UserLogin from '../../src/components/UserLogin.vue'
+
+vi.mock('axios')
 
 const router = createRouter({
   history: createWebHistory(), // Use browser built-in history

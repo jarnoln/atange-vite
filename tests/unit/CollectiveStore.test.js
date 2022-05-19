@@ -2,6 +2,7 @@ import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 
+vi.mock('axios')
 
 const pinia = createPinia()
 setActivePinia(pinia)

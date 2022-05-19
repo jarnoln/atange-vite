@@ -6,11 +6,13 @@ import CollectiveView from '../../src/views/CollectiveView.vue'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 // import { EventService } from '../../src/services/EventService.ts'
 
+
 const pinia = createTestingPinia({
   createSpy: vitest.fn,
   stubActions: false
 })
 
+vi.mock('axios')
 // vi.mock('EventService')
 
 const collectiveStore = useCollectiveStore()
