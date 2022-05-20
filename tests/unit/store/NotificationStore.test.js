@@ -1,6 +1,6 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { useNotificationStore } from '../../src/stores/NotificationStore'
+import { useNotificationStore } from '../../../src/stores/NotificationStore'
 
 const pinia = createPinia()
 setActivePinia(pinia)

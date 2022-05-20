@@ -1,6 +1,6 @@
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { useSessionStore } from '../../src/stores/SessionStore'
+import { useSessionStore } from '../../../src/stores/SessionStore'
 
 const pinia = createPinia()
 setActivePinia(pinia)
