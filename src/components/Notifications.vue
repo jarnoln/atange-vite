@@ -5,7 +5,7 @@
       v-if="isNotificationAckable()"
       @click="ackNotification(getActiveNotification().id)"
     >Ack</button>
-    {{ getActiveNotification().message }}
+    <span id="active-notification">{{ getActiveNotification().message }}</span>
   </div>
 </template>
 

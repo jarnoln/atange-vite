@@ -10,7 +10,8 @@
     "test": "vitest --run",
     "coverage": "vitest run --coverage",
     "test:events": "vitest EventService --run",
-    "test:stores": "vitest Store.test --run"
+    "test:stores": "vitest Store.test --run",
+    "test:notifications": "vitest Notifications.test --run"
   },
   "dependencies": {
     "axios": "^0.27.2",

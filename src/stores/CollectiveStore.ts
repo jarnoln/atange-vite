@@ -34,14 +34,14 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
     },
     deleteCollective(collectiveName: string) {
       console.log('CollectiveStore:deleteCollective', collectiveName)
-      console.log('collectives before:', this.collectives)
+      // console.log('collectives before:', this.collectives)
       if (this.currentCollectiveName === collectiveName) {
         this.currentCollectiveName = ''  // Current index might not be correct after array modified
       }
       const index = this.collectives.findIndex(collective => collective.name === collectiveName)
       console.log(collectiveName, 'found at index', index)
       this.collectives = this.collectives.filter(collective => collective.name != collectiveName)
-      console.log('collectives after:', this.collectives)
+      // console.log('collectives after:', this.collectives)
     },
     selectCollective(name: string) : boolean {
       const index = this.collectives.findIndex(collective => collective.name === name)

@@ -35,7 +35,7 @@ describe('Test EditCollective', () => {
         expect(collectiveCreateButton.attributes().disabled).toBe('true')
         collectiveNameInput.setValue('jla')
         collectiveTitleInput.setValue('JLA')
-        await wrapper.vm.$nextTick()
+        await nextTick()
         // expect(collectiveCreateButton.attributes().disabled).toBeUndefined()
         collectiveCreateButton.trigger('click')
     })
