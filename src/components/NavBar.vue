@@ -2,21 +2,21 @@
   <nav id="navbar">
     <ul classid="right-links">
       <li>
-        <router-link active-class="active" to="/">Home</router-link>
+        <router-link id="navbar-home" active-class="active" to="/">Home</router-link>
       </li>
     </ul>
     <ul id="left-links">
       <li v-if="!isLoggedIn()">
-        <router-link active-class="active" to="/login">Login</router-link>
+        <router-link id="navbar-login" active-class="active" to="/login">Login</router-link>
       </li>
       <li v-if="!isLoggedIn()">
-        <router-link active-class="active" to="/register">Register</router-link>
+        <router-link id="navbar-register" active-class="active" to="/register">Register</router-link>
       </li>
       <li v-if="isLoggedIn()">
-        <a href="#">{{ getUsername() }}</a>
+        <a href="#" id="navbar-username">{{ getUsername() }}</a>
       </li>
       <li v-if="isLoggedIn()">
-        <a href="#" @click="logout()">Logout</a>
+        <a href="#" id="navbar-logout" @click="logout()">Logout</a>
       </li>
     </ul>
   </nav>
