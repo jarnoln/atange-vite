@@ -1,7 +1,7 @@
 <template>
-  <div v-if="collectiveStore.selectedCollective !== undefined">
-    <h1 id="collective-title">{{ collectiveStore.selectedCollective.title }}</h1>
-    <p id="collective-description">{{ collectiveStore.selectedCollective.description }}</p>
+  <div v-if="collectiveStore.currentCollective !== undefined">
+    <h1 id="collective-title">{{ collectiveStore.currentCollective.title }}</h1>
+    <p id="collective-description">{{ collectiveStore.currentCollective.description }}</p>
     <button id="delete-collective-btn" @click="deleteSelectedCollective()">Delete collective</button>
   </div>
   <p v-else>Unknown collective</p>
@@ -27,7 +27,7 @@ onMounted(() => {
 })
 
 function deleteSelectedCollective() {
-  const collective = collectiveStore.selectedCollective
+  const collective = collectiveStore.currentCollective
   if (collective) {
     collectiveStore.deleteCollective(collective.name)
     EventService.deleteCollective(collective)

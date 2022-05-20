@@ -44,7 +44,7 @@ const router = useRouter()
 
 function submitForm() {
   // console.log('Tadaa!', currentName.value, currentTitle.value)
-  collectiveStore.addCollective({ name: currentName.value, title: currentTitle.value, description: '' })
+  collectiveStore.addCollective(currentName.value, currentTitle.value, '')
   EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: '' })
   router.push({ name: 'collective', params: { collectiveName: currentName.value }})
 }

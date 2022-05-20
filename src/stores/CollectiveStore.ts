@@ -2,54 +2,63 @@ import { defineStore } from 'pinia'
 import { Collective } from '../types'
 
 export const useCollectiveStore = defineStore('CollectiveStore', {
-    state: () => ({
-        collectives: [] as Collective[],
-        selectedCollective: undefined as Collective | undefined
-    }),
-    getters: {
-        getCollectiveNames: (state) => {
-            return state.collectives.map(collective => collective.name)
-        }
+  state: () => ({
+    collectives: [] as Collective[],
+    currentCollectiveName: '',
+  }),
+  getters: {
+    collectiveNames: (state) => {
+      return state.collectives.map(collective => collective.name)
     },
-    actions: {
-        clear() {
-            this.collectives = []
-            this.selectedCollective = undefined
-        },
-        addCollective(collective: Collective) {
-            // console.log('CollectiveStore:addCollective', collective)
-            this.collectives.push(collective)
-        },
-        deleteCollective(collectiveName: string) {
-            console.log('CollectiveStore:deleteCollective', collectiveName)
-            if (this.selectedCollective) {
-                if (collectiveName === this.selectedCollective.name) {
-                    this.selectedCollective = undefined
-                }
-            }
-            const index = this.collectives.findIndex(collective => collective.name = collectiveName)
-            if (index > -1) {
-                this.collectives.splice(index, 1)
-            } else {
-                console.log('CollectiveStore:deleteCollective(', collectiveName, '): no such collective')
-            }
-        },
-        selectCollective(name: string) {
-            // console.log('selectCollective(name=', name, ')')
-            let result = this.collectives.find(collective => collective.name === name)
-            // console.log('result: ', result)
-            if (result !== undefined) {
-                this.selectedCollective = result
-                return true
-            }
-            return false
-        },
-        addExampleCollectives() {
-            if (this.collectives.length === 0) {
-                this.addCollective({ name: 'jla', title: 'JLA', description: 'Justice League of America'})
-                this.addCollective({ name: 'jsa', title: 'JSA', description: ''})
-                this.addCollective({ name: 'section8', title: 'Section 8', description: ''})
-            }
-        }
+    currentCollective: (state) => {
+      if (state.currentCollectiveName === '') {
+        return undefined
+      }
+      return state.collectives.find(collective => collective.name === state.currentCollectiveName)
     }
+  },
+  actions: {
+    clear() {
+      this.collectives = []
+      this.currentCollectiveName = ''
+    },
+    addCollective(name: string, title: string, description: string) {
+      // console.log('CollectiveStore:addCollective', collective)
+      if (name.length < 1) {
+        console.warn('addCollective: Name too short:', name)
+      }
+      if (title.length < 1) {
+        console.warn('addCollective: Title too short:', title)
+      }
+      this.collectives.push({ name: name, title: title, description: description})
+    },
+    deleteCollective(collectiveName: string) {
+      console.log('CollectiveStore:deleteCollective', collectiveName)
+      console.log('collectives before:', this.collectives)
+      if (this.currentCollectiveName === collectiveName) {
+        this.currentCollectiveName = ''  // Current index might not be correct after array modified
+      }
+      const index = this.collectives.findIndex(collective => collective.name === collectiveName)
+      console.log(collectiveName, 'found at index', index)
+      this.collectives = this.collectives.filter(collective => collective.name != collectiveName)
+      console.log('collectives after:', this.collectives)
+    },
+    selectCollective(name: string) : boolean {
+      const index = this.collectives.findIndex(collective => collective.name === name)
+      console.log('selectCollective(name=', name, ') index:', index)
+      if (index > -1) {
+        this.currentCollectiveName = name
+        return true
+      }
+      this.currentCollectiveName = ''
+      return false
+    },
+    addExampleCollectives() {
+      if (this.collectives.length === 0) {
+        this.addCollective('jla', 'JLA', 'Justice League of America')
+        this.addCollective('jsa', 'JSA', '')
+        this.addCollective('section8', 'Section 8', '')
+      }
+    }
+  }
 })

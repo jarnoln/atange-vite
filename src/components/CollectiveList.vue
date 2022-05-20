@@ -2,13 +2,13 @@
   <table>
     <thead>
       <tr>
-        <th id="collective-count">Collectives: {{ collectives.length }}</th>
+        <th id="collective-count">Collectives: {{ collectiveStore.collectives.length }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="collective in collectives">
+      <tr v-for="collective in collectiveStore.collectives">
         <td> <router-link :to="{ name: 'collective', params: { collectiveName: collective.name }}">{{ collective.title }}</router-link> </td>
-        <td v-if="isLoggedIn"> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
+        <td v-if="sessionStore.isLoggedIn"> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
       </tr>
     </tbody>
   </table>
@@ -17,14 +17,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { Collective } from '../types'
-import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useCollectiveStore } from '../stores/CollectiveStore'
 import { EventService } from '../services/EventService';
 import { useSessionStore } from '../stores/SessionStore';
 
 const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
-const collectives = ref(collectiveStore.collectives)
-const isLoggedIn = ref(sessionStore.isLoggedIn)
 
 onMounted(() => {
   collectiveStore.addExampleCollectives()

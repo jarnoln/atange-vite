@@ -19,13 +19,7 @@ const apiClient = axios.create({
 function storeCollectives(collectiveData: Collective[]) {
   const collectiveStore = useCollectiveStore()
   console.log('Fetched collectives: ', collectiveData.length)
-  collectiveData.forEach(item => {
-    collectiveStore.addCollective({
-      name: item.name,
-      title: item.title,
-      description: ''
-    })
-  })
+  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, ''))
 }
 
 function handleApiError(error: any, message: string) {

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
-import { EventService } from '../../src/services/EventService.ts'
-import { useCollectiveStore } from '../../src/stores/CollectiveStore'
-import { useNotificationStore } from '../../src/stores/NotificationStore'
-import { useSessionStore } from '../../src/stores/SessionStore'
+import { EventService } from '../../src/services/EventService.ts'
+import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+import { useNotificationStore } from '../../src/stores/NotificationStore'
+import { useSessionStore } from '../../src/stores/SessionStore'
 
 vi.mock('axios')
 
@@ -24,7 +24,7 @@ beforeEach(() => {
 
 describe('Test EventService:fetchCollectives', () => {
   it('calls fetch with proper URL', async () => {
-    expect(collectiveStore.selectedCollective).toBe(undefined)
+    expect(collectiveStore.currentCollective).toBe(undefined)
     expect(collectiveStore.collectives.length).toBe(0)
     await EventService.fetchCollectives()
     expect(collectiveStore.collectives.length).toBe(1)

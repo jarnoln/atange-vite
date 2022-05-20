@@ -26,9 +26,9 @@ describe('Test CollectiveView', () => {
       title: 'JLA',
       description: 'Justice League of America'
     }
-    collectiveStore.addCollective(collective)
+    collectiveStore.addCollective(collective.name, collective.title, collective.description)
     expect(collectiveStore.collectives.length).toBe(1)
-    expect(collectiveStore.selectedCollective).toBe(undefined)
+    expect(collectiveStore.currentCollective).toBe(undefined)
     const wrapper = mount(CollectiveView, {
       props: {
         collectiveName: collective.name
@@ -38,7 +38,7 @@ describe('Test CollectiveView', () => {
       }
     })
     await nextTick()
-    expect(collectiveStore.selectedCollective).toEqual(collective)
+    expect(collectiveStore.currentCollective).toEqual(collective)
     const title = wrapper.get('#collective-title')
     const description = wrapper.get('#collective-description')
     const deleteButton = wrapper.get('#delete-collective-btn')
@@ -55,9 +55,9 @@ describe('Test CollectiveView', () => {
       title: 'JLA',
       description: 'Justice League of America'
     }
-    collectiveStore.addCollective(collective)
+    collectiveStore.addCollective(collective.name, collective.title, collective.description)
     expect(collectiveStore.collectives.length).toBe(1)
-    expect(collectiveStore.selectedCollective).toBe(undefined)
+    expect(collectiveStore.currentCollective).toBe(undefined)
     const wrapper = mount(CollectiveView, {
       props: {
         collectiveName: collective.name
@@ -67,13 +67,13 @@ describe('Test CollectiveView', () => {
       }
     })
     await nextTick()
-    expect(collectiveStore.selectedCollective).toEqual(collective)
+    expect(collectiveStore.currentCollective).toEqual(collective)
     const deleteButton = wrapper.get('#delete-collective-btn')
     // expect(submitButton.attributes().disabled).toBe('true')
     deleteButton.trigger('click')
     await nextTick()
     expect(collectiveStore.collectives.length).toBe(0)
-    expect(collectiveStore.selectedCollective).toBe(undefined)
+    expect(collectiveStore.currentCollective).toBe(undefined)
     expect(wrapper.text()).toContain('Unknown collective')
   }),
   it('show unknown if collective does not exist', () => {
