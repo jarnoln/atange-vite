@@ -22,21 +22,27 @@ describe('Test EditCollective', () => {
         const wrapper = mount(EditCollective, {
             global: {
                 plugins: [router, pinia]
+            },
+            props: {
+                collectiveName: ''
             }
         })
         expect(wrapper.text()).toContain('Title')
         expect(wrapper.text()).toContain('Name')
+        expect(wrapper.text()).toContain('Description')
         const collectiveNameInput = wrapper.get('#collective-name')
         const collectiveTitleInput = wrapper.get('#collective-title')
-        const collectiveCreateButton = wrapper.get('#collective-create-button')
+        const collectiveDescriptionInput = wrapper.get('#collective-description')
+        const collectiveSubmitButton = wrapper.get('#collective-submit-button')
         expect(collectiveNameInput.isVisible()).toBe(true)
         expect(collectiveTitleInput.isVisible()).toBe(true)
-        expect(collectiveCreateButton.isVisible()).toBe(true)
-        expect(collectiveCreateButton.attributes().disabled).toBe('true')
+        expect(collectiveSubmitButton.isVisible()).toBe(true)
+        expect(collectiveSubmitButton.attributes().disabled).toBe('true')
         collectiveNameInput.setValue('jla')
         collectiveTitleInput.setValue('JLA')
+        collectiveDescriptionInput.setValue('Justice League of America')
         await nextTick()
         // expect(collectiveCreateButton.attributes().disabled).toBeUndefined()
-        collectiveCreateButton.trigger('click')
+        collectiveSubmitButton.trigger('click')
     })
 })

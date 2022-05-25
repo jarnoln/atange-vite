@@ -2,6 +2,9 @@
   <div v-if="collectiveStore.currentCollective !== undefined">
     <h1 id="collective-title">{{ collectiveStore.currentCollective.title }}</h1>
     <p id="collective-description">{{ collectiveStore.currentCollective.description }}</p>
+    <p>
+      <router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link>
+    </p>
     <button id="delete-collective-btn" @click="deleteSelectedCollective()">Delete collective</button>
   </div>
   <p v-else>Unknown collective</p>

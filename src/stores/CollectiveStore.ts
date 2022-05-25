@@ -43,6 +43,17 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.collectives = this.collectives.filter(collective => collective.name != collectiveName)
       // console.log('collectives after:', this.collectives)
     },
+    updateCurrentCollective(title: string, description: string) {
+      console.log('updateCurrentCollective', title, description)
+      console.log('  collectives before:', this.collectives)
+      const collective = this.currentCollective
+      if (collective === undefined) {
+        return false
+      }
+      collective.title = title
+      collective.description = description
+      console.log('  collectives after:', this.collectives)
+    },
     selectCollective(name: string) : boolean {
       const index = this.collectives.findIndex(collective => collective.name === name)
       console.log('selectCollective(name=', name, ') index:', index)

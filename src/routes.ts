@@ -9,7 +9,8 @@ export const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/login', name: 'login', component: UserLogin },
   { path: '/register', name: 'register', component: UserLogin },
-  { path: '/new', name: 'create-collective', component: EditCollective },
+  { path: '/new', name: 'create-collective', component: EditCollective, props: { collectiveName: ''} },
   { path: '/c/:collectiveName', name: 'collective', component: CollectiveView, props: true },
+  { path: '/c/:collectiveName/edit', name: 'collective-edit', component: EditCollective, props: true },
   { path: '/:notFound(.*)', name: 'not-found', component: PageNotFoundView }
 ]

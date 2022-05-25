@@ -1,9 +1,11 @@
 import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
-import { createTestingPinia } from '@pinia/testing'
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
-import CollectiveView from '../../src/views/CollectiveView.vue'
+import { createTestingPinia } from '@pinia/testing'
+import { createRouter, createWebHistory } from 'vue-router'
+import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+import CollectiveView from '../../src/views/CollectiveView.vue'
 // import { EventService } from '../../src/services/EventService.ts'
 
 
@@ -12,8 +14,14 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const router = createRouter({
+  history: createWebHistory(), // Use browser built-in history
+  routes: routes
+})
+
 vi.mock('axios')
 // vi.mock('EventService')
+
 
 const collectiveStore = useCollectiveStore()
 
@@ -34,7 +42,7 @@ describe('Test CollectiveView', () => {
         collectiveName: collective.name
       },
       global: {
-        plugins: [pinia]
+        plugins: [pinia, router]
       }
     })
     await nextTick()
@@ -63,7 +71,7 @@ describe('Test CollectiveView', () => {
         collectiveName: collective.name
       },
       global: {
-        plugins: [pinia]
+        plugins: [pinia, router]
       }
     })
     await nextTick()
@@ -82,7 +90,7 @@ describe('Test CollectiveView', () => {
         collectiveName: 'outsiders'
       },
       global: {
-        plugins: [pinia]
+        plugins: [pinia, router]
       }
     })
     expect(wrapper.text()).toContain('Unknown collective')

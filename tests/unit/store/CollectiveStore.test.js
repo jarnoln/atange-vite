@@ -41,6 +41,16 @@ describe('Test CollectiveStore', () => {
     collectiveStore.selectCollective(collective_1.name)
     expect(collectiveStore.currentCollective).toEqual(collective_1)
   }),
+  it('can update current collective', () => {
+    collectiveStore.addCollective(collective_1.name, collective_1.title, collective_1.description)
+    collectiveStore.addCollective(collective_2.name, collective_2.title, collective_2.description)
+    collectiveStore.selectCollective(collective_2.name)
+    expect(collectiveStore.currentCollective).toEqual(collective_2)
+    collectiveStore.updateCurrentCollective('Section 8', '')
+    expect(collectiveStore.currentCollective.name).toEqual(collective_2.name)
+    expect(collectiveStore.currentCollective.title).toEqual('Section 8')
+    expect(collectiveStore.currentCollective.description).toEqual('')
+  }),
   it('can delete collectives', () => {
     collectiveStore.addCollective(collective_1.name, collective_1.title, collective_1.description)
     collectiveStore.addCollective(collective_2.name, collective_2.title, collective_2.description)
