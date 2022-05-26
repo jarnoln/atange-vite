@@ -1,10 +1,10 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div v-if="!collectiveName" class="form-control" :class="{ invalid: nameValidateError }">
-      <label for="collective-name">Name</label>
+    <div v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
+      <label for="question-name">Name</label>
       <input
-          id="collective-name"
-          name="collective-name"
+          id="question-name"
+          name="question-name"
           type="text"
           minlength="1"
           v-model.trim="currentName"
@@ -13,10 +13,10 @@
       <p v-if="nameValidateError">{{ nameValidateError }}</p>
     </div>
     <div class="form-control" :class="{ invalid: titleValidateError }">
-      <label for="collective-title">Title</label>
+      <label for="question-title">Title</label>
       <input
-          id="collective-title"
-          name="collective-title"
+          id="question-title"
+          name="question-title"
           type="text"
           minlength="3"
           required
@@ -26,15 +26,15 @@
       <p v-if="titleValidateError">{{ titleValidateError }}</p>
     </div>
     <div class="form-control">
-      <label for="collective-description">Description</label>
+      <label for="question-description">Description</label>
       <input
-          id="collective-description"
-          name="collective-description"
+          id="question-description"
+          name="question-description"
           type="text"
           v-model.trim="currentDescription"
       />
     </div>
-    <button id="collective-submit-button" :disabled="!isFormValid()">
+    <button id="question-submit-button" :disabled="!isFormValid()">
       {{ getSubmitButtonText() }}
     </button>
   </form>
@@ -43,12 +43,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
   collectiveName: string
+  questionName: string
 }>()
 
 const currentName = ref('')
@@ -58,34 +59,25 @@ const nameValidateError = ref('')
 const titleValidateError = ref('')
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
-const collectiveStore = useCollectiveStore()
+const questionStore = useQuestionStore()
 const router = useRouter()
 
 onMounted(() => {
-  console.log('EditCollective:onMounted', props.collectiveName)
-  if (collectiveStore.currentCollective === undefined) {
-    collectiveStore.selectCollective(props.collectiveName)
-  }
-  if (collectiveStore.currentCollective != undefined) {
-    currentName.value = collectiveStore.currentCollective.name
-    currentTitle.value = collectiveStore.currentCollective.title
-    currentDescription.value = collectiveStore.currentCollective.description
-  }
+  console.log('EditQuestion:onMounted', props.collectiveName, props.questionName)
 })
 
 function submitForm() {
-  // console.log('Tadaa!', currentName.value, currentTitle.value)
-  if (props.collectiveName) {
-    collectiveStore.updateCurrentCollective(currentTitle.value, '')
+  if (props.questionName) {
+    questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
   } else {
-    collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
-    EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: currentDescription.value })
+    questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
+    // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
   }
   router.push({ name: 'collective', params: { collectiveName: currentName.value }})
 }
 
 function getSubmitButtonText() {
-  if (collectiveStore.currentCollective === undefined) {
+  if (props.questionName === '') {
     return 'Create'
   } else {
     return 'Save'
@@ -96,22 +88,20 @@ function validateName() {
   console.log('validateName:', currentName.value)
   nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
   if (nameValidateError.value === '') {
-    const collectiveNames = collectiveStore.collectives.map(collective => collective.name)
-    // const collectiveNames = collectiveStore.getCollectiveNames()
-    console.log('collectiveNames', collectiveNames)
-    nameValidateError.value = validateStringNotDuplicate(currentName.value, collectiveNames)
+    const questionNames = questionStore.questionNames
+    console.log('questionNames', questionNames)
+    nameValidateError.value = validateStringNotDuplicate(currentName.value, questionNames)
   }
   isNameValidated.value = true
 }
 
 function validateTitle() {
-  // console.log('validateTitle:', currentTitle.value)
   titleValidateError.value = validateStringLongEnough('Title', currentTitle.value, 3)
   isTitleValidated.value = true
 }
 
 function isFormValid() {
-  if (collectiveStore.currentCollective === undefined) {
+  if (props.questionName != '') {
     if (isNameValidated.value === false || nameValidateError.value !== '') {
       return false
     }
