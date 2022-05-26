@@ -46,6 +46,7 @@ import { useRouter } from 'vue-router'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
+import CollectiveListVue from './CollectiveList.vue'
 
 const props = defineProps<{
   collectiveName: string
@@ -73,7 +74,7 @@ function submitForm() {
     questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
     // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
   }
-  router.push({ name: 'collective', params: { collectiveName: currentName.value }})
+  router.push({ name: 'collective', params: { collectiveName: props.collectiveName }})
 }
 
 function getSubmitButtonText() {
