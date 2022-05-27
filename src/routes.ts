@@ -14,5 +14,6 @@ export const routes: Array<RouteRecordRaw> = [
   { path: '/c/:collectiveName',name: 'collective', component: CollectiveView, props: true },
   { path: '/c/:collectiveName/edit', name: 'collective-edit', component: EditCollective, props: true, meta: { requiresAuth: true } },
   { path: '/c/:collectiveName/add_question', name: 'create-question', component: EditQuestion, props: true, meta: { requiresAuth: true } },
+  { path: '/c/:collectiveName/q/:questionName/edit', name: 'question-edit', component: EditQuestion, props: true, meta: { requiresAuth: true } },
   { path: '/:notFound(.*)', name: 'not-found', component: PageNotFoundView }
 ]

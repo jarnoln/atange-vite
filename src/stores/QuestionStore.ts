@@ -17,6 +17,14 @@ export const useQuestionStore = defineStore('QuestionStore', {
     clear() {
       this.questions = []
     },
+    getQuestion(name: string) {
+      const question = this.questions.find(question => question.name === name)
+      if (question != undefined) {
+        return { ...question }  // Return copy of question. This should not be used to alter questions.
+      } else {
+        return undefined
+      }
+    },
     addQuestion(name: string, title: string, description: string) {
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)

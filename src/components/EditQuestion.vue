@@ -8,7 +8,7 @@
           type="text"
           minlength="1"
           v-model.trim="currentName"
-          @blur="validateName"
+          @input="validateName"
       />
       <p v-if="nameValidateError">{{ nameValidateError }}</p>
     </div>
@@ -34,14 +34,17 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <button id="question-submit-button" :disabled="!isFormValid()">
-      {{ getSubmitButtonText() }}
+    <button id="question-submit-button" :disabled="!isFormValid">
+      {{ submitButtonText }}
     </button>
   </form>
+  <p> 
+    <li><router-link :to="{ name: 'collective', params: { collectiveName: props.collectiveName }}">Back</router-link></li>
+  </p>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
@@ -65,7 +68,20 @@ const router = useRouter()
 
 onMounted(() => {
   console.log('EditQuestion:onMounted', props.collectiveName, props.questionName)
+  if (props.questionName != '') {
+    const question = questionStore.getQuestion(props.questionName)
+    if (question != undefined) {
+      currentName.value = question.name
+      currentTitle.value = question.title
+      currentDescription.value = question.description
+      validateName()
+      validateTitle()
+    }
+  }
 })
+
+
+
 
 function submitForm() {
   if (props.questionName) {
@@ -77,13 +93,13 @@ function submitForm() {
   router.push({ name: 'collective', params: { collectiveName: props.collectiveName }})
 }
 
-function getSubmitButtonText() {
+const submitButtonText = computed(() => {
   if (props.questionName === '') {
     return 'Create'
   } else {
     return 'Save'
   }
-}
+})
 
 function validateName() {
   console.log('validateName:', currentName.value)
@@ -101,8 +117,9 @@ function validateTitle() {
   isTitleValidated.value = true
 }
 
-function isFormValid() {
-  if (props.questionName != '') {
+const isFormValid = computed(() => {
+  console.log('isFormValid', props.questionName, isNameValidated.value, isTitleValidated.value)
+  if (props.questionName === '') {
     if (isNameValidated.value === false || nameValidateError.value !== '') {
       return false
     }
@@ -111,7 +128,7 @@ function isFormValid() {
     return false
   }
   return true
-}
+})
 </script>
 
 <style scoped>
