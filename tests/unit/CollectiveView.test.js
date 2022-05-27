@@ -5,6 +5,7 @@ import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+import { useSessionStore } from '../../src/stores/SessionStore'
 import CollectiveView from '../../src/views/CollectiveView.vue'
 // import { EventService } from '../../src/services/EventService.ts'
 
@@ -24,6 +25,7 @@ vi.mock('axios')
 
 
 const collectiveStore = useCollectiveStore()
+const sessionStore = useSessionStore()
 
 
 describe('Test CollectiveView', () => {
@@ -37,6 +39,7 @@ describe('Test CollectiveView', () => {
     collectiveStore.addCollective(collective.name, collective.title, collective.description)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.currentCollective).toBe(undefined)
+    sessionStore.login('superman', 'abcd')
     const wrapper = mount(CollectiveView, {
       props: {
         collectiveName: collective.name

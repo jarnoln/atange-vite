@@ -34,9 +34,15 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <button id="question-submit-button" :disabled="!isFormValid">
-      {{ submitButtonText }}
-    </button>
+    <p>
+      <button id="question-submit-button" :disabled="!isFormValid">
+        {{ submitButtonText }}
+      </button>
+    </p>
+    <p>
+      <button id="question-delete-button" v-if="props.questionName" @click="deleteQuestion">Delete</button>
+    </p>
+
   </form>
   <p> 
     <li><router-link :to="{ name: 'collective', params: { collectiveName: props.collectiveName }}">Back</router-link></li>
@@ -49,7 +55,6 @@ import { useRouter } from 'vue-router'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
-import CollectiveListVue from './CollectiveList.vue'
 
 const props = defineProps<{
   collectiveName: string
@@ -80,25 +85,25 @@ onMounted(() => {
   }
 })
 
-
-
-
-function submitForm() {
-  if (props.questionName) {
-    questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
-  } else {
-    questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
-    // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
-  }
-  router.push({ name: 'collective', params: { collectiveName: props.collectiveName }})
-}
-
 const submitButtonText = computed(() => {
   if (props.questionName === '') {
     return 'Create'
   } else {
     return 'Save'
   }
+})
+
+const isFormValid = computed(() => {
+  console.log('isFormValid', props.questionName, isNameValidated.value, isTitleValidated.value)
+  if (props.questionName === '') {
+    if (isNameValidated.value === false || nameValidateError.value !== '') {
+      return false
+    }
+  }
+  if (isTitleValidated.value === false || titleValidateError.value !== '') {
+    return false
+  }
+  return true
 })
 
 function validateName() {
@@ -117,18 +122,21 @@ function validateTitle() {
   isTitleValidated.value = true
 }
 
-const isFormValid = computed(() => {
-  console.log('isFormValid', props.questionName, isNameValidated.value, isTitleValidated.value)
-  if (props.questionName === '') {
-    if (isNameValidated.value === false || nameValidateError.value !== '') {
-      return false
-    }
+function submitForm() {
+  if (props.questionName) {
+    questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
+  } else {
+    questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
+    // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
   }
-  if (isTitleValidated.value === false || titleValidateError.value !== '') {
-    return false
+  router.push({ name: 'collective', params: { collectiveName: props.collectiveName }})
+}
+
+function deleteQuestion() {
+  if (props.questionName) {
+    questionStore.deleteQuestion(props.questionName)
   }
-  return true
-})
+}
 </script>
 
 <style scoped>
