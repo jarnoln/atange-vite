@@ -44,20 +44,20 @@
     </p>
 
   </form>
-  <p> 
-    <li><router-link :to="{ name: 'collective', params: { collectiveName: props.collectiveName }}">Back</router-link></li>
+  <p v-if="collectiveStore.currentCollective">
+    <router-link :to="{ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
   </p>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
-  collectiveName: string
   questionName: string
 }>()
 
@@ -69,10 +69,11 @@ const titleValidateError = ref('')
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
 const questionStore = useQuestionStore()
+const collectiveStore = useCollectiveStore()
 const router = useRouter()
 
 onMounted(() => {
-  console.log('EditQuestion:onMounted', props.collectiveName, props.questionName)
+  console.log('EditQuestion:onMounted', props.questionName)
   if (props.questionName != '') {
     const question = questionStore.getQuestion(props.questionName)
     if (question != undefined) {
@@ -129,7 +130,9 @@ function submitForm() {
     questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
     // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
   }
-  router.push({ name: 'collective', params: { collectiveName: props.collectiveName }})
+  if (collectiveStore.currentCollective) {
+    router.push({ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }})
+  }
 }
 
 function deleteQuestion() {

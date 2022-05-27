@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div v-if="!collectiveName" class="form-control" :class="{ invalid: nameValidateError }">
+    <div v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
       <label for="collective-name">Name</label>
       <input
           id="collective-name"
@@ -34,22 +34,18 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <button id="collective-submit-button" :disabled="!isFormValid()">
+    <button id="collective-submit-button" :disabled="!isFormValid">
       {{ getSubmitButtonText() }}
     </button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
-
-const props = defineProps<{
-  collectiveName: string
-}>()
 
 const currentName = ref('')
 const currentTitle = ref('')
@@ -62,20 +58,18 @@ const collectiveStore = useCollectiveStore()
 const router = useRouter()
 
 onMounted(() => {
-  console.log('EditCollective:onMounted', props.collectiveName)
-  if (collectiveStore.currentCollective === undefined) {
-    collectiveStore.selectCollective(props.collectiveName)
-  }
   if (collectiveStore.currentCollective != undefined) {
     currentName.value = collectiveStore.currentCollective.name
     currentTitle.value = collectiveStore.currentCollective.title
     currentDescription.value = collectiveStore.currentCollective.description
+    validateName()
+    validateTitle()
   }
 })
 
 function submitForm() {
   // console.log('Tadaa!', currentName.value, currentTitle.value)
-  if (props.collectiveName) {
+  if (collectiveStore.currentCollective != undefined) {
     collectiveStore.updateCurrentCollective(currentTitle.value, '')
   } else {
     collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
@@ -110,7 +104,7 @@ function validateTitle() {
   isTitleValidated.value = true
 }
 
-function isFormValid() {
+const isFormValid = computed(() => {
   if (collectiveStore.currentCollective === undefined) {
     if (isNameValidated.value === false || nameValidateError.value !== '') {
       return false
@@ -120,7 +114,7 @@ function isFormValid() {
     return false
   }
   return true
-}
+})
 </script>
 
 <style scoped>

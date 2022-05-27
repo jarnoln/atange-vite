@@ -13,7 +13,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log('router beforeEach')
   if (to.meta.requiresAuth) {
     const sessionStore = useSessionStore()
     if (!sessionStore.isLoggedIn) {

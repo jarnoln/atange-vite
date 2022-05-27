@@ -8,7 +8,7 @@
           name="user-name"
           type="text"
           v-model.trim="currentUsername"
-          @blur="validateUsername"
+          @input="validateUsername"
       />
       <p v-if="usernameValidateError">{{ usernameValidateError }}</p>
     </div>

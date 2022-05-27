@@ -6,7 +6,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
-import CollectiveView from '../../src/views/CollectiveView.vue'
+import CollectiveBaseView from '../../src/views/CollectiveBaseView.vue'
 // import { EventService } from '../../src/services/EventService.ts'
 
 
@@ -28,7 +28,7 @@ const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
 
-describe('Test CollectiveView', () => {
+describe('Test CollectiveBaseView', () => {
   it('show collective information', async () => {
     collectiveStore.clear()
     const collective = {
@@ -40,7 +40,7 @@ describe('Test CollectiveView', () => {
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.currentCollective).toBe(undefined)
     sessionStore.login('superman', 'abcd')
-    const wrapper = mount(CollectiveView, {
+    const wrapper = mount(CollectiveBaseView, {
       props: {
         collectiveName: collective.name
       },
@@ -69,7 +69,7 @@ describe('Test CollectiveView', () => {
     collectiveStore.addCollective(collective.name, collective.title, collective.description)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.currentCollective).toBe(undefined)
-    const wrapper = mount(CollectiveView, {
+    const wrapper = mount(CollectiveBaseView, {
       props: {
         collectiveName: collective.name
       },
@@ -88,7 +88,7 @@ describe('Test CollectiveView', () => {
     expect(wrapper.text()).toContain('Unknown collective')
   }),
   it('show unknown if collective does not exist', () => {
-    const wrapper = mount(CollectiveView, {
+    const wrapper = mount(CollectiveBaseView, {
       props: {
         collectiveName: 'outsiders'
       },

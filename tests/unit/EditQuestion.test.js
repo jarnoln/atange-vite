@@ -24,7 +24,6 @@ describe('Test EditQuestion', () => {
                 plugins: [router, pinia]
             },
             props: {
-                collectiveName: '',
                 questionName: ''
             }
         })
