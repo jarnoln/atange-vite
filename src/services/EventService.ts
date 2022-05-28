@@ -224,6 +224,41 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
+  updateCollective: (collective: Collective) => {
+    // Creates collective in the backend. Note: Does not add collective to store.
+    const sessionStore = useSessionStore()
+    const notificationStore = useNotificationStore()
+    const path: string = '/api/collective/' + collective.name + '/'
+    const dataOut = {
+      name: collective.name,
+      title: collective.title,
+      description: collective.description,
+      is_visible: true,
+    }
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('updating_collective', 'Updating collective ' + collective.name)
+    console.log('PUT', path, dataOut)
+    apiClient.put(path, dataOut, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('updating_collective')
+      if (response.status === 200) {
+        notificationStore.notifySuccess('collective_updated', 'Updated collective: ' + collective.title)
+        console.log(response.data)
+      } else {
+        notificationStore.notifyError('Expected status code 200, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('updating_collective')
+      const message = 'Failed to update collective: ' + collective.name + '. '
+      handleApiError(error, message)
+    })
+  },
   deleteCollective: (collective: Collective) => {
     console.log('EventService:deleteCollective()')
     const sessionStore = useSessionStore()

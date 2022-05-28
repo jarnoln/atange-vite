@@ -115,6 +115,26 @@ describe('Test EventService:createCollective', () => {
   })
 })
 
+describe('Test EventService:updateCollective', () => {
+  it('updates collective', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '')
+    expect(notificationStore.count).toBe(0)
+    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('collective_updated')
+    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  })
+})
+
+describe('Test EventService:deleteCollective', () => {
+  it('deletes collective', async () => {
+    expect(notificationStore.count).toBe(0)
+    await EventService.deleteCollective({name: 'jla', title:'JLA'})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('collective_deleted')
+  })
+})
+
 describe('Test EventService:createQuestion', () => {
   it('creates question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '')
@@ -130,15 +150,6 @@ describe('Test EventService:createQuestion', () => {
     expect(notificationStore.count).toBe(0)
     await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
     expect(notificationStore.count).toBe(0)
-  })
-})
-
-describe('Test EventService:deleteCollective', () => {
-  it('deletes collective', async () => {
-    expect(notificationStore.count).toBe(0)
-    await EventService.deleteCollective({name: 'jla', title:'JLA'})
-    expect(notificationStore.count).toBe(1)
-    expect(notificationStore.latestNotification.id).toBe('collective_deleted')
   })
 })
 

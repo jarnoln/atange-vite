@@ -15,6 +15,16 @@ export default {
           })
         })
       },
+      put: (url, dataIn) => {
+        let status = 200
+        let dataOut = dataIn
+        return new Promise((resolve, reject) => {
+          resolve({
+            status: status,
+            data: dataOut
+          })
+        })
+      },
       post: (url, dataIn) => {
         let status = 201
         let dataOut = {}

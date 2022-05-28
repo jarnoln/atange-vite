@@ -122,6 +122,7 @@ function submitForm() {
   console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
   if (collectiveStore.currentCollective != undefined) {
     collectiveStore.updateCurrentCollective(currentTitle.value, '')
+    EventService.updateCollective({ name: collectiveStore.currentCollective.name, title: currentTitle.value, description: currentDescription.value })
   } else {
     collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
     EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: currentDescription.value })
