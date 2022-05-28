@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { validateStringLongEnough } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
@@ -40,6 +40,7 @@ const passwordValidateError = ref('')
 const isUsernameValidated = ref(false)
 const isPasswordValidated = ref(false)
 const route = useRoute()
+const router = useRouter()
 
 function getTitle() {
   return route.name
@@ -52,7 +53,7 @@ function submitForm() {
   } else {
       EventService.login(currentUsername.value, currentPassword.value)
   }
-  // router.push({ name: 'collective', params: { collectiveName: currentName.value }})
+  router.push({ name: 'home' })
 }
 
 function validateUsername() {

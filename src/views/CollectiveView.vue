@@ -9,7 +9,7 @@
       <tbody>
         <tr v-for="question in questionStore.questions">
           <td> {{ question.title }} </td>
-          <td v-if=" collectiveStore.currentCollective">
+          <td v-if="canEditQuestions">
             <router-link
               :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
                 Edit
@@ -22,15 +22,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { computed } from '@vue/reactivity';
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
+import { useSessionStore } from '../stores/SessionStore'
 
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
+const sessionStore = useSessionStore()
 
-onMounted(() => {
-  console.log('CollectiveView mounted')
+
+const canEditQuestions = computed(() => {
+  if (collectiveStore.currentCollective) {
+    if (sessionStore.isLoggedIn) {
+      return true
+    }
+  }
+  return false
 })
-
 </script>

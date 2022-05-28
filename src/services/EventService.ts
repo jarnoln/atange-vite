@@ -21,6 +21,7 @@ function storeCollectives(collectiveData: Collective[]) {
   const collectiveStore = useCollectiveStore()
   collectiveStore.clear()
   console.log('Fetched collectives: ', collectiveData.length)
+  console.log(...collectiveData)
   collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description))
 }
 

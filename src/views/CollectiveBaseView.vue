@@ -9,7 +9,6 @@
       <ul>
         <li><router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link></li>
         <li><router-link :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link></li>
-        <li><button id="delete-collective-btn" @click="deleteSelectedCollective">Delete collective</button></li>
       </ul>
     </p>
   </div>
@@ -37,12 +36,4 @@ onMounted(() => {
     EventService.fetchQuestions(props.collectiveName)
   }
 })
-
-function deleteSelectedCollective() {
-  const collective = collectiveStore.currentCollective
-  if (collective) {
-    collectiveStore.deleteCollective(collective.name)
-    EventService.deleteCollective(collective)
-  }
-}
 </script>

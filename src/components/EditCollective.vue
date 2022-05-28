@@ -35,15 +35,20 @@
       />
     </div>
     <button id="collective-submit-button" :disabled="!isFormValid">
-      {{ getSubmitButtonText() }}
+      {{ submitButtonText }}
+    </button>
+    <button id="cancel-btn" @click="userCancelled()">Cancel
     </button>
   </form>
+  <p v-if="showDeleteButton">
+    <button id="delete-collective-btn" @click="deleteSelectedCollective">Delete collective</button>
+  </p>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useCollectiveStore } from '../stores/CollectiveStore'
 import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
@@ -67,24 +72,21 @@ onMounted(() => {
   }
 })
 
-function submitForm() {
-  // console.log('Tadaa!', currentName.value, currentTitle.value)
-  if (collectiveStore.currentCollective != undefined) {
-    collectiveStore.updateCurrentCollective(currentTitle.value, '')
-  } else {
-    collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
-    EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: currentDescription.value })
+const showDeleteButton = computed(() => {
+  if (collectiveStore.currentCollective === undefined) {
+    return false
   }
-  router.push({ name: 'collective', params: { collectiveName: currentName.value }})
-}
+  // TODO: Check that current user is creator
+  return true
+})
 
-function getSubmitButtonText() {
+const submitButtonText = computed(() => {
   if (collectiveStore.currentCollective === undefined) {
     return 'Create'
   } else {
     return 'Save'
   }
-}
+})
 
 function validateName() {
   console.log('validateName:', currentName.value)
@@ -115,6 +117,35 @@ const isFormValid = computed(() => {
   }
   return true
 })
+
+function submitForm() {
+  console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
+  if (collectiveStore.currentCollective != undefined) {
+    collectiveStore.updateCurrentCollective(currentTitle.value, '')
+  } else {
+    collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
+    EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: currentDescription.value })
+  }
+  router.push({ name: 'collective-view', params: { collectiveName: currentName.value }})
+}
+
+function userCancelled() {
+  if (collectiveStore.currentCollective) {
+    router.push({ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }})
+  } else {
+    router.push({ name: 'home' })
+  }
+}
+
+function deleteSelectedCollective() {
+  const collective = collectiveStore.currentCollective
+  if (collective) {
+    collectiveStore.deleteCollective(collective.name)
+    EventService.deleteCollective(collective)
+    router.push({ name: 'home' })
+  }
+}
+
 </script>
 
 <style scoped>

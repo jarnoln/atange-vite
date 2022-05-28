@@ -135,7 +135,7 @@ function submitForm() {
     }
   }
   if (collectiveStore.currentCollective) {
-    router.push({ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }})
+    router.push({ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }})
   }
 }
 
