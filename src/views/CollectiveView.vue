@@ -29,8 +29,6 @@ import { useQuestionStore } from '../stores/QuestionStore'
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 
-// const route = useRoute()
-
 onMounted(() => {
   console.log('CollectiveView mounted')
 })

@@ -7,9 +7,8 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
     currentCollectiveName: '',
   }),
   getters: {
-    collectiveNames: (state) => {
-      return state.collectives.map(collective => collective.name)
-    },
+    count: (state) => state.collectives.length,
+    collectiveNames: (state) => state.collectives.map(collective => collective.name),
     currentCollective: (state) => {
       if (state.currentCollectiveName === '') {
         return undefined

@@ -35,12 +35,34 @@ describe('Test EventService:fetchCollectives', () => {
     expect(collectiveStore.collectives[0].name).toBe('jla')
     expect(collectiveStore.collectives[0].title).toBe('JLA')
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  }),
+  it('clears previous collectives when fetching new ones', async () => {
+    collectiveStore.addCollective('jsa', 'JSA', '')
+    collectiveStore.addCollective('checkmate', 'Checkmate', '')
+    collectiveStore.selectCollective('jsa')
+    expect(collectiveStore.currentCollective.name).toBe('jsa')
+    expect(collectiveStore.count).toBe(2)
+    await EventService.fetchCollectives()
+    expect(collectiveStore.count).toBe(1)
+    expect(collectiveStore.collectives[0].name).toBe('jla')
+    expect(collectiveStore.collectives[0].title).toBe('JLA')
+    expect(collectiveStore.currentCollective).toBe(undefined)
+    // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
   })
 })
 
 describe('Test EventService:fetchQuestions', () => {
   it('fetches and stores questions', async () => {
     expect(questionStore.count).toBe(0)
+    await EventService.fetchQuestions('jla')
+    expect(questionStore.count).toBe(1)
+    expect(questionStore.questions[0].name).toBe('q1')
+    expect(questionStore.questions[0].title).toBe('Question 1')
+  }),
+  it('clears previous questions when fetching new ones', async () => {
+    questionStore.addQuestion('oq1', 'Old question 1', '')
+    questionStore.addQuestion('oq2', 'Old question 2', '')
+    expect(questionStore.count).toBe(2)
     await EventService.fetchQuestions('jla')
     expect(questionStore.count).toBe(1)
     expect(questionStore.questions[0].name).toBe('q1')

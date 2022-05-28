@@ -28,7 +28,7 @@ const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
 onMounted(() => {
-  collectiveStore.addExampleCollectives()
+  // collectiveStore.addExampleCollectives()
 })
 
 function deleteCollective(collective: Collective) {

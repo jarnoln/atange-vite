@@ -28,8 +28,10 @@ describe('Test CollectiveStore', () => {
   it('can store collectives', () => {
     collectiveStore.addCollective(collective_1.name, collective_1.title, collective_1.description)
     expect(collectiveStore.collectives.length).toBe(1)
+    expect(collectiveStore.count).toBe(1)
     collectiveStore.addCollective(collective_2.name, collective_2.title, collective_2.description)
     expect(collectiveStore.collectives.length).toBe(2)
+    expect(collectiveStore.count).toBe(2)
   }),
   it('can select active collective', () => {
     collectiveStore.addCollective(collective_1.name, collective_1.title, collective_1.description)
