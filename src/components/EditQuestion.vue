@@ -142,6 +142,7 @@ function submitForm() {
 function deleteQuestion() {
   if (props.questionName) {
     questionStore.deleteQuestion(props.questionName)
+    EventService.deleteQuestion(props.questionName)
   }
 }
 </script>

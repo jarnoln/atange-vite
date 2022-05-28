@@ -294,5 +294,37 @@ export const EventService = {
       const message = 'Failed to create question: ' + question.name + '. '
       handleApiError(error, message)
     })
+  },
+  deleteQuestion: (name: string) => {
+    console.log('EventService:deleteQuestion', name)
+    const sessionStore = useSessionStore()
+    const notificationStore = useNotificationStore()
+    const collectiveStore = useCollectiveStore()
+    if (!collectiveStore.currentCollective) {
+      console.warn('No collective selected, can not delete question')
+      return
+    }
+    const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + name + '/'
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('deleting_question', 'Deleting question ' + name)
+    apiClient.delete(path, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('deleting_question')
+      if (response.status === 204) {
+        notificationStore.notifySuccess('question_deleted', 'Deleted question: ' + name)
+      } else {
+        notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('deleting_question')
+      const message = 'Failed to delete question: ' + name + '. '
+      handleApiError(error, message)
+    })
   }
 }
