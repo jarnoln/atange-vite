@@ -25,6 +25,14 @@ export const useQuestionStore = defineStore('QuestionStore', {
         return undefined
       }
     },
+    getAnswers(questionName: string) {
+      const question = this.questions.find(question => question.name === questionName)
+      if (question != undefined) {
+        return question.answers
+      } else {
+        return []
+      }
+    },
     addQuestion(name: string, title: string, description: string) {
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)
@@ -41,7 +49,8 @@ export const useQuestionStore = defineStore('QuestionStore', {
         itemType: 'Q',
         order: 0,
         parent: '',
-        creator: ''
+        creator: '',
+        answers: []
       })
     },
     updateQuestion(name: string, title: string, description: string) {
@@ -58,6 +67,24 @@ export const useQuestionStore = defineStore('QuestionStore', {
       const index = this.questions.findIndex(question => question.name === name)
       console.log(name, 'found at index', index)
       this.questions = this.questions.filter(question => question.name != name)
+    },
+    addAnswer(questionName: string, user: string, vote: number, comment: string) {
+      const question = this.questions.find(question => question.name === questionName)
+      if (question != undefined) {
+        const answer = question.answers.find(answer => answer.user === user)
+        if (answer === undefined) {
+          question.answers.push({
+            question: questionName,
+            user: user,
+            vote: vote,
+            comment: comment
+          })
+        } else {
+          console.warn('User', user, 'has already answered question', questionName)
+        }
+      } else {
+        console.warn('No such question:', questionName)
+      }
     }
   }
 })

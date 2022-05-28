@@ -1,7 +1,14 @@
 export interface Collective {
-    name: string
-    title: string
-    description: string
+  name: string
+  title: string
+  description: string
+}
+
+export interface Answer {
+  question: string
+  user: string
+  vote: number
+  comment: string
 }
 
 export interface Question {
@@ -12,6 +19,7 @@ export interface Question {
     order: number
     parent: string
     creator: string
+    answers: Answer[]
 }
 
 export interface Notification {
