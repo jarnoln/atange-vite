@@ -85,6 +85,33 @@ export const useQuestionStore = defineStore('QuestionStore', {
       } else {
         console.warn('No such question:', questionName)
       }
+    },
+    updateAnswer(questionName: string, user: string, vote: number, comment: string) {
+      const question = this.questions.find(question => question.name === questionName)
+      if (question != undefined) {
+        const answer = question.answers.find(answer => answer.user === user)
+        if (answer != undefined) {
+          answer.vote = vote
+          answer.comment = comment
+        } else {
+          console.warn('User', user, 'has not answered question', questionName)
+        }
+      } else {
+        console.warn('No such question:', questionName)
+      }
+    },
+    deleteAnswer(questionName: string, user: string) {
+      const question = this.questions.find(question => question.name === questionName)
+      if (question != undefined) {
+        const answer = question.answers.find(answer => answer.user === user)
+        if (answer != undefined) {
+          question.answers = question.answers.filter(answer => answer.user != user)
+        } else {
+          console.warn('User', user, 'has not answered question', questionName)
+        }
+      } else {
+        console.warn('No such question:', questionName)
+      }
     }
   }
 })
