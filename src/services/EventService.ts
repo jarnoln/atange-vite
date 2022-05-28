@@ -330,6 +330,50 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
+  updateQuestion: (currentName: string, question: Question) => {
+    // Creates collective in the backend. Note: Does not add question to store.
+    const collectiveStore = useCollectiveStore()
+    const sessionStore = useSessionStore()
+    const notificationStore = useNotificationStore()
+
+    if (!collectiveStore.currentCollective) {
+      console.warn('No collective selected, can not update question')
+      return
+    }
+    const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + currentName + '/'
+    const dataOut = {
+      name: question.name,
+      title: question.title,
+      description: question.description,
+      item_type: question.itemType,
+      order: question.order,
+      parent: question.parent,
+      creator: ''
+    }
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('updating_question', 'Updating question ' + question.title)
+    console.log('PUT', path, dataOut)
+    apiClient.put(path, dataOut, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('updating_question')
+      if (response.status === 200) {
+        notificationStore.notifySuccess('question_updated', 'Updated question: ' + question.title)
+        console.log(response.data)
+      } else {
+        notificationStore.notifyError('Expected status code 200, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('updating_question')
+      const message = 'Failed to update question: ' + currentName + '. '
+      handleApiError(error, message)
+    })
+  },
   deleteQuestion: (name: string) => {
     console.log('EventService:deleteQuestion', name)
     const sessionStore = useSessionStore()

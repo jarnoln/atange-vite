@@ -126,9 +126,14 @@ function validateTitle() {
 function submitForm() {
   if (props.questionName) {
     questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
+    const question = questionStore.getQuestion(props.questionName)
+    // Get updated question from store so that it has proper default attributes when sending it to backend
+    if (question != undefined) {
+      EventService.updateQuestion(props.questionName, question)
+    }
   } else {
     questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
-    // Get question from store so that it has proper default attributes when sending it to backend
+    // Get created question from store so that it has proper default attributes when sending it to backend
     const question = questionStore.getQuestion(currentName.value)
     if (question != undefined) {
       EventService.createQuestion(question)

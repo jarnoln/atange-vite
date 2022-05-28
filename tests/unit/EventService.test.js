@@ -153,6 +153,18 @@ describe('Test EventService:createQuestion', () => {
   })
 })
 
+describe('Test EventService:updateQuestion', () => {
+  it('updates question', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    await EventService.updateQuestion('q1', {name: 'q2', title:'Question 2', description: 'Question of Ethics'})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('question_updated')
+    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  })
+})
+
 describe('Test EventService:deleteQuestion', () => {
   it('deletes question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '')
