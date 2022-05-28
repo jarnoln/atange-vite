@@ -4,8 +4,8 @@ import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
-import { useCollectiveStore } from '../../src/stores/CollectiveStore'
-import { useSessionStore } from '../../src/stores/SessionStore'
+import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+import { useSessionStore } from '../../src/stores/SessionStore'
 import CollectiveBaseView from '../../src/views/CollectiveBaseView.vue'
 
 

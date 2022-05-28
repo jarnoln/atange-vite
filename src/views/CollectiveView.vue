@@ -8,7 +8,11 @@
       </thead>
       <tbody>
         <tr v-for="question in questionStore.questions">
-          <td> {{ question.title }} </td>
+          <td>
+            <router-link :to="{ name: 'question', params: { questionName: question.name }}">
+              {{ question.title }}
+            </router-link>
+            </td>
           <td v-if="canEditQuestions">
             <router-link
               :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
