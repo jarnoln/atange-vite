@@ -188,7 +188,7 @@ export const EventService = {
     })
   },
   createCollective: (collective: Collective) => {
-    // Creates collective in the backend. Note: Doesn not add collective in store.
+    // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collective.name + '/'
@@ -245,6 +245,50 @@ export const EventService = {
     .catch(error => {
       notificationStore.notifyWaitOff('deleting_collective')
       const message = 'Failed to delete collective: ' + collective.name + '. '
+      handleApiError(error, message)
+    })
+  },
+  createQuestion: (question: Question) => {
+    // Creates collective in the backend. Note: Does not add question to store.
+    const collectiveStore = useCollectiveStore()
+    const sessionStore = useSessionStore()
+    const notificationStore = useNotificationStore()
+
+    if (!collectiveStore.currentCollective) {
+      console.warn('No collective selected, can not create question')
+      return
+    }
+    const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + question.name + '/'
+    const dataOut = {
+      name: question.name,
+      title: question.title,
+      description: question.description,
+      item_type: question.itemType,
+      order: question.order,
+      parent: question.parent,
+      creator: ''
+    }
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('creating_question', 'Creating question ' + question.title)
+    console.log('POST', path, dataOut)
+    apiClient.post(path, dataOut, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('creating_question')
+      if (response.status === 201) {
+        notificationStore.notifySuccess('question_created', 'Created new question: ' + question.title)
+        console.log(response.data)
+      } else {
+        notificationStore.notifyError('Expected status code 201, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('creating_question')
+      const message = 'Failed to create question: ' + question.name + '. '
       handleApiError(error, message)
     })
   }

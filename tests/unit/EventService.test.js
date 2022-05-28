@@ -93,6 +93,26 @@ describe('Test EventService:createCollective', () => {
   })
 })
 
+describe('Test EventService:createQuestion', () => {
+  it('creates question', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '')
+    collectiveStore.selectCollective('jla')
+    expect(questionStore.count).toBe(0)
+    expect(notificationStore.count).toBe(0)
+    await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('question_created')
+    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  }),
+  it('does not create question if no collective selected', async () => {
+    expect(questionStore.count).toBe(0)
+    expect(notificationStore.count).toBe(0)
+    await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
+    expect(notificationStore.count).toBe(0)
+    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  })
+})
+
 describe('Test EventService:deleteCollective', () => {
   it('calls login with proper URL', async () => {
     expect(notificationStore.count).toBe(0)

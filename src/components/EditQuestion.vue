@@ -128,7 +128,11 @@ function submitForm() {
     questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
   } else {
     questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
-    // EventService.createQuestion({ name: currentName.value, title: currentTitle.value, description: '' })
+    // Get question from store so that it has proper default attributes when sending it to backend
+    const question = questionStore.getQuestion(currentName.value)
+    if (question != undefined) {
+      EventService.createQuestion(question)
+    }
   }
   if (collectiveStore.currentCollective) {
     router.push({ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }})
