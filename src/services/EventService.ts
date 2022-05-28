@@ -1,9 +1,10 @@
 import axios from 'axios'
 
 import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { useNotificationStore } from '../stores/NotificationStore'
-import { Collective } from '../types'
+import { Collective, Question } from '../types'
 
 
 const server: string = 'http://127.0.0.1:8000'
@@ -19,7 +20,15 @@ const apiClient = axios.create({
 function storeCollectives(collectiveData: Collective[]) {
   const collectiveStore = useCollectiveStore()
   console.log('Fetched collectives: ', collectiveData.length)
-  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, ''))
+  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description))
+}
+
+function storeQuestions(questionData: Question[]) {
+  const questionStore = useQuestionStore()
+  console.log('Fetched questions: ', questionData.length)
+  questionData.forEach(item => {
+    questionStore.addQuestion(item.name, item.title, item.description)
+  })
 }
 
 function handleApiError(error: any, message: string) {
@@ -59,6 +68,26 @@ export const EventService = {
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_collectives')
         const message = 'Failed to fetch collectives. '
+        handleApiError(error, message)
+      })
+  },
+  fetchQuestions: (collectiveName: string) => {
+    const notificationStore = useNotificationStore()
+    notificationStore.notifyWaitOn('fetching_questions', 'Fetching questions')
+    const path: string = '/api/collective/' + collectiveName + '/questions/'
+    apiClient.get(path)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_questions')
+        if (response.status === 200) {
+          storeQuestions(response.data)
+        } else {
+          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_questions')
+        const message = 'Failed to fetch questions. '
         handleApiError(error, message)
       })
   },

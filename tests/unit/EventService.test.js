@@ -3,6 +3,7 @@ import { createTestingPinia } from '@pinia/testing'
 import { EventService } from '../../src/services/EventService.ts'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 import { useNotificationStore } from '../../src/stores/NotificationStore'
+import { useQuestionStore } from '../../src/stores/QuestionStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
 
 vi.mock('axios')
@@ -13,22 +14,37 @@ createTestingPinia({
 })
 
 const collectiveStore = useCollectiveStore()
-const sessionStore = useSessionStore()
 const notificationStore = useNotificationStore()
+const questionStore = useQuestionStore()
+const sessionStore = useSessionStore()
+
 
 beforeEach(() => {
   collectiveStore.clear()
-  sessionStore.clear()
   notificationStore.clear()
+  questionStore.clear()
+  sessionStore.clear()
 })
 
 describe('Test EventService:fetchCollectives', () => {
-  it('calls fetch with proper URL', async () => {
+  it('fetches and stores collectives', async () => {
     expect(collectiveStore.currentCollective).toBe(undefined)
     expect(collectiveStore.collectives.length).toBe(0)
     await EventService.fetchCollectives()
     expect(collectiveStore.collectives.length).toBe(1)
+    expect(collectiveStore.collectives[0].name).toBe('jla')
+    expect(collectiveStore.collectives[0].title).toBe('JLA')
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  })
+})
+
+describe('Test EventService:fetchQuestions', () => {
+  it('fetches and stores questions', async () => {
+    expect(questionStore.count).toBe(0)
+    await EventService.fetchQuestions('jla')
+    expect(questionStore.count).toBe(1)
+    expect(questionStore.questions[0].name).toBe('q1')
+    expect(questionStore.questions[0].title).toBe('Question 1')
   })
 })
 

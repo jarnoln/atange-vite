@@ -5,6 +5,8 @@ export default {
         let dataOut = {}
         if (url === '/api/collectives/') {
           dataOut = [{ name: 'jla', title: 'JLA', description: '' }]
+        } else if (url === '/api/collective/jla/questions/') {
+          dataOut = [{ name: 'q1', title: 'Question 1', description: '' }]
         }
         return new Promise((resolve, reject) => {
           resolve({

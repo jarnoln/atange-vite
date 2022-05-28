@@ -32,7 +32,10 @@ const sessionStore = useSessionStore()
 
 onMounted(() => {
   console.log('CollectiveBaseView mounted')
-  collectiveStore.selectCollective(props.collectiveName)
+  if ((props.collectiveName) && (props.collectiveName != collectiveStore.currentCollectiveName)) {
+    collectiveStore.selectCollective(props.collectiveName)
+    EventService.fetchQuestions(props.collectiveName)
+  }
 })
 
 function deleteSelectedCollective() {
