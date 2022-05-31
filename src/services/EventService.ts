@@ -7,7 +7,14 @@ import { useNotificationStore } from '../stores/NotificationStore'
 import { Collective, Question } from '../types'
 
 
-const server: string = 'http://127.0.0.1:8000'
+// console.log('import.meta.env.VITE_BACKEND_URL', import.meta.env.VITE_BACKEND_URL)
+
+let server = import.meta.env.VITE_BACKEND_URL
+if (!server) {
+  server = 'http://127.0.0.1:8000'
+}
+
+console.log('backend server:', server)
 
 const apiClient = axios.create({
   baseURL: server,
