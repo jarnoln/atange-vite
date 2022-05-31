@@ -1,16 +1,25 @@
-# Vue 3 + TypeScript + Vite
+# Atange 
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Frontend for Atange
 
-## Recommended IDE Setup
+[Atange backend](https://github.com/jarnoln/atange-backend)
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar)
+Created using these:
+* Framework: [Vue 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/)
+* Tooling: [Vite](https://vitejs.dev/)
+* Store: [Pinia](https://pinia.vuejs.org/)
+* Unit tests: [Vitest](https://vitest.dev/)
+* Components created using [Composition API](https://vuejs.org/guide/extras/composition-api-faq.html)
 
-## Type Support For `.vue` Imports in TS
-
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
-
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
-
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+Wetware upgrades used prior & during creation:
+* Very useful courses to learn basics in [Udemy](https://www.udemy.com) by [Maximilian Schwarzmüller](https://www.udemy.com/user/maximilian-schwarzmuller/):
+  * [Vue - The Complete Guide (incl. Router & Composition API)](https://www.udemy.com/course/vuejs-2-the-complete-guide/)
+  * [JavaScript Unit Testing - The Practical Guide](https://www.udemy.com/course/javascript-unit-testing-the-practical-guide/)
+* For more bleeding-edge things some courses in [Vue Mastery](https://www.vuemastery.com):
+  * [Intro to Vue 3](https://www.vuemastery.com/courses/intro-to-vue-3)
+  * [Real World Vue 3](https://www.vuemastery.com/courses/real-world-vue3)
+  * [Vue 3 Composition API](https://www.vuemastery.com/courses/vue-3-essentials)
+  * [Intro to Vue 3 + TypeScript](https://www.vuemastery.com/courses/vue3-typescript)
+  * [Unit Testing Vue 3](https://www.vuemastery.com/courses/unit-testing-vue-3)
+  * [From Vuex to Pinia](https://www.vuemastery.com/courses/from-vuex-to-pinia)
+  * [Lightning Fast Builds with Vite](https://www.vuemastery.com/courses/lightning-fast-builds-with-vite)
