@@ -3,9 +3,9 @@
     <h1 id="question-title">{{ question.title }}</h1>
     <p id="question-description">{{ question.description }}</p>
     <p v-if="sessionStore.isLoggedIn">
-      <button>Yes</button>
-      <button>Abstain</button>
-      <button>No</button>
+      <button id="answer-yes-btn">Yes</button>
+      <button id="answer-abstain-btn">Abstain</button>
+      <button id="answer-no-btn">No</button>
     </p>
   </div>
   <p v-else>Unknown question</p>
