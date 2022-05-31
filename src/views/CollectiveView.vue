@@ -7,7 +7,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="question in questionStore.questions">
+        <tr v-for="question in questionStore.questions" :key="question.name">
           <td>
             <router-link :to="{ name: 'question', params: { questionName: question.name }}">
               {{ question.title }}

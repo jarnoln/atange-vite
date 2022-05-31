@@ -6,7 +6,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="collective in collectiveStore.collectives">
+      <tr v-for="collective in collectiveStore.collectives" :key="collective.name">
         <td> <router-link :to="{ name: 'collective-view', params: { collectiveName: collective.name }}">{{ collective.title }}</router-link> </td>
         <td v-if="sessionStore.isLoggedIn">
           <router-link :to="{ name: 'collective-edit', params: { collectiveName: collective.name }}">Edit</router-link>
