@@ -36,11 +36,15 @@ export const useQuestionStore = defineStore('QuestionStore', {
     addQuestion(name: string, title: string, description: string) {
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)
-        return
+        return false
       }
       if (title.length < 1) {
         console.warn('addQuestion: Title too short:', title)
-        return
+        return false
+      }
+      if (this.getQuestion(name) != undefined) {
+        console.warn('Question with name', name, 'already exists')
+        return false
       }
       this.questions.push({
         name: name,
@@ -52,6 +56,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         creator: '',
         answers: []
       })
+      return true
     },
     updateQuestion(name: string, title: string, description: string) {
       const index = this.questions.findIndex(question => question.name === name)

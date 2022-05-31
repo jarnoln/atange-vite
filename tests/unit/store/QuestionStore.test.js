@@ -25,27 +25,43 @@ describe('Test QuestionStore', () => {
   beforeEach(() => {
     questionStore.clear()
   }),
-  it('can store questions', () => {
+  it('stores questions', () => {
     expect(questionStore.count).toBe(0)
-    questionStore.addQuestion(q1.name, q1.title, q1.description)
+    expect(questionStore.addQuestion(q1.name, q1.title, q1.description)).toBe(true)
     expect(questionStore.count).toBe(1)
-    questionStore.addQuestion(q2.name, q2.title, q2.description)
+    expect(questionStore.addQuestion(q2.name, q2.title, q2.description)).toBe(true)
     expect(questionStore.count).toBe(2)
+    expect(questionStore.questions[0].name, q1.name)
+    expect(questionStore.questions[0].title, q1.title)
+    expect(questionStore.questions[0].description, q1.description)
+    expect(questionStore.questions[1].name, q2.name)
+    expect(questionStore.questions[1].title, q2.title)
+    expect(questionStore.questions[1].description, q2.description)
   }),
   it('does not store invalid questions', () => {
     expect(questionStore.count).toBe(0)
-    questionStore.addQuestion('', q1.title, q1.description)
+    expect(questionStore.addQuestion('', q1.title, q1.description)).toBe(false)
     expect(questionStore.count).toBe(0)
-    questionStore.addQuestion(q1.name, '', q1.description)
+    expect(questionStore.addQuestion(q1.name, '', q1.description)).toBe(false)
     expect(questionStore.count).toBe(0)
   }),
-  it('can update question', () => {
+  it('does not store question with name that already exists', () => {
+    expect(questionStore.count).toBe(0)
+    questionStore.addQuestion(q1.name, q1.title, q1.description)
+    expect(questionStore.count).toBe(1)
+    expect(questionStore.addQuestion(q1.name, q2.title, q2.description)).toBe(false)
+    expect(questionStore.count).toBe(1)
+    expect(questionStore.questions[0].name, q1.name)
+    expect(questionStore.questions[0].title, q1.title)
+    expect(questionStore.questions[0].description, q1.description)
+  }),
+  it('updates question', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.updateQuestion(q1.name, 'Outsiders', 'Out in the cold')
     expect(questionStore.questions[0].title, 'Outsiders')
     expect(questionStore.questions[0].description, 'Out in the cold')
   }),
-  it('can delete questions', () => {
+  it('deletes questions', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addQuestion(q2.name, q2.title, q2.description)
     expect(questionStore.count).toBe(2)
@@ -62,7 +78,7 @@ describe('Test QuestionStore', () => {
     questionStore.deleteQuestion(q1.name)
     expect(questionStore.count).toBe(0)
   }),
-  it('can get question names', () => {
+  it('lists question names', () => {
     expect(questionStore.questionNames).toEqual([])
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addQuestion(q2.name, q2.title, q2.description)
@@ -77,7 +93,7 @@ describe('Test QuestionStore', () => {
     expect(questionStore.questions.length).toBe(0)
     expect(questionStore.count).toBe(0)
   })
-  it('can store answers', () => {
+  it('stores answers', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
@@ -100,7 +116,7 @@ describe('Test QuestionStore', () => {
     expect(questionStore.getAnswers(q1.name)[0].vote).toBe(1)
     expect(questionStore.getAnswers(q1.name)[0].comment).toBe('Of course')
   }),
-  it('can change answers', () => {
+  it('updates answers', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
     questionStore.addAnswer(q1.name, 'batman', -1, 'No way')
@@ -123,7 +139,7 @@ describe('Test QuestionStore', () => {
     questionStore.updateAnswer(q1.name, 'superman', -1, 'No way')
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
   }),
-  it('can delete answers', () => {
+  it('deletes answers', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
     questionStore.addAnswer(q1.name, 'batman', -1, 'No way')
