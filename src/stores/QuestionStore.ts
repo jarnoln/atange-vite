@@ -105,6 +105,27 @@ export const useQuestionStore = defineStore('QuestionStore', {
         console.warn('No such question:', questionName)
       }
     },
+    setAnswer(questionName: string, user: string, vote: number, comment: string) {
+      // Sets answer regardless if it exists or not
+      // If answer exists, update it. Otherwise create new answer.
+      const question = this.questions.find(question => question.name === questionName)
+      if (question != undefined) {
+        const answer = question.answers.find(answer => answer.user === user)
+        if (answer != undefined) {
+          answer.vote = vote
+          answer.comment = comment
+        } else {
+          question.answers.push({
+            question: questionName,
+            user: user,
+            vote: vote,
+            comment: comment
+          })
+        }
+      } else {
+        console.warn('No such question:', questionName)
+      }
+    },
     deleteAnswer(questionName: string, user: string) {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {

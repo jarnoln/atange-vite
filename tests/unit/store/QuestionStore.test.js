@@ -139,6 +139,21 @@ describe('Test QuestionStore', () => {
     questionStore.updateAnswer(q1.name, 'superman', -1, 'No way')
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
   }),
+  it('setAnswer creates answer if it does not exist', () => {
+    questionStore.addQuestion(q1.name, q1.title, q1.description)
+    expect(questionStore.getAnswers(q1.name).length).toBe(0)
+    questionStore.setAnswer(q1.name, 'superman', 1, 'Of course')
+    expect(questionStore.getAnswers(q1.name).length).toBe(1)
+  }),
+  it('setAnswer updates answer if it already exists', () => {
+    questionStore.addQuestion(q1.name, q1.title, q1.description)
+    questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
+    expect(questionStore.getAnswers(q1.name).length).toBe(1)
+    questionStore.setAnswer(q1.name, 'superman', -1, 'Or maybe not')
+    expect(questionStore.getAnswers(q1.name).length).toBe(1)
+    expect(questionStore.getAnswers(q1.name)[0].vote).toBe(-1)
+    expect(questionStore.getAnswers(q1.name)[0].comment).toBe('Or maybe not')
+  }),
   it('deletes answers', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
