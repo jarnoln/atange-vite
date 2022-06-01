@@ -28,9 +28,14 @@ const sessionStore = useSessionStore()
 
 
 describe('Test QuestionView', () => {
-  it('show question information', async () => {
+  beforeEach(() => {
+    sessionStore.clear()
+    questionStore.clear()
+    collectiveStore.clear()
     collectiveStore.addCollective('jla', 'JLA', '')
     collectiveStore.selectCollective('jla')
+  }),
+  it('shows question information', async () => {
     questionStore.addQuestion('q1', 'Question 1', 'Most vital question')
     // sessionStore.login('superman', 'abcd')
     const wrapper = mount(QuestionView, {
@@ -47,8 +52,7 @@ describe('Test QuestionView', () => {
     expect(title.text()).toBe('Question 1')
     expect(description.text()).toBe('Most vital question')
   }),
-  it('show unknown if question does not exist', () => {
-    questionStore.clear()
+  it('shows unknown if question does not exist', () => {
     const wrapper = mount(QuestionView, {
       props: {
         questionName: 'qq'
@@ -59,9 +63,7 @@ describe('Test QuestionView', () => {
     })
     expect(wrapper.text()).toContain('Unknown question')
   }),
-  it('show answer buttons if logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '')
-    collectiveStore.selectCollective('jla')
+  it('shows buttons which can be used to cast vote', async () => {
     questionStore.addQuestion('q1', 'Question 1', 'Most vital question')
     sessionStore.login('superman', 'abcd')
     const wrapper = mount(QuestionView, {
@@ -72,7 +74,6 @@ describe('Test QuestionView', () => {
         plugins: [pinia, router]
       }
     })
-    await nextTick()
     const title = wrapper.get('#question-title')
     const description = wrapper.get('#question-description')
     const yesButton = wrapper.get('#answer-yes-btn')
@@ -80,5 +81,21 @@ describe('Test QuestionView', () => {
     const noButton = wrapper.get('#answer-no-btn')
     expect(title.text()).toBe('Question 1')
     expect(description.text()).toBe('Most vital question')
+    expect(questionStore.getAnswers('q1').length).toBe(0)
+    yesButton.trigger('click')
+    await nextTick()
+    expect(questionStore.getAnswers('q1').length).toBe(1)
+    expect(questionStore.getAnswers('q1')[0].user).toBe('superman')
+    expect(questionStore.getAnswers('q1')[0].vote).toBe(1)
+    noButton.trigger('click')
+    await nextTick()
+    expect(questionStore.getAnswers('q1').length).toBe(1)
+    expect(questionStore.getAnswers('q1')[0].user).toBe('superman')
+    expect(questionStore.getAnswers('q1')[0].vote).toBe(-1)
+    abstainButton.trigger('click')
+    await nextTick()
+    expect(questionStore.getAnswers('q1').length).toBe(1)
+    expect(questionStore.getAnswers('q1')[0].user).toBe('superman')
+    expect(questionStore.getAnswers('q1')[0].vote).toBe(0)
   })
 })
