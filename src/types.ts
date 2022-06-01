@@ -30,3 +30,12 @@ export interface Notification {
     needAck: boolean
     ack: boolean
 }
+
+export interface Approval {
+  yes: number
+  no: number
+  abstain: number
+  opinions: number
+  votes: number
+  approvalPct: number | undefined
+}

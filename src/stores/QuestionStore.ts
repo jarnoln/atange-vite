@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { Question } from '../types'
+import { Question, Approval } from '../types'
+import { approval } from '../utils/approval'
 
 export const useQuestionStore = defineStore('QuestionStore', {
   state: () => ({
@@ -32,6 +33,10 @@ export const useQuestionStore = defineStore('QuestionStore', {
       } else {
         return []
       }
+    },
+    getApproval(questionName: string) : Approval {
+      const answers = this.getAnswers(questionName)
+      return approval(answers)
     },
     addQuestion(name: string, title: string, description: string) {
       if (name.length < 1) {

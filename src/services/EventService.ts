@@ -7,8 +7,10 @@ import { useNotificationStore } from '../stores/NotificationStore'
 import { Collective, Question } from '../types'
 
 
-// console.log('import.meta.env.VITE_BACKEND_URL', import.meta.env.VITE_BACKEND_URL)
-
+// Define the real backed server URL in environment variable VITE_BACKEND_URL
+// For example can create .env.local-file with content
+//  VITE_BACKEND_URL="https://my.backend.server"
+// By default using Django's default development server URL
 let server = import.meta.env.VITE_BACKEND_URL
 if (!server) {
   server = 'http://127.0.0.1:8000'
