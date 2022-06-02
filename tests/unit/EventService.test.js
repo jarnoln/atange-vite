@@ -175,3 +175,14 @@ describe('Test EventService:deleteQuestion', () => {
     expect(notificationStore.latestNotification.id).toBe('question_deleted')
   })
 })
+
+describe('Test EventService:updateAnswer', () => {
+  it('updates answer', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    await EventService.updateAnswer('q1', 'u1', 1, '')
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('answer_updated')
+  })
+})

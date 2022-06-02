@@ -399,6 +399,7 @@ export const EventService = {
       }
     }
     notificationStore.notifyWaitOn('deleting_question', 'Deleting question ' + name)
+    console.log('DELETE', path)
     apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_question')
@@ -412,6 +413,48 @@ export const EventService = {
     .catch(error => {
       notificationStore.notifyWaitOff('deleting_question')
       const message = 'Failed to delete question: ' + name + '. '
+      handleApiError(error, message)
+    })
+  },
+  updateAnswer: (questionName: string, user: string, vote: number, comment: string) => {
+    console.log('EventService:updateAnswer', questionName, user, vote, comment)
+    const sessionStore = useSessionStore()
+    const notificationStore = useNotificationStore()
+    const collectiveStore = useCollectiveStore()
+    if (!collectiveStore.currentCollective) {
+      console.warn('No collective selected, can not delete question')
+      return
+    }
+    const collectiveName = collectiveStore.currentCollective.name
+    const path = '/api/collective/' + collectiveName + '/question/' + questionName + '/answer/' + user + '/'
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const dataOut = {
+      vote: vote,
+      comment: comment
+    }
+    notificationStore.notifyWaitOn('updating_answer', 'Saving answer')
+    console.log('PUT', path, dataOut)
+    apiClient.put(path, dataOut, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('updating_answer')
+      if (response.status === 200) {
+        notificationStore.notifySuccess('answer_updated', 'Answer updated')
+        console.log(response.data)
+      } else if (response.status === 201) {
+        notificationStore.notifySuccess('answer_saved', 'Answer saved')
+         console.log(response.data)
+      } else {
+        notificationStore.notifyError('Expected status code 200, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('updating_answer')
+      const message = 'Failed to save answer'
       handleApiError(error, message)
     })
   }

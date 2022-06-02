@@ -50,19 +50,22 @@ function updateApproval() {
   }
 }
 
-function voteYes() {
-  questionStore.setAnswer(props.questionName, sessionStore.username, 1, '')
+function updateAnswer(vote: number) {
+  const comment = ''
+  questionStore.setAnswer(props.questionName, sessionStore.username, vote, comment)
   updateApproval()
+  EventService.updateAnswer(props.questionName, sessionStore.username, vote, comment)
+}
+
+function voteYes() {
+  updateAnswer(1)
 }
 
 function voteAbstain() {
-  questionStore.setAnswer(props.questionName, sessionStore.username, 0, '')
-  updateApproval()
+  updateAnswer(0)
 }
 
 function voteNo() {
-  questionStore.setAnswer(props.questionName, sessionStore.username, -1, '')
-  updateApproval()
+  updateAnswer(-1)
 }
-
 </script>
