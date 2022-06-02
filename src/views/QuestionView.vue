@@ -33,6 +33,7 @@ const approvalText = ref('-')
 
 onMounted(() => {
   console.log('QuestionView mounted')
+  updateApproval()
 })
 
 function updateApproval() {

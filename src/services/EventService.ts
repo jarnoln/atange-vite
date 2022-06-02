@@ -38,8 +38,12 @@ function storeQuestions(questionData: Question[]) {
   const questionStore = useQuestionStore()
   questionStore.clear()
   console.log('Fetched questions: ', questionData.length)
-  questionData.forEach(item => {
-    questionStore.addQuestion(item.name, item.title, item.description)
+  questionData.forEach(question => {
+    console.log(question)
+    questionStore.addQuestion(question.name, question.title, question.description)
+    question.answers.forEach(answer => {
+      questionStore.addAnswer(question.name, answer.user, answer.vote, answer.comment)
+    })
   })
 }
 
