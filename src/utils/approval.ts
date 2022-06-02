@@ -25,7 +25,7 @@ export function approval(answers: Answer[]) : Approval {
     }
   })
   assert ((yesCount + noCount + abstainCount) === voteCount)
-  let approvalPct = undefined
+  let approvalPct = null
   if (opinionCount > 0) {
     approvalPct = yesCount * 100 / opinionCount
   }

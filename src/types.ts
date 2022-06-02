@@ -37,5 +37,5 @@ export interface Approval {
   abstain: number
   opinions: number
   votes: number
-  approvalPct: number | undefined
+  approvalPct: number | null
 }

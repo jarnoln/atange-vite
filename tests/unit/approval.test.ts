@@ -15,7 +15,7 @@ it('should have valid values if no answers', () => {
   expect(result.yes).toBe(0)
   expect(result.abstain).toBe(0)
   expect(result.votes).toBe(0)
-  expect(result.approvalPct).toBe(undefined)
+  expect(result.approvalPct).toBe(null)
 })
 
 it('should be 100 with one yes vote', () => {
@@ -49,7 +49,7 @@ it('should be undefined with one abstain vote', () => {
   expect(result.no).toBe(0)
   expect(result.abstain).toBe(1)
   expect(result.opinions).toBe(0)
-  expect(result.approvalPct).toBe(undefined)
+  expect(result.approvalPct).toBe(null)
 })
 
 it('should be 0 with one no vote', () => {

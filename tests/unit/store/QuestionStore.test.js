@@ -96,7 +96,7 @@ describe('Test QuestionStore', () => {
   it('stores answers', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
-    expect(questionStore.getApproval(q1.name).approvalPct).toBe(undefined)
+    expect(questionStore.getApproval(q1.name).approvalPct).toBe(null)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(100)
