@@ -9,13 +9,16 @@
       <button id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
       <button id="answer-no-btn" @click="voteNo">No</button>
     </p>
+    <p v-if="collectiveStore.currentCollective">
+      <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
+    </p>
   </div>
   <p v-else>Unknown question</p>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-// import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { EventService } from '../services/EventService'
@@ -24,7 +27,7 @@ const props = defineProps<{
   questionName: string
 }>()
 
-// const collectiveStore = useCollectiveStore()
+const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
 const question = questionStore.getQuestion(props.questionName)

@@ -3,7 +3,11 @@
     <table>
       <thead>
         <tr>
-          <th>Questions: {{ questionStore.count }}</th>
+          <th class="text-left light-background">Questions: {{ questionStore.count }}</th>
+          <th class="light-background">Y</th>
+          <th class="light-background">N</th>
+          <th class="light-background">A</th>
+          <th class="light-background">Approval</th>
         </tr>
       </thead>
       <tbody>
@@ -12,7 +16,11 @@
             <router-link :to="{ name: 'question', params: { questionName: question.name }}">
               {{ question.title }}
             </router-link>
-            </td>
+          </td>
+          <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
+          <td class="text-right">{{ questionStore.getApproval(question.name).no }}</td>
+          <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
+          <td class="text-right"> {{ questionStore.getApproval(question.name).approvalPct }} %</td>
           <td v-if="canEditQuestions">
             <router-link
               :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
@@ -34,7 +42,6 @@ import { useSessionStore } from '../stores/SessionStore'
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
-
 
 const canEditQuestions = computed(() => {
   if (collectiveStore.currentCollective) {

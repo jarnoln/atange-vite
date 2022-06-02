@@ -67,7 +67,7 @@ export const EventService = {
 // For some reason unit tests were not able to call fetchCollectives
 // so moved functionality out here so that can test until can
 // figure out way to test method
-  fetchCollectives: () => {
+  fetchCollectives: async () => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_collectives', 'Fetching collectives')
     const path: string = '/api/collectives/'

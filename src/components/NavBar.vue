@@ -1,5 +1,5 @@
 <template>
-  <nav id="navbar">
+  <nav id="navbar" class="dark-background">
     <ul classid="right-links">
       <li>
         <router-link id="navbar-home" active-class="active" to="/">Home</router-link>
@@ -44,7 +44,6 @@ function logout() {
 <style scoped>
 #navbar {
   width: 100%;
-  background-color: navy;
   display: flex;
   justify-content: space-between;
 }
