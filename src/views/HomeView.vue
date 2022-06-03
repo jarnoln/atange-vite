@@ -1,5 +1,5 @@
 <template>
-  <h1>Home</h1>
+  <h1 class="text-center">Atange</h1>
   <CollectiveList />
   <p v-if="sessionStore.isLoggedIn">
   <router-link :to="{ name: 'create-collective' }">Create new collective</router-link>

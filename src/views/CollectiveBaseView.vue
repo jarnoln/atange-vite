@@ -29,8 +29,12 @@ const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
 
-onMounted(() => {
+onMounted(async () => {
   console.log('CollectiveBaseView mounted')
+  if (collectiveStore.count === 0) {
+    console.log('CollectiveBase:onMounted:wait for fetch')
+    await EventService.fetchCollectives()
+  }
   if ((props.collectiveName) && (props.collectiveName != collectiveStore.currentCollectiveName)) {
     collectiveStore.selectCollective(props.collectiveName)
     EventService.fetchQuestions(props.collectiveName)

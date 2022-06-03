@@ -71,7 +71,7 @@ export const EventService = {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_collectives', 'Fetching collectives')
     const path: string = '/api/collectives/'
-    apiClient.get(path)
+    return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_collectives')
         if (response.status === 200) {
@@ -87,11 +87,11 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
-  fetchQuestions: (collectiveName: string) => {
+  fetchQuestions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_questions', 'Fetching questions')
     const path: string = '/api/collective/' + collectiveName + '/questions/'
-    apiClient.get(path)
+    return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_questions')
         if (response.status === 200) {
@@ -107,7 +107,7 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
-  login: (username: string, password: string) => {
+  login: async (username: string, password: string) => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     notificationStore.notifyLoggingInOn()
@@ -117,7 +117,7 @@ export const EventService = {
       password: password
     }
 
-    apiClient.post('/auth/token/login/', dataOut)
+    return apiClient.post('/auth/token/login/', dataOut)
     .then(response => {
       notificationStore.notifyLoggingInOff()
       if (response.status === 200) {
@@ -136,7 +136,7 @@ export const EventService = {
       sessionStore.login('', '')
     })
   },
-  register: (username: string, password: string) => {
+  register: async (username: string, password: string) => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     notificationStore.notifyRegisteringOn()
@@ -146,7 +146,7 @@ export const EventService = {
       password: password
     }
 
-    apiClient.post('/auth/users/', dataOut)
+    return apiClient.post('/auth/users/', dataOut)
     .then(response => {
       notificationStore.notifyRegisteringOff()
       if (response.data['username'] === username ) {
@@ -176,7 +176,7 @@ export const EventService = {
       sessionStore.login('', '')
     })
   },
-  logout: () => {
+  logout: async () => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     const config = {
@@ -185,7 +185,7 @@ export const EventService = {
       }
     }
     notificationStore.notifyWaitOn('logging_out', 'Logging out')
-    apiClient.post('/auth/token/logout/', {}, config)
+    return apiClient.post('/auth/token/logout/', {}, config)
     .then(response => {
       sessionStore.logout()
       notificationStore.notifyWaitOff('logging_out')
@@ -203,7 +203,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  createCollective: (collective: Collective) => {
+  createCollective: async (collective: Collective) => {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -221,7 +221,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + collective.title)
     console.log('POST', path, dataOut)
-    apiClient.post(path, dataOut, config)
+    return apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_collective')
       if (response.status === 201) {
@@ -237,7 +237,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  updateCollective: (collective: Collective) => {
+  updateCollective: async (collective: Collective) => {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -255,7 +255,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('updating_collective', 'Updating collective ' + collective.name)
     console.log('PUT', path, dataOut)
-    apiClient.put(path, dataOut, config)
+    return apiClient.put(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('updating_collective')
       if (response.status === 200) {
@@ -272,7 +272,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  deleteCollective: (collective: Collective) => {
+  deleteCollective: async (collective: Collective) => {
     console.log('EventService:deleteCollective()')
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -283,7 +283,7 @@ export const EventService = {
       }
     }
     notificationStore.notifyWaitOn('deleting_collective', 'Deleting collective ' + collective.title)
-    apiClient.delete(path, config)
+    return apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_collective')
       if (response.status === 204) {
@@ -299,7 +299,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  createQuestion: (question: Question) => {
+  createQuestion: async (question: Question) => {
     // Creates collective in the backend. Note: Does not add question to store.
     const collectiveStore = useCollectiveStore()
     const sessionStore = useSessionStore()
@@ -326,7 +326,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('creating_question', 'Creating question ' + question.title)
     console.log('POST', path, dataOut)
-    apiClient.post(path, dataOut, config)
+    return apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_question')
       if (response.status === 201) {
@@ -343,7 +343,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  updateQuestion: (currentName: string, question: Question) => {
+  updateQuestion: async (currentName: string, question: Question) => {
     // Creates collective in the backend. Note: Does not add question to store.
     const collectiveStore = useCollectiveStore()
     const sessionStore = useSessionStore()
@@ -370,7 +370,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('updating_question', 'Updating question ' + question.title)
     console.log('PUT', path, dataOut)
-    apiClient.put(path, dataOut, config)
+    return apiClient.put(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('updating_question')
       if (response.status === 200) {
@@ -387,7 +387,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  deleteQuestion: (name: string) => {
+  deleteQuestion: async (name: string) => {
     console.log('EventService:deleteQuestion', name)
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -404,7 +404,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('deleting_question', 'Deleting question ' + name)
     console.log('DELETE', path)
-    apiClient.delete(path, config)
+    return apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_question')
       if (response.status === 204) {
@@ -420,7 +420,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  updateAnswer: (questionName: string, user: string, vote: number, comment: string) => {
+  updateAnswer: async (questionName: string, user: string, vote: number, comment: string) => {
     console.log('EventService:updateAnswer', questionName, user, vote, comment)
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -442,7 +442,7 @@ export const EventService = {
     }
     notificationStore.notifyWaitOn('updating_answer', 'Saving answer')
     console.log('PUT', path, dataOut)
-    apiClient.put(path, dataOut, config)
+    return apiClient.put(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('updating_answer')
       if (response.status === 200) {
