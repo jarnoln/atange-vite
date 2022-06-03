@@ -26,6 +26,18 @@ export const useQuestionStore = defineStore('QuestionStore', {
         return undefined
       }
     },
+    getQuestionSkeleton() : Question {
+      return {
+        name: '',
+        title: '',
+        description: '',
+        itemType: 'Q',
+        order: 0,
+        parent: '',
+        creator: '',
+        answers: []
+      }
+    },
     getAnswers(questionName: string) {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="question">
+  <div v-if="question && question.name">
     <h1 id="question-title">{{ question.title }}</h1>
     <p id="question-description">{{ question.description }}</p>
     <h2 id="approval-title">Approval: {{ approvalText }} %</h2>
@@ -22,6 +22,7 @@ import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { EventService } from '../services/EventService'
+import { Question } from '../types'
 
 const props = defineProps<{
   questionName: string
@@ -30,16 +31,40 @@ const props = defineProps<{
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
-const question = questionStore.getQuestion(props.questionName)
 const approval = reactive(questionStore.getApproval(props.questionName))
 const approvalText = ref('-')
+const question : Question = reactive(questionStore.getQuestionSkeleton())
 
-onMounted(() => {
+onMounted(async () => {
   console.log('QuestionView mounted')
+  if (questionStore.count === 0) {
+    if (collectiveStore.currentCollective) {
+      console.log('QuestionView:fetch questions')
+      await EventService.fetchQuestions(collectiveStore.currentCollective.name)
+      console.log('QuestionView:fetched questions')
+    }
+  }
+  updateQuestion()
   updateApproval()
 })
 
+function updateQuestion() {
+  // TODO: There is probably a better way to do this
+  const newQuestion = questionStore.getQuestion(props.questionName)
+  if (newQuestion) {
+    question.name = newQuestion.name
+    question.title = newQuestion.title
+    question.description = newQuestion.description
+    question.itemType = newQuestion.itemType
+    question.order = newQuestion.order
+    question.parent = newQuestion.parent
+    question.creator = newQuestion.creator
+    question.answers = newQuestion.answers
+  }
+}
+
 function updateApproval() {
+  // TODO: There is probably a better way to do this
   const newApproval = questionStore.getApproval(props.questionName)
   approval.yes = newApproval.yes
   approval.no = newApproval.no

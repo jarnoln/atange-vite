@@ -46,7 +46,7 @@ describe('Test QuestionView', () => {
         plugins: [pinia, router]
       }
     })
-    // await nextTick()
+    await nextTick()
     const title = wrapper.get('#question-title')
     const description = wrapper.get('#question-description')
     expect(title.text()).toBe('Question 1')
@@ -74,6 +74,7 @@ describe('Test QuestionView', () => {
         plugins: [pinia, router]
       }
     })
+    await nextTick()
     const title = wrapper.get('#question-title')
     const description = wrapper.get('#question-description')
     const approval = wrapper.get('#approval-title')
