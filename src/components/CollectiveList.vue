@@ -1,6 +1,6 @@
 <template>
   <table>
-    <thead>
+    <thead v-show="false">
       <tr>
         <th id="collective-count">Collectives: {{ collectiveStore.collectives.length }}</th>
       </tr>

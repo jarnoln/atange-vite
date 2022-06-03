@@ -30,15 +30,24 @@ import Notifications from './components/Notifications.vue'
 }
 
 .dark-background {
-  background-color: navy;
+  background-color: #512483;
 }
 
 .light-background {
-  background-color: rgb(100, 100, 255);
+  background-color: rgb(200, 100, 240);
 }
 
 th {
   text-align: start;
   padding: 5px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
 }
 </style>

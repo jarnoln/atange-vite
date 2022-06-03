@@ -60,8 +60,12 @@ ul {
 
 a {
   text-decoration: none;
-  color: grey;
+  color: #cccccc;
   padding: 1rem;
+}
+
+a:visited {
+  color:  #cccccc;
 }
 
 a:hover {
