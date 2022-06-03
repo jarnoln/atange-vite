@@ -30,6 +30,9 @@
         </tr>
       </tbody>
     </table>
+    <p v-if="sessionStore.isLoggedIn">
+      <router-link :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link>
+    </p>
   </div>
 </template>
 

@@ -2,15 +2,10 @@
   <div v-if="collectiveStore.currentCollective !== undefined">
     <h1 id="collective-title">{{ collectiveStore.currentCollective.title }}</h1>
     <p id="collective-description">{{ collectiveStore.currentCollective.description }}</p>
-
+    <div v-if="sessionStore.isLoggedIn">
+      <router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link>
+    </div>
     <router-view></router-view>
-
-    <p v-if="sessionStore.isLoggedIn">
-      <ul>
-        <li><router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link></li>
-        <li><router-link :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link></li>
-      </ul>
-    </p>
   </div>
   <p v-else>Unknown collective</p>
 </template>
