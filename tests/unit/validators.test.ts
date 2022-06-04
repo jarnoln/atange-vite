@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { validateStringLongEnough, validateStringNotDuplicate } from '../../src/utils/validators'
+import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../../src/utils/validators'
 
 
-describe('validateStringLongEnough()', () => {
+describe('validateStringLongEnough', () => {
     it('should be invalid if string too short', () => {
         // Arrange
         const inputName: string = 'Username'
@@ -37,7 +37,7 @@ describe('validateStringLongEnough()', () => {
     })
 })
 
-describe('validateStringNotDuplicate()', () => {
+describe('validateStringNotDuplicate', () => {
     it('should be invalid if string already in array', () => {
         const inputValue: string = 'superman'
         const userNames: string[] = ['batman', 'superman']
@@ -53,5 +53,50 @@ describe('validateStringNotDuplicate()', () => {
         const result = validateStringNotDuplicate(inputValue, userNames)
 
         expect(result).toBe('')
+    })
+})
+
+describe('validateStringSlugified', () => {
+    it('should be valid if string contains regular lowercase characters', () => {
+        const inputValue: string = 'superman'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('')
+    }),
+    it('should be valid if string contains regular lowercase characters and dash', () => {
+        const inputValue: string = 'super-man'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('')
+    }),
+    it('should be invalid if string contains capital letters', () => {
+        const inputValue: string = 'Superman'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('username contains illegal characters')
+    }),
+    it('should be invalid if string contains spaces', () => {
+        const inputValue: string = 'super man'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('username contains illegal characters')
+    }),
+    it('should be invalid if string contains exclamation mark', () => {
+        const inputValue: string = 'superman!'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('username contains illegal characters')
+    }),
+    it('should be invalid if string contains question mark', () => {
+        const inputValue: string = 'superman?'
+
+        const result = validateStringSlugified('username', inputValue)
+
+        expect(result).toBe('username contains illegal characters')
     })
 })
