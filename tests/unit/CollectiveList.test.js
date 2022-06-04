@@ -1,6 +1,7 @@
 import { nextTick } from 'vue'
 import { render, fireEvent } from '@testing-library/vue'
-import { beforeEach, describe, expect, test, vi, vitest } from 'vitest'
+import { beforeEach, describe, expect, it, test, vi, vitest } from 'vitest'
+import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
@@ -24,7 +25,11 @@ const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
 describe('Test CollectiveList', () => {
-  test('test show collective titles', async () => {
+  beforeEach(() => {
+    collectiveStore.clear()
+    sessionStore.clear()
+  }),
+  it('shows collective titles', async () => {
     // The render method returns a collection of utilities to query your component.
     collectiveStore.addCollective('jla', 'JLA', '')
     collectiveStore.addCollective('jsa', 'JSA', '')
@@ -33,22 +38,42 @@ describe('Test CollectiveList', () => {
         plugins: [router, pinia]
       }
     })
-    // getByText returns the first matching node for the provided text, and
-    // throws an error if no elements match or if more than one match is found.
     getByText('Collectives: 2')
     getByText('JLA')
     getByText('JSA')
-
+  }),
+  it('shows create button if logged in', async () => {
+    const wrapper = mount(CollectiveList, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
     sessionStore.login('superman', 'abcd')
     await nextTick()
-    const createButton = getByText('Create new')
-    // const button2 = getByText('Delete JLA')
-
-    // Dispatch a native click event to our button element.
-    // await fireEvent.click(button1)
-    // getByText('Collectives: 1')
-
-    // await fireEvent.click(button2)
-    // getByText('Collectives: 0')
+    const createButton = wrapper.get('#create-collective-button')
+    expect(createButton.exists()).toBe(true)
+    expect(createButton.text()).toBe('Create new')
+  }),
+  it('shows create button if logged in', async () => {
+    const wrapper = mount(CollectiveList, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
+    sessionStore.login('superman', 'abcd')
+    await nextTick()
+    const createButton = wrapper.find('#create-collective-button')
+    expect(createButton.exists()).toBe(true)
+    expect(createButton.text()).toBe('Create new')
+  }),
+  it('does not show create button if not logged in', async () => {
+    const wrapper = mount(CollectiveList, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
+    await nextTick()
+    const createButton = wrapper.find('#create-collective-button')
+    expect(createButton.exists()).toBe(false)
   })
 })

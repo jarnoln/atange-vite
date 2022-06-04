@@ -17,7 +17,7 @@
       </tbody>
     </table>
     <p v-if="sessionStore.isLoggedIn">
-      <router-link class="btn" :to="{ name: 'create-collective' }">Create new</router-link>
+      <router-link class="btn" id="create-collective-button" :to="{ name: 'create-collective' }">Create new</router-link>
     </p>
   </div>
 </template>
