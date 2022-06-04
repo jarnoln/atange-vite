@@ -35,21 +35,31 @@
       <p v-if="nameValidateError">{{ nameValidateError }}</p>
     </div>
     <p>
-      <button id="question-submit-button" :disabled="!isFormValid">
+      <button class="btn" id="question-submit-button" :disabled="!isFormValid">
         {{ submitButtonText }}
       </button>
     </p>
   </form>
   <p>
-    <button v-if="!questionName" id="toggle-show-name-edit-button" @click="isNameInputShown = !isNameInputShown">
+    <button
+        v-if="!questionName"
+        class="btn"
+        id="toggle-show-name-edit-button"
+        @click="isNameInputShown = !isNameInputShown"
+    >
       {{ nameEditToggleButtonText }}
     </button>
   </p>
    <p>
-    <button id="question-delete-button" v-if="props.questionName" @click="deleteQuestion">Delete</button>
+    <button
+        v-if="props.questionName"
+        id="question-delete-button"
+        class="btn btn-danger"
+        @click="deleteQuestion"
+    >Delete</button>
   </p>
   <p v-if="collectiveStore.currentCollective">
-    <router-link :to="{ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
+    <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
   </p>
 </template>
 

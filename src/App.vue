@@ -59,12 +59,19 @@ th {
   background-color: #512483;
   padding: 0.5rem 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  margin: 0.5rem;
+  margin: 0 0.5rem 0 0;
 }
 
 .btn:hover {
   box-shadow: none;
   border: 2px solid black;
+}
+
+.btn:disabled {
+  color: grey;
+  box-shadow: none;
+  background-color: rgb(200, 140, 255);
+  border-color: rgb(200, 140, 255);
 }
 
 .btn-danger {

@@ -41,7 +41,11 @@
     </button>
   </form>
   <p>
-    <button v-if="!collectiveStore.currentCollective" id="toggle-show-name-edit-button" @click="isNameInputShown = !isNameInputShown">
+    <button
+        v-if="!collectiveStore.currentCollective"
+        class="btn"
+        id="toggle-show-name-edit-button"
+        @click="isNameInputShown = !isNameInputShown">
       {{ nameEditToggleButtonText }}
     </button>
   </p>
