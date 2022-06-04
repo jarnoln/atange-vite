@@ -1,13 +1,16 @@
 <template>
   <div v-if="collectiveStore.currentCollective !== undefined">
-    <table>
+    <p v-if="questionStore.count === 0">No questions</p>
+    <table v-else id="questions-table">
+      <caption>Questions: {{ questionStore.count }}</caption>
       <thead>
         <tr>
-          <th class="text-left light-background">Questions: {{ questionStore.count }}</th>
-          <th class="light-background">Y</th>
-          <th class="light-background">N</th>
-          <th class="light-background">A</th>
-          <th class="light-background">Approval</th>
+          <th class="text-left light-background">Question</th>
+          <th class="text-right light-background">Yes</th>
+          <th class="text-right light-background">No</th>
+          <th class="text-right light-background">Abstain</th>
+          <th class="text-right light-background">Approval</th>
+          <th class="text-right light-background" v-if="canEditQuestions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -68,5 +71,15 @@ a:visited {
 
 a:hover {
   text-decoration: underline;
+}
+
+#questions-table {
+  width: 100%
+}
+
+caption {
+  text-align: start;
+  font-weight: bold;
+  caption-side: bottom;
 }
 </style>

@@ -5,7 +5,9 @@
     <div v-if="sessionStore.isLoggedIn">
       <router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link>
     </div>
-    <router-view></router-view>
+    <div id="collective-view-container">
+      <router-view></router-view>
+    </div>
   </div>
   <p v-else>Unknown collective</p>
 </template>

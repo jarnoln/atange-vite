@@ -1,5 +1,4 @@
 <template>
-  <h1 class="text-center">Atange</h1>
   <CollectiveList />
   <p v-show="false">
     <button @click="fetchCollectivesClicked">Fetch collectives</button>

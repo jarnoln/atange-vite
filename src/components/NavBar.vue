@@ -1,6 +1,6 @@
 <template>
   <nav id="navbar" class="dark-background">
-    <ul classid="right-links">
+    <ul id="right-links">
       <li>
         <router-link id="navbar-home" active-class="active" to="/">Home</router-link>
       </li>
@@ -46,6 +46,7 @@ function logout() {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
 
 ul {

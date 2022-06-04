@@ -34,14 +34,14 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <button id="collective-submit-button" :disabled="!isFormValid">
+    <button id="collective-submit-button" class="btn" :disabled="!isFormValid">
       {{ submitButtonText }}
     </button>
-    <button id="cancel-btn" @click="userCancelled()">Cancel
+    <button id="cancel-btn" class="btn" @click="userCancelled()">Cancel
     </button>
   </form>
   <p v-if="showDeleteButton">
-    <button id="delete-collective-btn" @click="deleteSelectedCollective">Delete collective</button>
+    <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
   </p>
 </template>
 
