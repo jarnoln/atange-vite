@@ -41,13 +41,4 @@ th {
   text-align: start;
   padding: 5px;
 }
-
-a {
-  color: black;
-  text-decoration: none;
-}
-
-a:visited {
-  color: black;
-}
 </style>

@@ -1,9 +1,6 @@
 <template>
   <h1 class="text-center">Atange</h1>
   <CollectiveList />
-  <p v-if="sessionStore.isLoggedIn">
-  <router-link :to="{ name: 'create-collective' }">Create new collective</router-link>
-  </p>
   <p v-show="false">
     <button @click="fetchCollectivesClicked">Fetch collectives</button>
     <button @click="createExampleCollectives">Create example collectives</button>

@@ -8,13 +8,16 @@
     <tbody>
       <tr v-for="collective in collectiveStore.collectives" :key="collective.name">
         <td> <router-link :to="{ name: 'collective-view', params: { collectiveName: collective.name }}">{{ collective.title }}</router-link> </td>
-        <td v-if="sessionStore.isLoggedIn">
+        <td v-if="false">
           <router-link :to="{ name: 'collective-edit', params: { collectiveName: collective.name }}">Edit</router-link>
         </td>
-        <td v-if="sessionStore.isLoggedIn"> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
+        <td v-if="false"> <a href="#" @click="deleteCollective(collective)">Delete {{ collective.title }}</a></td>
       </tr>
     </tbody>
   </table>
+  <p v-if="sessionStore.isLoggedIn">
+    <router-link :to="{ name: 'create-collective' }">Create new</router-link>
+  </p>
 </template>
 
 <script setup lang="ts">
@@ -36,3 +39,18 @@ function deleteCollective(collective: Collective) {
     EventService.deleteCollective(collective)
 }
 </script>
+
+<style scoped>
+a {
+  color: black;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>

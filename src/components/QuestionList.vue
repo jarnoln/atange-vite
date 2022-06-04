@@ -55,3 +55,18 @@ const canEditQuestions = computed(() => {
   return false
 })
 </script>
+
+<style scoped>
+a {
+  color: black;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>
