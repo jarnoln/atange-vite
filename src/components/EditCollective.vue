@@ -7,6 +7,7 @@
           name="collective-title"
           type="text"
           minlength="3"
+          size="50"
           required
           v-model.trim="currentTitle"
           @input="validateTitle"
@@ -15,11 +16,12 @@
     </div>
     <div class="form-control">
       <label for="collective-description">Description</label>
-      <input
+      <textarea
           id="collective-description"
           name="collective-description"
-          type="text"
           v-model.trim="currentDescription"
+          rows="10"
+          cols="60"
       />
     </div>
     <div v-show="isNameInputShown" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
@@ -141,7 +143,7 @@ const isFormValid = computed(() => {
 
 watch(currentTitle, function(newValue) {
   if (collectiveStore.currentCollective === undefined) {
-    currentName.value = slugify(newValue, { lower: true })
+    currentName.value = slugify(newValue, { lower: true, strict: true })
     validateName()
   }
 })
@@ -149,7 +151,7 @@ watch(currentTitle, function(newValue) {
 function submitForm() {
   console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
   if (collectiveStore.currentCollective != undefined) {
-    collectiveStore.updateCurrentCollective(currentTitle.value, '')
+    collectiveStore.updateCurrentCollective(currentTitle.value, currentDescription.value)
     EventService.updateCollective({ name: collectiveStore.currentCollective.name, title: currentTitle.value, description: currentDescription.value })
   } else {
     collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
@@ -194,7 +196,7 @@ label {
   color: red;
 }
 
-input {
+input, textarea {
   display: block;
 }
 </style>

@@ -7,6 +7,7 @@
           name="question-title"
           type="text"
           minlength="3"
+          size="50"
           required
           v-model.trim="currentTitle"
           @input="validateTitle"
@@ -15,11 +16,12 @@
     </div>
     <div class="form-control">
       <label for="question-description">Description</label>
-      <input
+      <textarea
           id="question-description"
           name="question-description"
-          type="text"
           v-model.trim="currentDescription"
+          rows="10"
+          cols="60"
       />
     </div>
     <div v-show="isNameInputShown" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
@@ -133,7 +135,7 @@ const isFormValid = computed(() => {
 
 watch(currentTitle, function(newValue) {
   if (props.questionName === '') {
-    currentName.value = slugify(newValue, { lower: true })
+    currentName.value = slugify(newValue, { lower: true, strict: true })
     validateName()
   }
 })
@@ -203,7 +205,7 @@ label {
   color: red;
 }
 
-input {
+input, textarea {
   display: block;
 }
 </style>

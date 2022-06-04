@@ -1,7 +1,7 @@
 <template>
   <div v-if="question && question.name">
     <h2 id="question-title">{{ question.title }}</h2>
-    <p id="question-description">{{ question.description }}</p>
+    <p id="question-description" v-html="question.description"></p>
     <h3 id="approval-title">Approval: {{ approvalText }} %</h3>
     <p v-if="sessionStore.isLoggedIn">
       <button class="btn" id="answer-yes-btn" @click="voteYes">Yes</button>
