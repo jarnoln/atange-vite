@@ -50,8 +50,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import slugify from 'slugify'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
@@ -105,6 +106,11 @@ const isFormValid = computed(() => {
     return false
   }
   return true
+})
+
+watch(currentTitle, function(newValue) {
+  currentName.value = slugify(newValue, { lower: true })
+  validateName()
 })
 
 function validateName() {
