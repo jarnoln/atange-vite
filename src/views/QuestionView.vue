@@ -1,17 +1,49 @@
 <template>
   <div v-if="question && question.name">
-    <h1 id="question-title">{{ question.title }}</h1>
+    <h2 id="question-title">{{ question.title }}</h2>
     <p id="question-description">{{ question.description }}</p>
-    <h2 id="approval-title">Approval: {{ approvalText }} %</h2>
-    <div> Yes: {{ approval.yes }} No: {{ approval.no }} Abstain: {{ approval.abstain }}</div>
+    <h3 id="approval-title">Approval: {{ approvalText }} %</h3>
     <p v-if="sessionStore.isLoggedIn">
-      <button id="answer-yes-btn" @click="voteYes">Yes</button>
-      <button id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
-      <button id="answer-no-btn" @click="voteNo">No</button>
+      <button class="btn" id="answer-yes-btn" @click="voteYes">Yes</button>
+      <button class="btn" id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
+      <button class="btn" id="answer-no-btn" @click="voteNo">No</button>
     </p>
     <p v-if="collectiveStore.currentCollective">
       <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
     </p>
+    <table>
+      <thead>
+        <tr>
+          <th id="yes-header" class="light-background">Yes: {{ approval.yes }}</th>
+          <th id="abstain-header" class="light-background">Abstain: {{ approval.abstain }}</th>
+          <th id="no-header" class="light-background">No: {{ approval.no }}</th>
+        </tr>
+      </thead>
+      <td>
+        <div v-for="yea in questionStore.getYeas(question.name)" :key="yea.user">
+          <div>{{ yea.user }}</div>
+          <div v-if="yea.comment" class="comment">
+            {{ yea.comment }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div v-for="abstain in questionStore.getAbstains(question.name)" :key="abstain.user">
+          <div>{{ abstain.user }}</div>
+          <div v-if="abstain.comment" class="comment">
+            {{ abstain.comment }}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div v-for="nay in questionStore.getNays(question.name)" :key="nay.user">
+          <div>{{ nay.user }}</div>
+          <div v-if="nay.comment" class="comment">
+            {{ nay.comment }}
+          </div>
+        </div>
+      </td>
+    </table>
   </div>
   <p v-else>Unknown question</p>
 </template>
@@ -98,3 +130,17 @@ function voteNo() {
   updateAnswer(-1)
 }
 </script>
+
+<style scoped>
+h2, h3, p {
+  text-align: center;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  text-align: center;
+}
+</style>
