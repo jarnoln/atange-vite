@@ -22,7 +22,7 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <div v-show="false" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
+    <div v-show="isNameInputShown" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
       <label for="question-name">Name</label>
       <input
           id="question-name"
@@ -39,11 +39,15 @@
         {{ submitButtonText }}
       </button>
     </p>
-    <p>
-      <button id="question-delete-button" v-if="props.questionName" @click="deleteQuestion">Delete</button>
-    </p>
-
   </form>
+  <p>
+    <button v-if="!questionName" id="toggle-show-name-edit-button" @click="isNameInputShown = !isNameInputShown">
+      {{ nameEditToggleButtonText }}
+    </button>
+  </p>
+   <p>
+    <button id="question-delete-button" v-if="props.questionName" @click="deleteQuestion">Delete</button>
+  </p>
   <p v-if="collectiveStore.currentCollective">
     <router-link :to="{ name: 'collective', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
   </p>
@@ -69,6 +73,7 @@ const nameValidateError = ref('')
 const titleValidateError = ref('')
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
+const isNameInputShown = ref(false)
 const questionStore = useQuestionStore()
 const collectiveStore = useCollectiveStore()
 const router = useRouter()
@@ -95,6 +100,14 @@ const submitButtonText = computed(() => {
   }
 })
 
+const nameEditToggleButtonText = computed(() => {
+  if (isNameInputShown.value) {
+    return 'Hide name input'
+  } else {
+    return 'Show name input'
+  }
+})
+
 const isFormValid = computed(() => {
   console.log('isFormValid', props.questionName, isNameValidated.value, isTitleValidated.value)
   if (props.questionName === '') {
@@ -109,8 +122,10 @@ const isFormValid = computed(() => {
 })
 
 watch(currentTitle, function(newValue) {
-  currentName.value = slugify(newValue, { lower: true })
-  validateName()
+  if (props.questionName === '') {
+    currentName.value = slugify(newValue, { lower: true })
+    validateName()
+  }
 })
 
 function validateName() {

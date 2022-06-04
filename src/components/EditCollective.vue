@@ -22,7 +22,7 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <div v-show="false" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
+    <div v-show="isNameInputShown" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
       <label for="collective-name">Name</label>
       <input
           id="collective-name"
@@ -40,6 +40,11 @@
     <button id="cancel-btn" class="btn" @click="userCancelled()">Cancel
     </button>
   </form>
+  <p>
+    <button v-if="!collectiveStore.currentCollective" id="toggle-show-name-edit-button" @click="isNameInputShown = !isNameInputShown">
+      {{ nameEditToggleButtonText }}
+    </button>
+  </p>
   <p v-if="showDeleteButton">
     <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
   </p>
@@ -60,6 +65,7 @@ const nameValidateError = ref('')
 const titleValidateError = ref('')
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
+const isNameInputShown = ref(false)
 const collectiveStore = useCollectiveStore()
 const router = useRouter()
 
@@ -86,6 +92,14 @@ const submitButtonText = computed(() => {
     return 'Create'
   } else {
     return 'Save'
+  }
+})
+
+const nameEditToggleButtonText = computed(() => {
+  if (isNameInputShown.value) {
+    return 'Hide name input'
+  } else {
+    return 'Show name input'
   }
 })
 
@@ -122,8 +136,10 @@ const isFormValid = computed(() => {
 })
 
 watch(currentTitle, function(newValue) {
-  currentName.value = slugify(newValue, { lower: true })
-  validateName()
+  if (collectiveStore.currentCollective === undefined) {
+    currentName.value = slugify(newValue, { lower: true })
+    validateName()
+  }
 })
 
 function submitForm() {
