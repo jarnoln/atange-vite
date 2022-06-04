@@ -1,17 +1,5 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
-      <label for="question-name">Name</label>
-      <input
-          id="question-name"
-          name="question-name"
-          type="text"
-          minlength="1"
-          v-model.trim="currentName"
-          @input="validateName"
-      />
-      <p v-if="nameValidateError">{{ nameValidateError }}</p>
-    </div>
     <div class="form-control" :class="{ invalid: titleValidateError }">
       <label for="question-title">Title</label>
       <input
@@ -33,6 +21,18 @@
           type="text"
           v-model.trim="currentDescription"
       />
+    </div>
+    <div v-show="false" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
+      <label for="question-name">Name</label>
+      <input
+          id="question-name"
+          name="question-name"
+          type="text"
+          minlength="1"
+          v-model.trim="currentName"
+          @input="validateName"
+      />
+      <p v-if="nameValidateError">{{ nameValidateError }}</p>
     </div>
     <p>
       <button id="question-submit-button" :disabled="!isFormValid">

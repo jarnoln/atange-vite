@@ -22,7 +22,7 @@
           v-model.trim="currentDescription"
       />
     </div>
-    <div v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
+    <div v-show="false" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
       <label for="collective-name">Name</label>
       <input
           id="collective-name"
