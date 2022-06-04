@@ -54,7 +54,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
-import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
+import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
@@ -110,6 +110,9 @@ const isFormValid = computed(() => {
 function validateName() {
   console.log('validateName:', currentName.value)
   nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
+  if (nameValidateError.value === '') {
+    nameValidateError.value = validateStringSlugified('Name', currentName.value)
+  }
   if (nameValidateError.value === '') {
     const questionNames = questionStore.questionNames
     console.log('questionNames', questionNames)

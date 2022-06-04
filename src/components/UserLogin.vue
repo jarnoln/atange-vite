@@ -1,5 +1,5 @@
 <template>
-  <h1 style="text-transform: capitalize"> {{ getTitle() }} </h1>
+  <h1 style="text-transform: capitalize; text-align: left;"> {{ getTitle() }} </h1>
   <form @submit.prevent="submitForm">
     <div class="form-control" :class="{ invalid: usernameValidateError }">
       <label for="user-name">Name</label>
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { validateStringLongEnough } from '../utils/validators'
+import { validateStringLongEnough, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
 const currentUsername = ref('')
@@ -59,6 +59,9 @@ function submitForm() {
 function validateUsername() {
   if (route.name === 'register') {
     usernameValidateError.value = validateStringLongEnough('Username', currentUsername.value, 3)
+    if (usernameValidateError.value === '') {
+      usernameValidateError.value = validateStringSlugified('Username', currentUsername.value)
+    }
   }
   isUsernameValidated.value = true
 }

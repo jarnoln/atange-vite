@@ -1,17 +1,5 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
-      <label for="collective-name">Name</label>
-      <input
-          id="collective-name"
-          name="collective-name"
-          type="text"
-          minlength="1"
-          v-model.trim="currentName"
-          @blur="validateName"
-      />
-      <p v-if="nameValidateError">{{ nameValidateError }}</p>
-    </div>
     <div class="form-control" :class="{ invalid: titleValidateError }">
       <label for="collective-title">Title</label>
       <input
@@ -34,6 +22,18 @@
           v-model.trim="currentDescription"
       />
     </div>
+    <div v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
+      <label for="collective-name">Name</label>
+      <input
+          id="collective-name"
+          name="collective-name"
+          type="text"
+          minlength="1"
+          v-model.trim="currentName"
+          @input="validateName"
+      />
+      <p v-if="nameValidateError">{{ nameValidateError }}</p>
+    </div>
     <button id="collective-submit-button" class="btn" :disabled="!isFormValid">
       {{ submitButtonText }}
     </button>
@@ -46,10 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import slugify from 'slugify'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { validateStringLongEnough, validateStringNotDuplicate } from '../utils/validators'
+import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
 const currentName = ref('')
@@ -92,8 +93,10 @@ function validateName() {
   console.log('validateName:', currentName.value)
   nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
   if (nameValidateError.value === '') {
+    nameValidateError.value = validateStringSlugified('Name', currentName.value)
+  }
+  if (nameValidateError.value === '') {
     const collectiveNames = collectiveStore.collectives.map(collective => collective.name)
-    // const collectiveNames = collectiveStore.getCollectiveNames()
     console.log('collectiveNames', collectiveNames)
     nameValidateError.value = validateStringNotDuplicate(currentName.value, collectiveNames)
   }
@@ -116,6 +119,11 @@ const isFormValid = computed(() => {
     return false
   }
   return true
+})
+
+watch(currentTitle, function(newValue) {
+  currentName.value = slugify(newValue, { lower: true })
+  validateName()
 })
 
 function submitForm() {
