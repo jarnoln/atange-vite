@@ -1,5 +1,5 @@
 <template>
-  <p v-if="sessionStore.isLoggedIn && collectiveStore.currentCollective">
+  <p v-if="sessionStore.isLoggedIn && collectiveStore.currentCollective && collectiveStore.currentCollective.creator === sessionStore.username">
     <router-link class="btn" :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">
       Edit {{ collectiveStore.currentCollective.title }}
     </router-link>

@@ -33,7 +33,7 @@
         </tr>
       </tbody>
     </table>
-    <p v-if="sessionStore.isLoggedIn">
+    <p v-if="canEditQuestions">
       <router-link class="btn" :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link>
     </p>
   </div>
@@ -52,7 +52,9 @@ const sessionStore = useSessionStore()
 const canEditQuestions = computed(() => {
   if (collectiveStore.currentCollective) {
     if (sessionStore.isLoggedIn) {
-      return true
+      if (sessionStore.username === collectiveStore.currentCollective.creator) {
+        return true
+      }
     }
   }
   return false
