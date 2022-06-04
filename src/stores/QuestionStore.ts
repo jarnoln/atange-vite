@@ -46,6 +46,18 @@ export const useQuestionStore = defineStore('QuestionStore', {
         return []
       }
     },
+    getYeas(questionName: string) {
+      const answers = this.getAnswers(questionName)
+      return answers.filter(answer => answer.vote === 1)
+    },
+    getNays(questionName: string) {
+      const answers = this.getAnswers(questionName)
+      return answers.filter(answer => answer.vote === -1)
+    },
+    getAbstains(questionName: string) {
+      const answers = this.getAnswers(questionName)
+      return answers.filter(answer => answer.vote === 0)
+    },
     getApproval(questionName: string) : Approval {
       const answers = this.getAnswers(questionName)
       return approval(answers)
