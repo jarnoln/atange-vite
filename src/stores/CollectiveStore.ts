@@ -21,7 +21,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.collectives = []
       this.currentCollectiveName = ''
     },
-    addCollective(name: string, title: string, description: string) {
+    addCollective(name: string, title: string, description: string, creator: string) {
       // console.log('CollectiveStore:addCollective', collective)
       if (name.length < 1) {
         console.warn('addCollective: Name too short:', name)
@@ -29,7 +29,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       if (title.length < 1) {
         console.warn('addCollective: Title too short:', title)
       }
-      this.collectives.push({ name: name, title: title, description: description})
+      this.collectives.push({ name: name, title: title, description: description, creator})
     },
     deleteCollective(collectiveName: string) {
       console.log('CollectiveStore:deleteCollective', collectiveName)
@@ -62,13 +62,6 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       }
       this.currentCollectiveName = ''
       return false
-    },
-    addExampleCollectives() {
-      if (this.collectives.length === 0) {
-        this.addCollective('jla', 'JLA', 'Justice League of America')
-        this.addCollective('jsa', 'JSA', '')
-        this.addCollective('section8', 'Section 8', '')
-      }
     }
   }
 })

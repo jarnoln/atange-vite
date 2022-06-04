@@ -31,7 +31,7 @@ function storeCollectives(collectiveData: Collective[]) {
   collectiveStore.clear()
   console.log('Fetched collectives: ', collectiveData.length)
   console.log(...collectiveData)
-  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description))
+  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description, item.creator))
 }
 
 function storeQuestions(questionData: Question[]) {

@@ -1,7 +1,8 @@
 export interface Collective {
   name: string
   title: string
-  description: string
+  description: string,
+  creator: string
 }
 
 export interface Answer {

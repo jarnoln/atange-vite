@@ -61,6 +61,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import slugify from 'slugify'
 import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
@@ -73,6 +74,7 @@ const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
 const isNameInputShown = ref(false)
 const collectiveStore = useCollectiveStore()
+const sessionStore = useSessionStore()
 const router = useRouter()
 
 onMounted(() => {
@@ -152,10 +154,20 @@ function submitForm() {
   console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
   if (collectiveStore.currentCollective != undefined) {
     collectiveStore.updateCurrentCollective(currentTitle.value, currentDescription.value)
-    EventService.updateCollective({ name: collectiveStore.currentCollective.name, title: currentTitle.value, description: currentDescription.value })
+    EventService.updateCollective({
+      name: collectiveStore.currentCollective.name,
+      title: currentTitle.value,
+      description: currentDescription.value,
+      creator: ''
+    })
   } else {
-    collectiveStore.addCollective(currentName.value, currentTitle.value, currentDescription.value)
-    EventService.createCollective({ name: currentName.value, title: currentTitle.value, description: currentDescription.value })
+    collectiveStore.addCollective(
+      currentName.value, currentTitle.value, currentDescription.value, sessionStore.username)
+    EventService.createCollective({
+      name: currentName.value,
+      title: currentTitle.value,
+      description: currentDescription.value,
+      creator: '' })
   }
   router.push({ name: 'collective-view', params: { collectiveName: currentName.value }})
 }
