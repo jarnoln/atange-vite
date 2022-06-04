@@ -10,7 +10,7 @@
           <th class="text-right light-background">No</th>
           <th class="text-right light-background">Abstain</th>
           <th class="text-right light-background">Approval</th>
-          <th class="text-right light-background" v-if="canEditQuestions">Actions</th>
+          <th class="text-left light-background" v-if="canEditQuestions">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -34,7 +34,7 @@
       </tbody>
     </table>
     <p v-if="sessionStore.isLoggedIn">
-      <router-link :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link>
+      <router-link class="btn" :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link>
     </p>
   </div>
 </template>
@@ -60,16 +60,16 @@ const canEditQuestions = computed(() => {
 </script>
 
 <style scoped>
-a {
+td a {
   color: black;
   text-decoration: none;
 }
 
-a:visited {
+td a:visited {
   color: black;
 }
 
-a:hover {
+td a:hover {
   text-decoration: underline;
 }
 

@@ -2,9 +2,6 @@
   <div v-if="collectiveStore.currentCollective !== undefined">
     <h1 id="collective-title">{{ collectiveStore.currentCollective.title }}</h1>
     <p id="collective-description">{{ collectiveStore.currentCollective.description }}</p>
-    <div v-if="sessionStore.isLoggedIn">
-      <router-link :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">Edit</router-link>
-    </div>
     <div id="collective-view-container">
       <router-view></router-view>
     </div>
@@ -15,8 +12,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { useQuestionStore } from '../stores/QuestionStore'
-import { useSessionStore } from '../stores/SessionStore'
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
@@ -24,9 +19,6 @@ const props = defineProps<{
 }>()
 
 const collectiveStore = useCollectiveStore()
-const questionStore = useQuestionStore()
-const sessionStore = useSessionStore()
-
 
 onMounted(async () => {
   console.log('CollectiveBaseView mounted')
