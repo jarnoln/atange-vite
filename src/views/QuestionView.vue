@@ -3,11 +3,17 @@
     <h2 id="question-title">{{ question.title }}</h2>
     <p id="question-description" v-html="question.description"></p>
     <h3 id="approval-title">Approval: {{ approvalText }} %</h3>
-    <p v-if="sessionStore.isLoggedIn">
-      <button class="btn" id="answer-yes-btn" @click="voteYes">Yes</button>
-      <button class="btn" id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
-      <button class="btn" id="answer-no-btn" @click="voteNo">No</button>
-    </p>
+    <div v-if="sessionStore.isLoggedIn">
+      <p>
+        <button class="btn" id="answer-yes-btn" @click="voteYes">Yes</button>
+        <button class="btn" id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
+        <button class="btn" id="answer-no-btn" @click="voteNo">No</button>
+      </p>
+      <div style="font-weight: bold; text-align: center">Comment (optional):</div>
+      <p>
+        <textarea id="answer-comment-input" rows="2" cols="40" v-model.trim="answerComment" />
+      </p>
+    </div>
     <p v-if="collectiveStore.currentCollective">
       <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
     </p>
@@ -65,6 +71,7 @@ const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
 const approval = reactive(questionStore.getApproval(props.questionName))
 const approvalText = ref('-')
+const answerComment = ref('')
 const question : Question = reactive(questionStore.getQuestionSkeleton())
 
 onMounted(async () => {
@@ -112,10 +119,9 @@ function updateApproval() {
 }
 
 function updateAnswer(vote: number) {
-  const comment = ''
-  questionStore.setAnswer(props.questionName, sessionStore.username, vote, comment)
+  questionStore.setAnswer(props.questionName, sessionStore.username, vote, answerComment.value)
   updateApproval()
-  EventService.updateAnswer(props.questionName, sessionStore.username, vote, comment)
+  EventService.updateAnswer(props.questionName, sessionStore.username, vote, answerComment.value)
 }
 
 function voteYes() {
@@ -132,7 +138,7 @@ function voteNo() {
 </script>
 
 <style scoped>
-h2, h3, p {
+h2, h3, h4, p {
   text-align: center;
 }
 
@@ -142,5 +148,9 @@ table {
 
 th, td {
   text-align: center;
+}
+
+.comment {
+  font-style: italic;
 }
 </style>
