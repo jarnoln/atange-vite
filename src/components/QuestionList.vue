@@ -80,6 +80,6 @@ td a:hover {
 caption {
   text-align: start;
   font-weight: bold;
-  caption-side: bottom;
+  /* caption-side: bottom; */
 }
 </style>

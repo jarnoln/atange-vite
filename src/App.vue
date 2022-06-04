@@ -65,6 +65,7 @@ th {
 .btn:hover {
   box-shadow: none;
   border: 2px solid black;
+  background-color: #613493;
 }
 
 .btn:disabled {

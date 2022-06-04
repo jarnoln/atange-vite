@@ -73,7 +73,7 @@ export const useNotificationStore = defineStore('NotificationStore', {
         needAck: false,
         ack: false
       })
-      setTimeout(this.removeNotification, 3000, id)
+      setTimeout(this.removeNotification, 1000, id)
     },
     notifyError(message: string) {
       console.log('notifyError:', message)

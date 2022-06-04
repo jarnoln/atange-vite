@@ -1,11 +1,11 @@
 <template>
   <div id="notifications" :class="getActiveNotification().class">
+    <span id="active-notification">{{ getActiveNotification().message }}</span>
     <button
       id="ack-notification-btn"
       v-if="isNotificationAckable()"
       @click="ackNotification(getActiveNotification().id)"
-    >Ack</button>
-    <span id="active-notification">{{ getActiveNotification().message }}</span>
+    >X</button>
   </div>
 </template>
 
@@ -35,7 +35,10 @@ function ackNotification(notificationId: string) {
 
 <style scoped>
 #notifications {
-  padding: 5px;
+  height: 2rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 #notifications.info {
@@ -52,8 +55,28 @@ function ackNotification(notificationId: string) {
   background-color: #f55;
 }
 
+#active-notification {
+  padding-top: 0.2rem;
+}
 #notifications.invisible {
   color: rgba(0, 0, 0, 0);
   background-color:rgba(0, 0, 0, 0);
 }
+
+#ack-notification-btn {
+  width: 2rem;
+  height: 2rem;
+  font: inherit;
+  text-decoration: none;
+  color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  padding: 0.1rem 0.2rem;
+}
+
+#ack-notification-btn:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
 </style>
