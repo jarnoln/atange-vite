@@ -108,7 +108,7 @@ describe('Test EventService:createCollective', () => {
   it('creates collective', async () => {
     expect(collectiveStore.collectives.length).toBe(0)
     expect(notificationStore.count).toBe(0)
-    await EventService.createCollective({name: 'jla', title:'JLA', description: ''})
+    await EventService.createCollective('jla', 'JLA', '')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_created')
     // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store

@@ -154,20 +154,11 @@ function submitForm() {
   console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
   if (collectiveStore.currentCollective != undefined) {
     collectiveStore.updateCurrentCollective(currentTitle.value, currentDescription.value)
-    EventService.updateCollective({
-      name: collectiveStore.currentCollective.name,
-      title: currentTitle.value,
-      description: currentDescription.value,
-      creator: ''
-    })
+    EventService.updateCollective(collectiveStore.currentCollective)
   } else {
     collectiveStore.addCollective(
       currentName.value, currentTitle.value, currentDescription.value, sessionStore.username)
-    EventService.createCollective({
-      name: currentName.value,
-      title: currentTitle.value,
-      description: currentDescription.value,
-      creator: '' })
+    EventService.createCollective(currentName.value, currentTitle.value, currentDescription.value)
   }
   router.push({ name: 'collective-view', params: { collectiveName: currentName.value }})
 }

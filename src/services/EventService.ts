@@ -203,15 +203,21 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  createCollective: async (collective: Collective) => {
+  createCollective: async (name: string, title: string, description: string) => {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
-    const path: string = '/api/collective/' + collective.name + '/'
+    if (!name) {
+      throw Error('EventSerice:createCollective: Name not defined')
+    }
+    if (!title) {
+      throw Error('EventSerice:createCollective: Title not defined')
+    }
+    const path: string = '/api/collective/' + name + '/'
     const dataOut = {
-      name: collective.name,
-      title: collective.title,
-      description: collective.description,
+      name: name,
+      title: title,
+      description: description,
       is_visible: true,
     }
     const config = {
@@ -219,13 +225,13 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + collective.title)
+    notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + title)
     console.log('POST', path, dataOut)
     return apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_collective')
       if (response.status === 201) {
-        notificationStore.notifySuccess('collective_created', 'Created new collective: ' + collective.title)
+        notificationStore.notifySuccess('collective_created', 'Created new collective: ' + title)
       } else {
         notificationStore.notifyError('Expected status code 201, server returned code:' + response.status)
         console.log(response.data)
@@ -233,7 +239,7 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyWaitOff('creating_collective')
-      const message = 'Failed to create collective: ' + collective.name + '. '
+      const message = 'Failed to create collective: ' + name + '. '
       handleApiError(error, message)
     })
   },
