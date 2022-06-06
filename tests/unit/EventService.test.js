@@ -35,6 +35,9 @@ describe('Test EventService:fetchCollectives', () => {
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.collectives[0].name).toBe('jla')
     expect(collectiveStore.collectives[0].title).toBe('JLA')
+    expect(collectiveStore.collectives[0].description).toBe('')
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
   }),
   it('clears previous collectives when fetching new ones', async () => {
@@ -49,6 +52,18 @@ describe('Test EventService:fetchCollectives', () => {
     expect(collectiveStore.collectives[0].title).toBe('JLA')
     expect(collectiveStore.currentCollective).toBe(undefined)
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  })
+})
+
+describe('Test EventService::fetchPermissions', () => {
+  it('fetch permissions', async () => {
+    await EventService.fetchCollectives()
+    expect(collectiveStore.collectives.length).toBe(1)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+    await EventService.fetchPermissions('jla')
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(true)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(true)
   })
 })
 

@@ -111,10 +111,12 @@ export const EventService = {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_permissions', 'Fetching permissions')
     const path: string = '/api/collective/' + collectiveName + '/permissions/'
+    console.log('GET', path)
     return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_permissions')
         if (response.status === 200) {
+          console.log('fetched permissions:', response.data)
           const collectiveStore = useCollectiveStore()
           collectiveStore.updateCollectivePermissions(collectiveName, response.data)
         } else {
