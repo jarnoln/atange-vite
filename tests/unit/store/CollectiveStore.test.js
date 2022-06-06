@@ -13,14 +13,22 @@ const collective_1 = {
   name: 'jla',
   title: 'JLA',
   description: 'Justice League of America',
-  creator: 'superman'
+  creator: 'superman',
+  permissions: {
+    canEdit: false,
+    canJoin: false
+  }
 }
 
 const collective_2 = {
   name: 'jsa',
   title: 'JSA',
   description: 'Justice Society of America',
-  creator: 'flash'
+  creator: 'flash',
+  permissions: {
+    canEdit: false,
+    canJoin: false
+  }
 }
 
 describe('Test CollectiveStore', () => {
@@ -32,6 +40,12 @@ describe('Test CollectiveStore', () => {
       collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.count).toBe(1)
+    expect(collectiveStore.collectives[0].name).toBe(collective_1.name)
+    expect(collectiveStore.collectives[0].title).toBe(collective_1.title)
+    expect(collectiveStore.collectives[0].description).toBe(collective_1.description)
+    expect(collectiveStore.collectives[0].creator).toBe(collective_1.creator)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
     collectiveStore.addCollective(
       collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
     expect(collectiveStore.collectives.length).toBe(2)

@@ -6,6 +6,7 @@ import { useNotificationStore } from '../../src/stores/NotificationStore'
 import { useQuestionStore } from '../../src/stores/QuestionStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
 
+
 vi.mock('axios')
 
 createTestingPinia({
@@ -48,6 +49,18 @@ describe('Test EventService:fetchCollectives', () => {
     expect(collectiveStore.collectives[0].title).toBe('JLA')
     expect(collectiveStore.currentCollective).toBe(undefined)
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  })
+})
+
+describe('Test EventService::fetchPermissions', () => {
+  it('fetch permissions', async () => {
+    await EventService.fetchCollectives()
+    expect(collectiveStore.collectives.length).toBe(1)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+    await EventService.fetchPermissions('jla')
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
   })
 })
 

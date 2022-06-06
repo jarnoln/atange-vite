@@ -29,7 +29,16 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       if (title.length < 1) {
         console.warn('addCollective: Title too short:', title)
       }
-      this.collectives.push({ name: name, title: title, description: description, creator})
+      this.collectives.push({
+        name: name,
+        title: title,
+        description: description,
+        creator: creator,
+        permissions: {
+          canEdit: false,
+          canJoin: false
+        }
+      })
     },
     deleteCollective(collectiveName: string) {
       console.log('CollectiveStore:deleteCollective', collectiveName)

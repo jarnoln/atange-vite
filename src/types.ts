@@ -1,8 +1,14 @@
 export interface Collective {
   name: string
   title: string
-  description: string,
+  description: string
   creator: string
+  permissions: Permissions
+}
+
+export interface Permissions {
+  canEdit: boolean
+  canJoin: boolean
 }
 
 export interface Answer {

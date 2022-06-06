@@ -31,7 +31,11 @@ describe('Test CollectiveBaseView', () => {
     const collective = {
       name: 'jla',
       title: 'JLA',
-      description: 'Justice League of America'
+      description: 'Justice League of America',
+      permissions: {
+        canEdit: false,
+        canJoin: false
+      }
     }
     collectiveStore.addCollective(collective.name, collective.title, collective.description)
     expect(collectiveStore.collectives.length).toBe(1)
