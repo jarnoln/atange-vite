@@ -28,6 +28,9 @@ onMounted(async () => {
   }
   if ((props.collectiveName) && (props.collectiveName != collectiveStore.currentCollectiveName)) {
     collectiveStore.selectCollective(props.collectiveName)
+    console.log('CollectiveBase:onMounted:wait for fetch permissions')
+    await EventService.fetchPermissions(props.collectiveName)
+    console.log('CollectiveBase:onMounted:permissions fetched')
     console.log('CollectiveBase:onMounted:wait for fetch questions')
     await EventService.fetchQuestions(props.collectiveName)
     console.log('CollectiveBase:onMounted:questions fetched')

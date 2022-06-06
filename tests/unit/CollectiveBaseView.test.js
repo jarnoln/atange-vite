@@ -32,12 +32,13 @@ describe('Test CollectiveBaseView', () => {
       name: 'jla',
       title: 'JLA',
       description: 'Justice League of America',
+      creator: 'superman',
       permissions: {
-        canEdit: false,
-        canJoin: false
+        canEdit: true,
+        canJoin: true
       }
     }
-    collectiveStore.addCollective(collective.name, collective.title, collective.description)
+    collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.creator)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.currentCollective).toBe(undefined)
     sessionStore.login('superman', 'abcd')

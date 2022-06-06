@@ -55,7 +55,7 @@ describe('Test EditCollective', () => {
   }),
   it('can edit existing collective', async () => {
     collectiveStore.clear()
-    collectiveStore.addCollective('jsa', 'JSA', 'Justice League of America')
+    collectiveStore.addCollective('jsa', 'JSA', 'Justice League of America', 'superman')
     collectiveStore.selectCollective('jsa')
     sessionStore.login('superman', 'abcd')
     const wrapper = mount(EditCollective, {
@@ -81,7 +81,7 @@ describe('Test EditCollective', () => {
   }),
   it('can delete collective', async () => {
     collectiveStore.clear()
-    collectiveStore.addCollective('jsa', 'JSA', '')
+    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
     collectiveStore.selectCollective('jsa')
     sessionStore.login('superman', 'abcd')
     const wrapper = mount(EditCollective, {

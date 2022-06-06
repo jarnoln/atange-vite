@@ -10,7 +10,8 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
     count: (state) => state.collectives.length,
     collectiveNames: (state) => state.collectives.map(collective => collective.name),
     currentCollective: (state) => {
-      if (state.currentCollectiveName === '') {
+      if (state.currentCollectiveName === '')
+      {
         return undefined
       }
       return state.collectives.find(collective => collective.name === state.currentCollectiveName)
@@ -22,12 +23,18 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.currentCollectiveName = ''
     },
     addCollective(name: string, title: string, description: string, creator: string) {
-      // console.log('CollectiveStore:addCollective', collective)
+      console.log('CollectiveStore:addCollective', name, title, description, creator)
       if (name.length < 1) {
         console.warn('addCollective: Name too short:', name)
+        return false
       }
       if (title.length < 1) {
         console.warn('addCollective: Title too short:', title)
+        return false
+      }
+      if (creator.length < 1) {
+        console.warn('addCollective: Creator too short:', title)
+        return false
       }
       this.collectives.push({
         name: name,
@@ -39,6 +46,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
           canJoin: false
         }
       })
+      return true
     },
     deleteCollective(collectiveName: string) {
       console.log('CollectiveStore:deleteCollective', collectiveName)

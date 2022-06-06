@@ -11,6 +11,7 @@
     "coverage": "vitest run --coverage",
     "test:events": "vitest EventService --run",
     "test:stores": "vitest Store.test --run",
+    "test:views": "vitest View.test --run",
     "test:notifications": "vitest Notifications.test --run"
   },
   "dependencies": {

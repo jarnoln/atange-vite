@@ -31,8 +31,8 @@ describe('Test CollectiveList', () => {
   }),
   it('shows collective titles', async () => {
     // The render method returns a collection of utilities to query your component.
-    collectiveStore.addCollective('jla', 'JLA', '')
-    collectiveStore.addCollective('jsa', 'JSA', '')
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', '', 'flash')
     const { getByText } = render(CollectiveList, {
       global: {
         plugins: [router, pinia]

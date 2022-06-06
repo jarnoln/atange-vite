@@ -36,8 +36,12 @@ describe('Test CollectiveStore', () => {
     collectiveStore.clear()
   }),
   it('can store collectives', () => {
-    collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+    expect(collectiveStore.addCollective(
+      collective_1.name,
+      collective_1.title,
+      collective_1.description,
+      collective_1.creator
+      )).toBe(true)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.count).toBe(1)
     expect(collectiveStore.collectives[0].name).toBe(collective_1.name)
@@ -46,10 +50,38 @@ describe('Test CollectiveStore', () => {
     expect(collectiveStore.collectives[0].creator).toBe(collective_1.creator)
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
     expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
-    collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+    expect(collectiveStore.addCollective(
+      collective_2.name,
+      collective_2.title,
+      collective_2.description,
+      collective_2.creator
+    )).toBe(true)
     expect(collectiveStore.collectives.length).toBe(2)
     expect(collectiveStore.count).toBe(2)
+  }),
+  it('does not store collectives with missing information', () => {
+    expect(collectiveStore.collectives.length).toBe(0)
+    expect(collectiveStore.addCollective(
+      '',
+      collective_1.title,
+      collective_1.description,
+      collective_1.creator
+    )).toBe(false)
+    expect(collectiveStore.collectives.length).toBe(0)
+    expect(collectiveStore.addCollective(
+      collective_1.name,
+      '',
+      collective_1.description,
+      collective_1.creator
+    )).toBe(false)
+    expect(collectiveStore.collectives.length).toBe(0)
+    expect(collectiveStore.addCollective(
+      collective_1.name,
+      collective_1.title,
+      collective_1.description,
+      ''
+    )).toBe(false)
+    expect(collectiveStore.collectives.length).toBe(0)
   }),
   it('can select active collective', () => {
     collectiveStore.addCollective(
