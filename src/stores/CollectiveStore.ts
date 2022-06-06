@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Collective } from '../types'
+import { Collective, Permissions } from '../types'
 
 export const useCollectiveStore = defineStore('CollectiveStore', {
   state: () => ({
@@ -70,6 +70,16 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         return true
       }
       this.currentCollectiveName = ''
+      return false
+    },
+    updateCollectivePermissions(collectiveName: string, permissions: Permissions) {
+      const index = this.collectives.findIndex(collective => collective.name === collectiveName)
+      if (index > -1) {
+        this.collectives[index].permissions.canEdit = permissions.canEdit
+        this.collectives[index].permissions.canJoin = permissions.canJoin
+        return true
+      }
+      console.warn('updateCollectivePermissions: Collective not found with name', collectiveName)
       return false
     }
   }

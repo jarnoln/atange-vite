@@ -75,6 +75,35 @@ describe('Test CollectiveStore', () => {
     expect(collectiveStore.currentCollective.title).toEqual('Section 8')
     expect(collectiveStore.currentCollective.description).toEqual('')
   }),
+  it('can update collective permissions', () => {
+    collectiveStore.addCollective(
+      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+    collectiveStore.addCollective(
+      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+    expect(collectiveStore.collectives[1].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[1].permissions.canJoin).toBe(false)
+    expect(collectiveStore.updateCollectivePermissions(collective_1.name, { canEdit: true, canJoin: true})).toBe(true)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(true)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(true)
+    expect(collectiveStore.collectives[1].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[1].permissions.canJoin).toBe(false)
+    expect(collectiveStore.updateCollectivePermissions(collective_2.name, { canEdit: false, canJoin: true})).toBe(true)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(true)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(true)
+    expect(collectiveStore.collectives[1].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[1].permissions.canJoin).toBe(true)
+  }),
+  it('does not update permissions if collective does not exist', () => {
+    collectiveStore.addCollective(
+      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+    expect(collectiveStore.updateCollectivePermissions('nonexistent', { canEdit: true, canJoin: true})).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
+    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+  }),
   it('can delete collectives', () => {
     collectiveStore.addCollective(
       collective_1.name, collective_1.title, collective_1.description, collective_1.creator)

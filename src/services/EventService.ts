@@ -97,13 +97,34 @@ export const EventService = {
         if (response.status === 200) {
           storeQuestions(response.data)
         } else {
-          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          notificationStore.notifyError('fetchQuestions: Expected status code 200, server returned ' + response.status)
           console.log(response.data)
         }
       })
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_questions')
         const message = 'Failed to fetch questions. '
+        handleApiError(error, message)
+      })
+  },
+  fetchPermissions: async (collectiveName: string) => {
+    const notificationStore = useNotificationStore()
+    notificationStore.notifyWaitOn('fetching_permissions', 'Fetching permissions')
+    const path: string = '/api/collective/' + collectiveName + '/permissions/'
+    return apiClient.get(path)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_permissions')
+        if (response.status === 200) {
+          const collectiveStore = useCollectiveStore()
+          collectiveStore.updateCollectivePermissions(collectiveName, response.data)
+        } else {
+          notificationStore.notifyError('fetchPermissions: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_permissions')
+        const message = 'Failed to fetch permissions. '
         handleApiError(error, message)
       })
   },

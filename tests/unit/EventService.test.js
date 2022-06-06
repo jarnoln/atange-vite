@@ -52,18 +52,6 @@ describe('Test EventService:fetchCollectives', () => {
   })
 })
 
-describe('Test EventService::fetchPermissions', () => {
-  it('fetch permissions', async () => {
-    await EventService.fetchCollectives()
-    expect(collectiveStore.collectives.length).toBe(1)
-    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
-    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
-    await EventService.fetchPermissions('jla')
-    expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
-    expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
-  })
-})
-
 describe('Test EventService:fetchQuestions', () => {
   it('fetches and stores questions', async () => {
     expect(questionStore.count).toBe(0)
