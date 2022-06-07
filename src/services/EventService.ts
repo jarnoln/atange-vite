@@ -109,10 +109,16 @@ export const EventService = {
   },
   fetchPermissions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
     notificationStore.notifyWaitOn('fetching_permissions', 'Fetching permissions')
     const path: string = '/api/collective/' + collectiveName + '/permissions/'
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
     console.log('GET', path)
-    return apiClient.get(path)
+    return apiClient.get(path, config)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_permissions')
         if (response.status === 200) {
