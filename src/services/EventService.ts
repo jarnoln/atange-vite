@@ -53,14 +53,22 @@ function handleApiError(error: any, message: string) {
     if (error.message === 'Network Error') {
       notificationStore.notifyError(message + 'Could not connect to backend server.')
     } else {
-      notificationStore.notifyError(message + error.message)
+      if (error.response) {
+        if (error.response.status === 401) {
+          notificationStore.notifyError(message + 'Unauthorized (401)')
+        }
+      } else {
+        notificationStore.notifyError(message + error.message)
+      }
     }
   } else if (error.response) {
     console.log(error.response.data)
     notificationStore.notifyError(message + 'Server returned status code: ' + error.response.status)
+    return error.response.status
   } else {
     notificationStore.notifyError(message)
   }
+  return 0
 }
 
 export const EventService = {
@@ -112,9 +120,12 @@ export const EventService = {
     const sessionStore = useSessionStore()
     notificationStore.notifyWaitOn('fetching_permissions', 'Fetching permissions')
     const path: string = '/api/collective/' + collectiveName + '/permissions/'
-    const config = {
-      headers: {
-        'Authorization': 'Token ' + sessionStore.token
+    let config = {}
+    if (sessionStore.isLoggedIn) {
+      config = {
+        headers: {
+          'Authorization': 'Token ' + sessionStore.token
+        }
       }
     }
     console.log('GET', path)

@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { EventService } from '../services/EventService'
 
@@ -20,8 +20,8 @@ const props = defineProps<{
 
 const collectiveStore = useCollectiveStore()
 
-onMounted(async () => {
-  console.log('CollectiveBaseView mounted')
+onBeforeMount(async () => {
+  console.log('CollectiveBaseView about to be mounted')
   if (collectiveStore.count === 0) {
     // console.log('CollectiveBase:onMounted:wait for fetch collectives')
     await EventService.fetchCollectives()
