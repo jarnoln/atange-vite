@@ -4,7 +4,10 @@ import { beforeEach, describe, expect, test, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
+import { useCollectiveStore } from '../../src/stores/CollectiveStore'
+import { useSessionStore } from '../../src/stores/SessionStore'
 import EditQuestion from '../../src/components/EditQuestion.vue'
+
 
 vi.mock('axios')
 
@@ -19,6 +22,12 @@ const pinia = createTestingPinia({
 
 describe('Test EditQuestion', () => {
     test('test using test utils', async () => {
+        const collectiveStore = useCollectiveStore()
+        const sessionStore = useSessionStore()
+        sessionStore.login('superman', 'abcd')
+        collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+        collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
+        collectiveStore.selectCollective('jsa')
         const wrapper = mount(EditQuestion, {
             global: {
                 plugins: [router, pinia]

@@ -1,59 +1,61 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="form-control" :class="{ invalid: titleValidateError }">
-      <label for="collective-title">Title</label>
-      <input
-          id="collective-title"
-          name="collective-title"
-          type="text"
-          minlength="3"
-          size="50"
-          required
-          v-model.trim="currentTitle"
-          @input="validateTitle"
-      />
-      <p v-if="titleValidateError">{{ titleValidateError }}</p>
-    </div>
-    <div class="form-control">
-      <label for="collective-description">Description</label>
-      <textarea
-          id="collective-description"
-          name="collective-description"
-          v-model.trim="currentDescription"
-          rows="10"
-          cols="60"
-      />
-    </div>
-    <div v-show="isNameInputShown" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
-      <label for="collective-name">Name</label>
-      <input
-          id="collective-name"
-          name="collective-name"
-          type="text"
-          minlength="1"
-          v-model.trim="currentName"
-          @input="validateName"
-      />
-      <p v-if="nameValidateError">{{ nameValidateError }}</p>
-    </div>
-    <button id="collective-submit-button" class="btn" :disabled="!isFormValid">
-      {{ submitButtonText }}
-    </button>
-    <button id="cancel-btn" class="btn" @click="userCancelled()">Cancel
-    </button>
-  </form>
-  <p>
-    <button
-        v-if="!collectiveStore.currentCollective"
-        class="btn"
-        id="toggle-show-name-edit-button"
-        @click="isNameInputShown = !isNameInputShown">
-      {{ nameEditToggleButtonText }}
-    </button>
-  </p>
-  <p v-if="showDeleteButton">
-    <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
-  </p>
+  <div v-if="canEdit">
+    <form @submit.prevent="submitForm">
+      <div class="form-control" :class="{ invalid: titleValidateError }">
+        <label for="collective-title">Title</label>
+        <input
+            id="collective-title"
+            name="collective-title"
+            type="text"
+            minlength="3"
+            size="50"
+            required
+            v-model.trim="currentTitle"
+            @input="validateTitle"
+        />
+        <p v-if="titleValidateError">{{ titleValidateError }}</p>
+      </div>
+      <div class="form-control">
+        <label for="collective-description">Description</label>
+        <textarea
+            id="collective-description"
+            name="collective-description"
+            v-model.trim="currentDescription"
+            rows="10"
+            cols="60"
+        />
+      </div>
+      <div v-show="isNameInputShown" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
+        <label for="collective-name">Name</label>
+        <input
+            id="collective-name"
+            name="collective-name"
+            type="text"
+            minlength="1"
+            v-model.trim="currentName"
+            @input="validateName"
+        />
+        <p v-if="nameValidateError">{{ nameValidateError }}</p>
+      </div>
+      <button id="collective-submit-button" class="btn" :disabled="!isFormValid">
+        {{ submitButtonText }}
+      </button>
+      <button id="cancel-btn" class="btn" @click="userCancelled()">Cancel
+      </button>
+    </form>
+    <p>
+      <button
+          v-if="!collectiveStore.currentCollective"
+          class="btn"
+          id="toggle-show-name-edit-button"
+          @click="isNameInputShown = !isNameInputShown">
+        {{ nameEditToggleButtonText }}
+      </button>
+    </p>
+    <p v-if="showDeleteButton">
+      <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -84,6 +86,17 @@ onMounted(() => {
     currentDescription.value = collectiveStore.currentCollective.description
     validateName()
     validateTitle()
+  }
+})
+
+const canEdit = computed(() => {
+  if (!sessionStore.isLoggedIn) {
+    return false
+  }
+  if (collectiveStore.currentCollective) {
+    return collectiveStore.currentCollective.permissions.canEdit
+  } else {
+    return true
   }
 })
 

@@ -1,68 +1,70 @@
 <template>
-  <form @submit.prevent="submitForm">
-    <div class="form-control" :class="{ invalid: titleValidateError }">
-      <label for="question-title">Title</label>
-      <input
-          id="question-title"
-          name="question-title"
-          type="text"
-          minlength="3"
-          size="50"
-          required
-          v-model.trim="currentTitle"
-          @input="validateTitle"
-      />
-      <p v-if="titleValidateError">{{ titleValidateError }}</p>
-    </div>
-    <div class="form-control">
-      <label for="question-description">Description</label>
-      <textarea
-          id="question-description"
-          name="question-description"
-          v-model.trim="currentDescription"
-          rows="10"
-          cols="60"
-      />
-    </div>
-    <div v-show="isNameInputShown" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
-      <label for="question-name">Name</label>
-      <input
-          id="question-name"
-          name="question-name"
-          type="text"
-          minlength="1"
-          v-model.trim="currentName"
-          @input="validateName"
-      />
-      <p v-if="nameValidateError">{{ nameValidateError }}</p>
-    </div>
+  <div v-if="canEdit">
+    <form @submit.prevent="submitForm">
+      <div class="form-control" :class="{ invalid: titleValidateError }">
+        <label for="question-title">Title</label>
+        <input
+            id="question-title"
+            name="question-title"
+            type="text"
+            minlength="3"
+            size="50"
+            required
+            v-model.trim="currentTitle"
+            @input="validateTitle"
+        />
+        <p v-if="titleValidateError">{{ titleValidateError }}</p>
+      </div>
+      <div class="form-control">
+        <label for="question-description">Description</label>
+        <textarea
+            id="question-description"
+            name="question-description"
+            v-model.trim="currentDescription"
+            rows="10"
+            cols="60"
+        />
+      </div>
+      <div v-show="isNameInputShown" v-if="!questionName" class="form-control" :class="{ invalid: nameValidateError }">
+        <label for="question-name">Name</label>
+        <input
+            id="question-name"
+            name="question-name"
+            type="text"
+            minlength="1"
+            v-model.trim="currentName"
+            @input="validateName"
+        />
+        <p v-if="nameValidateError">{{ nameValidateError }}</p>
+      </div>
+      <p>
+        <button class="btn" id="question-submit-button" :disabled="!isFormValid">
+          {{ submitButtonText }}
+        </button>
+      </p>
+    </form>
     <p>
-      <button class="btn" id="question-submit-button" :disabled="!isFormValid">
-        {{ submitButtonText }}
+      <button
+          v-if="!questionName"
+          class="btn"
+          id="toggle-show-name-edit-button"
+          @click="isNameInputShown = !isNameInputShown"
+      >
+        {{ nameEditToggleButtonText }}
       </button>
     </p>
-  </form>
-  <p>
-    <button
-        v-if="!questionName"
-        class="btn"
-        id="toggle-show-name-edit-button"
-        @click="isNameInputShown = !isNameInputShown"
-    >
-      {{ nameEditToggleButtonText }}
-    </button>
-  </p>
-   <p>
-    <button
-        v-if="props.questionName"
-        id="question-delete-button"
-        class="btn btn-danger"
-        @click="deleteQuestion"
-    >Delete</button>
-  </p>
-  <p v-if="collectiveStore.currentCollective">
-    <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
-  </p>
+    <p>
+      <button
+          v-if="props.questionName"
+          id="question-delete-button"
+          class="btn btn-danger"
+          @click="deleteQuestion"
+      >Delete</button>
+    </p>
+    <p v-if="collectiveStore.currentCollective">
+      <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -71,6 +73,7 @@ import { useRouter } from 'vue-router'
 import slugify from 'slugify'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
+import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 
@@ -86,8 +89,9 @@ const titleValidateError = ref('')
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
 const isNameInputShown = ref(false)
-const questionStore = useQuestionStore()
 const collectiveStore = useCollectiveStore()
+const questionStore = useQuestionStore()
+const sessionStore = useSessionStore()
 const router = useRouter()
 
 onMounted(() => {
@@ -101,6 +105,17 @@ onMounted(() => {
       validateName()
       validateTitle()
     }
+  }
+})
+
+const canEdit = computed(() => {
+  if (!sessionStore.isLoggedIn) {
+    return false
+  }
+  if (collectiveStore.currentCollective) {
+    return collectiveStore.currentCollective.permissions.canEdit
+  } else {
+    return false
   }
 })
 

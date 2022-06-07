@@ -8,7 +8,7 @@ export default {
         } else if (url === '/api/collective/jla/questions/') {
           dataOut = [{ name: 'q1', title: 'Question 1', description: '' }]
         } else if (url === '/api/collective/jla/permissions/') {
-          dataOut = { canEdit: true, canJoin: true }
+          dataOut = { 'can_edit': true, 'can_join': true }
         }
         return new Promise((resolve, reject) => {
           resolve({
