@@ -81,10 +81,11 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       return false
     },
     updateCollectivePermissions(collectiveName: string, permissions: Permissions) {
-      const index = this.collectives.findIndex(collective => collective.name === collectiveName)
+      console.log('updateCollectivePermissions', collectiveName, permissions)
       if (permissions === undefined || permissions.canEdit === undefined || permissions.canJoin === undefined) {
         throw Error('updateCollectivePermissions: permissions not defined')
       }
+      const index = this.collectives.findIndex(collective => collective.name === collectiveName)
       if (index > -1) {
         this.collectives[index].permissions.canEdit = permissions.canEdit
         this.collectives[index].permissions.canJoin = permissions.canJoin

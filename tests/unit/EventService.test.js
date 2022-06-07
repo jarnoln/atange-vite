@@ -186,7 +186,7 @@ describe('Test EventService:deleteQuestion', () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
     collectiveStore.selectCollective('jla')
     expect(notificationStore.count).toBe(0)
-    await EventService.deleteQuestion({name: 'q1'})
+    await EventService.deleteQuestion('q1')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('question_deleted')
   })

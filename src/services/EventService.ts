@@ -118,7 +118,10 @@ export const EventService = {
         if (response.status === 200) {
           console.log('fetched permissions:', response.data)
           const collectiveStore = useCollectiveStore()
-          collectiveStore.updateCollectivePermissions(collectiveName, response.data)
+          collectiveStore.updateCollectivePermissions(collectiveName, {
+            canEdit: response.data['can_edit'],
+            canJoin: response.data['can_join']
+          })
         } else {
           notificationStore.notifyError('fetchPermissions: Expected status code 200, server returned ' + response.status)
           console.log(response.data)
@@ -418,12 +421,16 @@ export const EventService = {
   },
   deleteQuestion: async (name: string) => {
     console.log('EventService:deleteQuestion', name)
+    if (name.length < 1) {
+      console.warn('ventService:deleteQuestion Invalid name')
+      return false
+    }
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
       console.warn('No collective selected, can not delete question')
-      return
+      return false
     }
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + name + '/'
     const config = {

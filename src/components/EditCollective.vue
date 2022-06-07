@@ -91,8 +91,10 @@ const showDeleteButton = computed(() => {
   if (collectiveStore.currentCollective === undefined) {
     return false
   }
-  // TODO: Check that current user is creator
-  return true
+  if (sessionStore.username === collectiveStore.currentCollective.creator) {
+    return true
+  }
+  return false
 })
 
 const submitButtonText = computed(() => {
