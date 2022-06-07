@@ -9,6 +9,17 @@
 <script setup lang="ts">
 import NavBar from './components/NavBar.vue'
 import Notifications from './components/Notifications.vue'
+import { useSessionStore } from './stores/SessionStore';
+import { onBeforeMount } from 'vue'
+
+onBeforeMount(() => {
+  if (localStorage.username && localStorage.token) {
+    console.log('User data found in localStorage. Logging in.')
+    const sessionStore = useSessionStore()
+    sessionStore.username = localStorage.username
+    sessionStore.token = localStorage.token
+  }
+})
 </script>
 
 <style>

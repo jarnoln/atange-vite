@@ -157,9 +157,9 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyLoggingInOff()
+      sessionStore.clear()
       const message = 'Failed to log in. '
       handleApiError(error, message)
-      sessionStore.login('', '')
     })
   },
   register: async (username: string, password: string) => {
@@ -199,7 +199,7 @@ export const EventService = {
         notificationStore.notifyError(message)
       }
       console.log(error)
-      sessionStore.login('', '')
+      sessionStore.clear()
     })
   },
   logout: async () => {
