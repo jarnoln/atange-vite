@@ -23,17 +23,17 @@ const collectiveStore = useCollectiveStore()
 onMounted(async () => {
   console.log('CollectiveBaseView mounted')
   if (collectiveStore.count === 0) {
-    console.log('CollectiveBase:onMounted:wait for fetch collectives')
+    // console.log('CollectiveBase:onMounted:wait for fetch collectives')
     await EventService.fetchCollectives()
   }
   if ((props.collectiveName) && (props.collectiveName != collectiveStore.currentCollectiveName)) {
     collectiveStore.selectCollective(props.collectiveName)
-    console.log('CollectiveBase:onMounted:wait for fetch permissions')
+    // console.log('CollectiveBase:onMounted:wait for fetch permissions')
     await EventService.fetchPermissions(props.collectiveName)
-    console.log('CollectiveBase:onMounted:permissions fetched')
-    console.log('CollectiveBase:onMounted:wait for fetch questions')
+    // console.log('CollectiveBase:onMounted:permissions fetched')
+    // console.log('CollectiveBase:onMounted:wait for fetch questions')
     await EventService.fetchQuestions(props.collectiveName)
-    console.log('CollectiveBase:onMounted:questions fetched')
+    // console.log('CollectiveBase:onMounted:questions fetched')
   }
 })
 </script>

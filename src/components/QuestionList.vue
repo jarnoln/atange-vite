@@ -52,9 +52,7 @@ const sessionStore = useSessionStore()
 const canEditQuestions = computed(() => {
   if (collectiveStore.currentCollective) {
     if (sessionStore.isLoggedIn) {
-      if (sessionStore.username === collectiveStore.currentCollective.creator) {
-        return true
-      }
+      return collectiveStore.currentCollective.permissions.canEdit
     }
   }
   return false

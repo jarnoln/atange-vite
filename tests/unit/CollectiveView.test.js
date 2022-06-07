@@ -38,8 +38,9 @@ describe('Test CollectiveView', () => {
     collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.creator)
     collectiveStore.selectCollective(collective.name)
   }),
-  it('shows "Edit collective"-button when logged in as creator', async () => {
+  it('shows "Edit collective"-button when logged and have edit permission', async () => {
     sessionStore.login('superman', 'abcd')
+    collectiveStore.updateCollectivePermissions('jla', { canEdit: true, canJoin: true })
     const wrapper = mount(CollectiveView, {
       global: {
         plugins: [pinia, router]
@@ -49,7 +50,7 @@ describe('Test CollectiveView', () => {
     expect(editButton.exists()).toBe(true)
     expect(editButton.text()).toBe("Edit JLA")
   }),
-  it('does not show "Edit collective"-button if not logged in as creator', async () => {
+  it('does not show "Edit collective"-button if no edit permission', async () => {
     sessionStore.login('batman', 'abcd')
     const wrapper = mount(CollectiveView, {
       global: {
