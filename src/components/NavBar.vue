@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import { RouterLink } from 'vue-router'
 import { useSessionStore } from '../stores/SessionStore'
 import { EventService } from '../services/EventService'
 

@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { RouterLink } from 'vue-router'
 import QuestionList from '../components/QuestionList.vue'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useSessionStore } from '../stores/SessionStore'
