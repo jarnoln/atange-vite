@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router'
+import AboutView from './views/AboutView.vue'
 import CollectiveView from './views/CollectiveView.vue'
 import CollectiveBaseView from './views/CollectiveBaseView.vue'
 import EditCollective from './components/EditCollective.vue'
@@ -10,6 +11,7 @@ import UserLogin from './components/UserLogin.vue'
 
 export const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'home', component: HomeView },
+  { path: '/about', name: 'about', component: AboutView },
   { path: '/login', name: 'login', component: UserLogin },
   { path: '/register', name: 'register', component: UserLogin },
   { path: '/new', name: 'create-collective', component: EditCollective, meta: { requiresAuth: true } },

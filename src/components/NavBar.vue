@@ -2,15 +2,26 @@
   <nav id="navbar" class="dark-background">
     <ul id="right-links">
       <li>
-        <router-link id="navbar-home" active-class="active" to="/">Home</router-link>
+        <router-link id="navbar-home" active-class="active" :to="{ name: 'home' }">
+          Home
+        </router-link>
+      </li>
+      <li>
+        <router-link id="navbar-about" active-class="active" :to="{ name: 'about' }">
+          About
+        </router-link>
       </li>
     </ul>
     <ul id="left-links">
       <li v-if="!isLoggedIn()">
-        <router-link id="navbar-login" active-class="active" to="/login">Login</router-link>
+        <router-link id="navbar-login" active-class="active" :to="{ name: 'login' }">
+          Login
+        </router-link>
       </li>
       <li v-if="!isLoggedIn()">
-        <router-link id="navbar-register" active-class="active" to="/register">Register</router-link>
+        <router-link id="navbar-register" active-class="active" :to="{ name: 'register' }">
+          Register
+        </router-link>
       </li>
       <li v-if="isLoggedIn()">
         <a href="#" id="navbar-username">{{ getUsername() }}</a>

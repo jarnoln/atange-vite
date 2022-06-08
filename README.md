@@ -1,8 +1,9 @@
 # Atange 
 
-Frontend for Atange
+A simple polling/voting app.
 
-[Atange backend](https://github.com/jarnoln/atange-backend)
+This repository contains sources for frontend.
+([Atange backend](https://github.com/jarnoln/atange-backend))
 
 Created using these:
 * Framework: [Vue 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/)
