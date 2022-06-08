@@ -48,6 +48,7 @@ describe('Test EditQuestion', () => {
     expect(wrapper.text()).toContain('Title')
     expect(wrapper.text()).toContain('Name')
     expect(wrapper.text()).toContain('Description')
+    expect(wrapper.text()).toContain('Create')
     const nameInput = wrapper.get('#question-name')
     const titleInput = wrapper.get('#question-title')
     const descriptionInput = wrapper.get('#question-description')
@@ -61,7 +62,6 @@ describe('Test EditQuestion', () => {
     titleInput.setValue('Question 1')
     descriptionInput.setValue('Important question')
     submitButton.trigger('click')
-    // await nextTick()
     // expect(questionStore.count).toBe(1)
   }),
   it('can edit existing question', async () => {
@@ -79,6 +79,7 @@ describe('Test EditQuestion', () => {
     expect(wrapper.text()).not.toContain('Name')
     expect(wrapper.text()).toContain('Title')
     expect(wrapper.text()).toContain('Description')
+    expect(wrapper.text()).toContain('Save')
     const titleInput = wrapper.get('#question-title')
     const descriptionInput = wrapper.get('#question-description')
     const submitButton = wrapper.get('#question-submit-button')
@@ -88,5 +89,36 @@ describe('Test EditQuestion', () => {
     titleInput.setValue('Question 2')
     descriptionInput.setValue('Less important question')
     submitButton.trigger('click')
+  }),
+  it('does not show inputs if not logged in', async () => {
+    collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
+    const wrapper = mount(EditQuestion, {
+      global: {
+        plugins: [router, pinia]
+      },
+      props: {
+        questionName: ''
+      }
+    })
+    expect(wrapper.text()).not.toContain('Title')
+    expect(wrapper.text()).not.toContain('Name')
+    expect(wrapper.text()).not.toContain('Description')
+    expect(wrapper.text()).not.toContain('Create')
+  }),
+  it('does not show inputs if no permission to edit', async () => {
+    sessionStore.login('superman', 'abcd')
+    collectiveStore.updateCollectivePermissions('jsa', { canEdit: false, canJoin: true })
+    const wrapper = mount(EditQuestion, {
+      global: {
+        plugins: [router, pinia]
+      },
+      props: {
+        questionName: ''
+      }
+    })
+    expect(wrapper.text()).not.toContain('Title')
+    expect(wrapper.text()).not.toContain('Name')
+    expect(wrapper.text()).not.toContain('Description')
+    expect(wrapper.text()).not.toContain('Create')
   })
 })

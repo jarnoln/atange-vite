@@ -24,6 +24,10 @@ const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
 describe('Test EditCollective', () => {
+  beforeEach(() => {
+    collectiveStore.clear()
+    sessionStore.clear()
+  }),
   it('can create new collective', async () => {
     expect(collectiveStore.collectives.length).toBe(0)
     sessionStore.login('superman', 'abcd')
@@ -54,7 +58,6 @@ describe('Test EditCollective', () => {
     // expect(collectiveStore.collectives.length).toBe(1)
   }),
   it('can edit existing collective', async () => {
-    collectiveStore.clear()
     collectiveStore.addCollective('jsa', 'JSA', 'Justice League of America', 'superman')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
     collectiveStore.selectCollective('jsa')
@@ -69,8 +72,6 @@ describe('Test EditCollective', () => {
     const collectiveDescriptionInput = wrapper.get('#collective-description')
     const collectiveSubmitButton = wrapper.get('#collective-submit-button')
     expect(collectiveSubmitButton.text()).toBe('Save')
-    // expect(collectiveTitleInput.text()).toBe('JSA')
-    // expect(collectiveDescriptionInput.text()).toBe('Justice Society of America')
     collectiveTitleInput.setValue('JC')
     collectiveDescriptionInput.setValue('Justice Club')
     collectiveSubmitButton.trigger('click')
@@ -81,7 +82,6 @@ describe('Test EditCollective', () => {
     // expect(collectiveSubmitButton.attributes().disabled).toBe('true')
   }),
   it('can delete collective', async () => {
-    collectiveStore.clear()
     collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
     collectiveStore.selectCollective('jsa')
@@ -94,13 +94,40 @@ describe('Test EditCollective', () => {
     expect(wrapper.text()).toContain('Title')
     expect(wrapper.text()).toContain('Description')
     expect(wrapper.text()).toContain('Delete')
-    const collectiveTitleInput = wrapper.get('#collective-title')
-    const collectiveDescriptionInput = wrapper.get('#collective-description')
     const deleteButton = wrapper.get('#delete-collective-btn')
     expect(collectiveStore.collectives.length).toBe(1)
     deleteButton.trigger('click')
     await nextTick()
     expect(collectiveStore.collectives.length).toBe(0)
     expect(collectiveStore.currentCollective).toBe(undefined)
+  }),
+  it('does not show inputs if not logged in', async () => {
+    expect(collectiveStore.collectives.length).toBe(0)
+    const wrapper = mount(EditCollective, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
+    expect(wrapper.text()).not.toContain('Title')
+    expect(wrapper.text()).not.toContain('Name')
+    expect(wrapper.text()).not.toContain('Description')
+    expect(wrapper.text()).not.toContain('Create')
+    expect(wrapper.text()).not.toContain('Cancel')
+  }),
+  it('does not show inputs if no permission to edit', async () => {
+    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+    collectiveStore.updateCollectivePermissions('jsa', { canEdit: false, canJoin: true })
+    collectiveStore.selectCollective('jsa')
+    sessionStore.login('superman', 'abcd')
+    const wrapper = mount(EditCollective, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
+    expect(wrapper.text()).not.toContain('Title')
+    expect(wrapper.text()).not.toContain('Name')
+    expect(wrapper.text()).not.toContain('Description')
+    expect(wrapper.text()).not.toContain('Save')
+    expect(wrapper.text()).not.toContain('Delete')
   })
 })
