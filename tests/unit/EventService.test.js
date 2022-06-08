@@ -126,10 +126,15 @@ describe('Test EventService:createCollective', () => {
     expect(collectiveStore.collectives.length).toBe(0)
     expect(notificationStore.count).toBe(0)
     sessionStore.login('superman', 'abcd')
-    await EventService.createCollective('jla', 'JLA', '', 'superman')
+    await EventService.createCollective('jla', 'JLA', '')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_created')
-    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  }),
+  it ('does not create collective if not logged in', async () => {
+    expect(notificationStore.count).toBe(0)
+    await EventService.createCollective('jla', 'JLA', '')
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
   })
 })
 
@@ -141,7 +146,14 @@ describe('Test EventService:updateCollective', () => {
     await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_updated')
-    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  }),
+  it('does not update collective if not logged in', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    expect(notificationStore.count).toBe(0)
+    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
   })
 })
 
@@ -152,6 +164,13 @@ describe('Test EventService:deleteCollective', () => {
     await EventService.deleteCollective({name: 'jla', title:'JLA'})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_deleted')
+  }),
+  it('does not delete collective if not logged in', async () => {
+    expect(notificationStore.count).toBe(0)
+    await EventService.deleteCollective({name: 'jla', title:'JLA'})
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
   })
 })
 
@@ -166,16 +185,23 @@ describe('Test EventService:createQuestion', () => {
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('question_created')
   }),
+  it('does not create question if not logged in', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
+  })
   it('does not create question if no collective selected', async () => {
     sessionStore.login('superman', 'abcd')
     expect(questionStore.count).toBe(0)
     expect(notificationStore.count).toBe(0)
-    try {
-      EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
-    } catch (e) {
-      console.log(e)
-    }
-    expect(notificationStore.count).toBe(0)
+    expect(await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not create question')
   })
 })
 
@@ -188,7 +214,24 @@ describe('Test EventService:updateQuestion', () => {
     await EventService.updateQuestion('q1', {name: 'q2', title:'Question 2', description: 'Question of Ethics'})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('question_updated')
-    // expect(collectiveStore.collectives.length).toBe(1) // EventService does not add collective to store
+  }),
+  it('does not update question if not logged in', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.updateQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
+  })
+  it('does not update question if no collective selected', async () => {
+    sessionStore.login('superman', 'abcd')
+    expect(questionStore.count).toBe(0)
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.updateQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not update question')
   })
 })
 
@@ -201,6 +244,24 @@ describe('Test EventService:deleteQuestion', () => {
     await EventService.deleteQuestion('q1')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('question_deleted')
+  }),
+  it('does not delete question if not logged in', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.deleteQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
+  })
+  it('does not delete question if no collective selected', async () => {
+    sessionStore.login('superman', 'abcd')
+    expect(questionStore.count).toBe(0)
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.deleteQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not delete question')
   })
 })
 
@@ -213,5 +274,23 @@ describe('Test EventService:updateAnswer', () => {
     await EventService.updateAnswer('q1', 'u1', 1, '')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('answer_updated')
+  }),
+  it('does not update answer if not logged in', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.updateAnswer('q1', 'u1', 1, '')).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('Not logged in')
+  })
+  it('does not update answer if no collective selected', async () => {
+    sessionStore.login('superman', 'abcd')
+    expect(questionStore.count).toBe(0)
+    expect(notificationStore.count).toBe(0)
+    expect(await EventService.updateAnswer('q1', 'u1', 1, '')).toBe(null)
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
+    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not update answer')
   })
 })
