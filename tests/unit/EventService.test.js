@@ -61,6 +61,7 @@ describe('Test EventService::fetchPermissions', () => {
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
     expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
+    sessionStore.login('superman', 'abcd')
     await EventService.fetchPermissions('jla')
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(true)
     expect(collectiveStore.collectives[0].permissions.canJoin).toBe(true)
@@ -124,6 +125,7 @@ describe('Test EventService:createCollective', () => {
   it('creates collective', async () => {
     expect(collectiveStore.collectives.length).toBe(0)
     expect(notificationStore.count).toBe(0)
+    sessionStore.login('superman', 'abcd')
     await EventService.createCollective('jla', 'JLA', '', 'superman')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_created')
@@ -134,6 +136,7 @@ describe('Test EventService:createCollective', () => {
 describe('Test EventService:updateCollective', () => {
   it('updates collective', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
     await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
     expect(notificationStore.count).toBe(1)
@@ -145,6 +148,7 @@ describe('Test EventService:updateCollective', () => {
 describe('Test EventService:deleteCollective', () => {
   it('deletes collective', async () => {
     expect(notificationStore.count).toBe(0)
+    sessionStore.login('superman', 'abcd')
     await EventService.deleteCollective({name: 'jla', title:'JLA'})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_deleted')
@@ -155,6 +159,7 @@ describe('Test EventService:createQuestion', () => {
   it('creates question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
     collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
     expect(questionStore.count).toBe(0)
     expect(notificationStore.count).toBe(0)
     await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
@@ -162,9 +167,14 @@ describe('Test EventService:createQuestion', () => {
     expect(notificationStore.latestNotification.id).toBe('question_created')
   }),
   it('does not create question if no collective selected', async () => {
+    sessionStore.login('superman', 'abcd')
     expect(questionStore.count).toBe(0)
     expect(notificationStore.count).toBe(0)
-    await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
+    try {
+      EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
+    } catch (e) {
+      console.log(e)
+    }
     expect(notificationStore.count).toBe(0)
   })
 })
@@ -173,6 +183,7 @@ describe('Test EventService:updateQuestion', () => {
   it('updates question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
     collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
     await EventService.updateQuestion('q1', {name: 'q2', title:'Question 2', description: 'Question of Ethics'})
     expect(notificationStore.count).toBe(1)
@@ -185,6 +196,7 @@ describe('Test EventService:deleteQuestion', () => {
   it('deletes question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
     collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
     await EventService.deleteQuestion('q1')
     expect(notificationStore.count).toBe(1)
@@ -196,6 +208,7 @@ describe('Test EventService:updateAnswer', () => {
   it('updates answer', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')
     collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
     await EventService.updateAnswer('q1', 'u1', 1, '')
     expect(notificationStore.count).toBe(1)

@@ -250,11 +250,14 @@ export const EventService = {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
+    if (!sessionStore.isLoggedIn) {
+      throw Error('EventService:createCollective: Not logged in')
+    }
     if (!name) {
-      throw Error('EventSerice:createCollective: Name not defined')
+      throw Error('EventService:createCollective: Name not defined')
     }
     if (!title) {
-      throw Error('EventSerice:createCollective: Title not defined')
+      throw Error('EventService:createCollective: Title not defined')
     }
     const path: string = '/api/collective/' + name + '/'
     const dataOut = {
@@ -289,6 +292,9 @@ export const EventService = {
   updateCollective: async (collective: Collective) => {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      throw Error('EventService:updateCollective: Not logged in')
+    }
     const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collective.name + '/'
     const dataOut = {
@@ -324,6 +330,9 @@ export const EventService = {
   deleteCollective: async (collective: Collective) => {
     console.log('EventService:deleteCollective()')
     const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      throw Error('EventService:deleteCollective: Not logged in')
+    }
     const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collective.name + '/'
     const config = {
@@ -350,13 +359,16 @@ export const EventService = {
   },
   createQuestion: async (question: Question) => {
     // Creates collective in the backend. Note: Does not add question to store.
-    const collectiveStore = useCollectiveStore()
     const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      console.warn('EventService:createQuestion: Not logged in')
+      return null
+    }
+    const collectiveStore = useCollectiveStore()
     const notificationStore = useNotificationStore()
-
     if (!collectiveStore.currentCollective) {
       console.warn('No collective selected, can not create question')
-      return
+      return null
     }
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + question.name + '/'
     const dataOut = {
@@ -394,14 +406,15 @@ export const EventService = {
   },
   updateQuestion: async (currentName: string, question: Question) => {
     // Creates collective in the backend. Note: Does not add question to store.
-    const collectiveStore = useCollectiveStore()
     const sessionStore = useSessionStore()
-    const notificationStore = useNotificationStore()
-
-    if (!collectiveStore.currentCollective) {
-      console.warn('No collective selected, can not update question')
-      return
+    if (!sessionStore.isLoggedIn) {
+      throw Error('EventService:updateQuestion: Not logged in')
     }
+    const collectiveStore = useCollectiveStore()
+    if (!collectiveStore.currentCollective) {
+      throw Error('No collective selected, can not update question')
+    }
+    const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + currentName + '/'
     const dataOut = {
       name: question.name,
@@ -439,16 +452,20 @@ export const EventService = {
   deleteQuestion: async (name: string) => {
     console.log('EventService:deleteQuestion', name)
     if (name.length < 1) {
-      console.warn('ventService:deleteQuestion Invalid name')
+      console.warn('EventService:deleteQuestion Invalid name')
       return false
     }
     const sessionStore = useSessionStore()
-    const notificationStore = useNotificationStore()
+    if (!sessionStore.isLoggedIn) {
+      console.warn('EventService:updateQuestion: Not logged in')
+      return false
+    }
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
       console.warn('No collective selected, can not delete question')
       return false
     }
+    const notificationStore = useNotificationStore()
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + name + '/'
     const config = {
       headers: {
