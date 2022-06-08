@@ -69,11 +69,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, RouterLink } from 'vue-router'
 import slugify from 'slugify'
-import { useCollectiveStore } from '../stores/CollectiveStore'
-import { useQuestionStore } from '../stores/QuestionStore'
-import { useSessionStore } from '../stores/SessionStore'
+import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useQuestionStore } from '../stores/QuestionStore'
+import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 

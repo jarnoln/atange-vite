@@ -41,6 +41,7 @@
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
+import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'

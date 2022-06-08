@@ -38,7 +38,6 @@ describe('Test CollectiveList', () => {
         plugins: [router, pinia]
       }
     })
-    getByText('Collectives: 2')
     getByText('JLA')
     getByText('JSA')
   }),
