@@ -24,7 +24,7 @@
         </router-link>
       </li>
       <li v-if="isLoggedIn()">
-        <a href="#" id="navbar-username">{{ getUsername() }}</a>
+        <router-link id="navbar-username" :to="{ name: 'user-view' }">{{ getUsername() }}</router-link>
       </li>
       <li v-if="isLoggedIn()">
         <a href="#" id="navbar-logout" @click="logout()">Logout</a>

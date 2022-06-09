@@ -8,12 +8,15 @@ import HomeView from './views/HomeView.vue'
 import PageNotFoundView from './views/PageNotFoundView.vue'
 import QuestionView from './views/QuestionView.vue'
 import UserLogin from './components/UserLogin.vue'
+import UserView from './views/UserView.vue'
+
 
 export const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'home', component: HomeView },
   { path: '/about', name: 'about', component: AboutView },
   { path: '/login', name: 'login', component: UserLogin },
   { path: '/register', name: 'register', component: UserLogin },
+  { path: '/user', name: 'user-view', component: UserView, meta: { requiresAuth: true } },
   { path: '/new', name: 'create-collective', component: EditCollective, meta: { requiresAuth: true } },
   {
     name: 'collective',
