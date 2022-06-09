@@ -70,8 +70,15 @@ export default {
         let status = 401  // Unauthorized by default
         let dataOut = {}
         if (url === '/auth/token/login/') {
-          dataOut = { auth_token: 'abcd' }
-          status = 200
+          if (dataIn.username === 'superman' && dataIn.password === 'manofsteel') {
+            dataOut = { auth_token: 'abcd' }
+            status = 200
+          } else {
+            dataOut = {
+              'non_field_errors': ['Unable to log in with provided credentials.']
+            }
+            status = 400
+          }
         } else if (url === '/auth/token/logout/') {
           status = 204
         } else if (url === '/auth/users/') {

@@ -49,25 +49,26 @@ function storeQuestions(questionData: Question[]) {
 }
 
 function handleApiError(error: any, message: string) {
+  console.log('handleApiError', error, message)
   const notificationStore = useNotificationStore()
   if (error.message) {
     if (error.message === 'Network Error') {
       notificationStore.notifyError(message + 'Could not connect to backend server.')
     } else {
-      if (error.response) {
-        if (error.response.status === 401) {
-          notificationStore.notifyError(message + 'Unauthorized (401)')
-        }
-      } else {
-        notificationStore.notifyError(message + error.message)
-      }
+      notificationStore.notifyError(message + error.message)
     }
   } else if (error.response) {
     console.log(error.response.data)
-    notificationStore.notifyError(message + 'Server returned status code: ' + error.response.status)
-    return error.response.status
+    if (error.response.status === 401) {
+      notificationStore.notifyError(message + 'Unauthorized (401)')
+    } else {
+      notificationStore.notifyError(message + 'Server returned status code: ' + error.response.status)
+    }
   } else {
     notificationStore.notifyError(message)
+  }
+  if (error && error.response) {
+    return error.response.status
   }
   return 0
 }
@@ -155,13 +156,13 @@ export const EventService = {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
     notificationStore.notifyLoggingInOn()
-
     const dataOut = {
       username: username,
       password: password
     }
-
-    return apiClient.post('/auth/token/login/', dataOut)
+    const path = '/auth/token/login/'
+    console.log('POST', path, dataOut)
+    return apiClient.post(path, dataOut)
     .then(response => {
       notificationStore.notifyLoggingInOff()
       if (response.status === 200) {
@@ -176,8 +177,11 @@ export const EventService = {
     .catch(error => {
       notificationStore.notifyLoggingInOff()
       sessionStore.clear()
-      const message = 'Failed to log in. '
-      handleApiError(error, message)
+      if (error.response && error.response.status === 400) {
+        notificationStore.notifyError('Invalid credentials.')
+      } else {
+        handleApiError(error, 'Failed to log in. ')
+      }
     })
   },
   register: async (username: string, password: string) => {

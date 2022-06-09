@@ -97,6 +97,16 @@ describe('Test EventService:login', () => {
     expect(sessionStore.token).toBe('abcd')
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('logged_in')
+  }),
+  it('fails if password is wrong', async () => {
+    expect(sessionStore.username).toBe('')
+    expect(sessionStore.token).toBe('')
+    expect(notificationStore.count).toBe(0)
+    await EventService.login('superman', 'iambatman')
+    expect(sessionStore.username).toBe('')
+    expect(sessionStore.token).toBe('')
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('error')
   })
 })
 
