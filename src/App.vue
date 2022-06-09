@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import Notifications from './components/Notifications.vue'
 import { useSessionStore } from './stores/SessionStore';
@@ -80,7 +81,7 @@ th {
 }
 
 .btn:disabled {
-  color: grey;
+  color: rgb(220, 220, 220);
   box-shadow: none;
   background-color: rgb(200, 140, 255);
   border-color: rgb(200, 140, 255);
@@ -89,5 +90,10 @@ th {
 .btn-danger {
   background-color: red;
   border: 2px solid red;
+}
+
+.btn-danger:disabled {
+  background-color: rgb(255, 50, 50);
+  border-color: rgb(255, 50, 50);
 }
 </style>

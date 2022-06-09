@@ -263,7 +263,7 @@ export const EventService = {
       },
       data: dataOut
     }
-    const path = '/auth/user/me/'
+    const path = '/auth/users/me/'
     const username = sessionStore.username
     notificationStore.notifyWaitOn('deleting_user', 'Deleting user ' + username)
     console.log('DELETE', path)
