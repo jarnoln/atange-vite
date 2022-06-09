@@ -20,6 +20,7 @@ console.log('backend server:', server)
 
 const apiClient = axios.create({
   baseURL: server,
+  timeout: 2000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
@@ -243,6 +244,43 @@ export const EventService = {
       sessionStore.logout()  // Even is server logout fails, still going to log out in frontend
       notificationStore.notifyWaitOff('logging_out')
       const message = 'Failed to log out. '
+      handleApiError(error, message)
+    })
+  },
+  deleteCurrentUser: async (password: string) => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      notificationStore.notifyError('Not logged in')
+      return null
+    }
+    const dataOut = {
+      current_password: password
+    }
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      },
+      data: dataOut
+    }
+    const path = '/auth/user/me/'
+    const username = sessionStore.username
+    notificationStore.notifyWaitOn('deleting_user', 'Deleting user ' + username)
+    console.log('DELETE', path)
+    return apiClient.delete(path, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('deleting_user')
+      if (response.status === 204) {
+        notificationStore.notifySuccess('user_deleted', 'Deleted user ' + username)
+        sessionStore.logout()
+      } else {
+        notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
+        console.log(response.data)
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('deleting_user')
+      const message = 'Failed to delete user ' + username
       handleApiError(error, message)
     })
   },

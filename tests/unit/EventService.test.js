@@ -121,6 +121,18 @@ describe('Test EventService:logout', () => {
   })
 })
 
+describe('Test EventService:deleteCurrentUser', () => {
+  it('deletes current user', async () => {
+    await EventService.login('superman', 'manofsteel')
+    expect(sessionStore.username).toBe('superman')
+    expect(sessionStore.token).toBe('abcd')
+    await EventService.deleteCurrentUser('manofsteel')
+    expect(sessionStore.username).toBe('')
+    expect(sessionStore.token).toBe('')
+    expect(notificationStore.latestNotification.id).toBe('user_deleted')
+  })
+})
+
 describe('Test EventService:createCollective', () => {
   it('creates collective', async () => {
     expect(collectiveStore.collectives.length).toBe(0)
