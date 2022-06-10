@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { Question, Approval } from '../types'
+import { Question, Answer, Approval } from '../types'
 import { approval } from '../utils/approval'
 
 export const useQuestionStore = defineStore('QuestionStore', {
@@ -7,7 +7,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
     questions: [] as Question[]
   }),
   getters: {
-    count: (state) => {
+    count: (state) : number => {
       return state.questions.length
     },
     questionNames: (state) => {
@@ -38,7 +38,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         answers: []
       }
     },
-    getAnswers(questionName: string) {
+    getAnswers(questionName: string) : Answer[] {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {
         return question.answers
@@ -46,15 +46,15 @@ export const useQuestionStore = defineStore('QuestionStore', {
         return []
       }
     },
-    getYeas(questionName: string) {
+    getYeas(questionName: string) : Answer[] {
       const answers = this.getAnswers(questionName)
       return answers.filter(answer => answer.vote === 1)
     },
-    getNays(questionName: string) {
+    getNays(questionName: string) : Answer[] {
       const answers = this.getAnswers(questionName)
       return answers.filter(answer => answer.vote === -1)
     },
-    getAbstains(questionName: string) {
+    getAbstains(questionName: string) : Answer[] {
       const answers = this.getAnswers(questionName)
       return answers.filter(answer => answer.vote === 0)
     },
@@ -62,7 +62,12 @@ export const useQuestionStore = defineStore('QuestionStore', {
       const answers = this.getAnswers(questionName)
       return approval(answers)
     },
-    addQuestion(name: string, title: string, description: string) {
+    addQuestion(
+        name: string,
+        title: string,
+        description: string,
+        itemType: string = 'q',
+        parent: string = '') : Boolean {
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)
         return false
@@ -80,30 +85,32 @@ export const useQuestionStore = defineStore('QuestionStore', {
         name: name,
         title: title,
         description: description,
-        itemType: 'q',
+        itemType: itemType,
         order: order,
-        parent: '',
+        parent: parent,
         creator: '',
         answers: []
       })
       return true
     },
-    updateQuestion(name: string, title: string, description: string) {
+    updateQuestion(name: string, title: string, description: string) : Boolean {
       const index = this.questions.findIndex(question => question.name === name)
       if (index >= 0) {
         this.questions[index].title = title
         this.questions[index].description = description
+        return true
       } else {
         console.warn('Question', name, 'not found')
+        return false
       }
     },
-    deleteQuestion(name: string) {
+    deleteQuestion(name: string) : Boolean {
       console.log('QuestionStore:deleteQuestion', name)
-      const index = this.questions.findIndex(question => question.name === name)
-      console.log(name, 'found at index', index)
+      const originalLength = this.questions.length
       this.questions = this.questions.filter(question => question.name != name)
+      return this.questions.length < originalLength
     },
-    addAnswer(questionName: string, user: string, vote: number, comment: string) {
+    addAnswer(questionName: string, user: string, vote: number, comment: string) : Boolean {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {
         const answer = question.answers.find(answer => answer.user === user)
@@ -114,28 +121,34 @@ export const useQuestionStore = defineStore('QuestionStore', {
             vote: vote,
             comment: comment
           })
+          return true
         } else {
           console.warn('User', user, 'has already answered question', questionName)
+          return false
         }
       } else {
         console.warn('No such question:', questionName)
+        return false
       }
     },
-    updateAnswer(questionName: string, user: string, vote: number, comment: string) {
+    updateAnswer(questionName: string, user: string, vote: number, comment: string) : Boolean {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {
         const answer = question.answers.find(answer => answer.user === user)
         if (answer != undefined) {
           answer.vote = vote
           answer.comment = comment
+          return true
         } else {
           console.warn('User', user, 'has not answered question', questionName)
+          return false
         }
       } else {
         console.warn('No such question:', questionName)
+        return false
       }
     },
-    setAnswer(questionName: string, user: string, vote: number, comment: string) {
+    setAnswer(questionName: string, user: string, vote: number, comment: string) : Boolean {
       // Sets answer regardless if it exists or not
       // If answer exists, update it. Otherwise create new answer.
       const question = this.questions.find(question => question.name === questionName)
@@ -144,6 +157,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         if (answer != undefined) {
           answer.vote = vote
           answer.comment = comment
+          return true
         } else {
           question.answers.push({
             question: questionName,
@@ -151,22 +165,33 @@ export const useQuestionStore = defineStore('QuestionStore', {
             vote: vote,
             comment: comment
           })
+          return true
         }
       } else {
         console.warn('No such question:', questionName)
+        return false
       }
     },
-    deleteAnswer(questionName: string, user: string) {
+    deleteAnswer(questionName: string, user: string) : Boolean {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {
         const answer = question.answers.find(answer => answer.user === user)
         if (answer != undefined) {
+          const originalCount = question.answers.length
           question.answers = question.answers.filter(answer => answer.user != user)
+          if (question.answers.length < originalCount) {
+            console.log('Answer deleted')
+            return true
+          } else {
+            return false
+          }
         } else {
           console.warn('User', user, 'has not answered question', questionName)
+          return false
         }
       } else {
         console.warn('No such question:', questionName)
+        return false
       }
     }
   }

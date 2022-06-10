@@ -63,7 +63,7 @@ describe('Test QuestionStore', () => {
   }),
   it('updates question', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
-    questionStore.updateQuestion(q1.name, 'Outsiders', 'Out in the cold')
+    expect(questionStore.updateQuestion(q1.name, 'Outsiders', 'Out in the cold')).toBe(true)
     expect(questionStore.questions[0].title).toBe('Outsiders')
     expect(questionStore.questions[0].description).toBe('Out in the cold')
   }),
@@ -71,17 +71,17 @@ describe('Test QuestionStore', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addQuestion(q2.name, q2.title, q2.description)
     expect(questionStore.count).toBe(2)
-    questionStore.deleteQuestion(q1.name)
+    expect(questionStore.deleteQuestion(q1.name)).toBe(true)
     expect(questionStore.count).toBe(1)
-    questionStore.deleteQuestion(q2.name)
+    expect(questionStore.deleteQuestion(q2.name)).toBe(true)
     expect(questionStore.count).toBe(0)
   }),
   it('try to delete unknown question', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.count).toBe(1)
-    questionStore.deleteQuestion('unknown')
+    expect(questionStore.deleteQuestion('unknown')).toBe(false)
     expect(questionStore.count).toBe(1)
-    questionStore.deleteQuestion(q1.name)
+    expect(questionStore.deleteQuestion(q1.name)).toBe(true)
     expect(questionStore.count).toBe(0)
   }),
   it('lists question names', () => {
@@ -103,10 +103,10 @@ describe('Test QuestionStore', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(null)
-    questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
+    expect(questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(100)
-    questionStore.addAnswer(q1.name, 'batman', -1, 'No way')
+    expect(questionStore.addAnswer(q1.name, 'batman', -1, 'No way')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(2)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(50)
     expect(questionStore.getAnswers(q1.name)[0].user).toBe('superman')
@@ -164,8 +164,8 @@ describe('Test QuestionStore', () => {
     expect(questionStore.getAbstains(q1.name).length).toBe(0)
     expect(questionStore.getYeas(q1.name)[0].user).toBe('superman')
     expect(questionStore.getNays(q1.name)[0].user).toBe('batman')
-    questionStore.updateAnswer(q1.name, 'superman', -1, 'Or maybe not')
-    questionStore.updateAnswer(q1.name, 'batman', 1, 'Actually why not')
+    expect(questionStore.updateAnswer(q1.name, 'superman', -1, 'Or maybe not')).toBe(true)
+    expect(questionStore.updateAnswer(q1.name, 'batman', 1, 'Actually why not')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(2)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(50)
     expect(questionStore.getAnswers(q1.name)[0].vote).toBe(-1)
@@ -181,13 +181,13 @@ describe('Test QuestionStore', () => {
   it('does not change answer if it does not exist', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
-    questionStore.updateAnswer(q1.name, 'superman', -1, 'No way')
+    expect(questionStore.updateAnswer(q1.name, 'superman', -1, 'No way')).toBe(false)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
   }),
   it('setAnswer creates answer if it does not exist', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
-    questionStore.setAnswer(q1.name, 'superman', 1, 'Of course')
+    expect(questionStore.setAnswer(q1.name, 'superman', 1, 'Of course')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
   }),
   it('setAnswer updates answer if it already exists', () => {
@@ -195,7 +195,7 @@ describe('Test QuestionStore', () => {
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(100)
-    questionStore.setAnswer(q1.name, 'superman', -1, 'Or maybe not')
+    expect(questionStore.setAnswer(q1.name, 'superman', -1, 'Or maybe not')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
     expect(questionStore.getApproval(q1.name).approvalPct).toBe(0)
     expect(questionStore.getAnswers(q1.name)[0].vote).toBe(-1)
@@ -208,17 +208,17 @@ describe('Test QuestionStore', () => {
     expect(questionStore.getAnswers(q1.name)[0].user).toBe('superman')
     expect(questionStore.getAnswers(q1.name)[1].user).toBe('batman')
     expect(questionStore.getAnswers(q1.name).length).toBe(2)
-    questionStore.deleteAnswer(q1.name, 'superman')
+    expect(questionStore.deleteAnswer(q1.name, 'superman')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
     expect(questionStore.getAnswers(q1.name)[0].user).toBe('batman')
-    questionStore.deleteAnswer(q1.name, 'batman')
+    expect(questionStore.deleteAnswer(q1.name, 'batman')).toBe(true)
     expect(questionStore.getAnswers(q1.name).length).toBe(0)
   }),
   it('does not delete answer if it does not exist', () => {
     questionStore.addQuestion(q1.name, q1.title, q1.description)
     questionStore.addAnswer(q1.name, 'superman', 1, 'Of course')
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
-    questionStore.deleteAnswer(q1.name, 'batman')
+    expect(questionStore.deleteAnswer(q1.name, 'batman')).toBe(false)
     expect(questionStore.getAnswers(q1.name).length).toBe(1)
   })
 })
