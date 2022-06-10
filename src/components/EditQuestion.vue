@@ -1,5 +1,6 @@
 <template>
   <div v-if="canEdit">
+    <h2 id="edit-question-title"> {{ titleText }}</h2>
     <form @submit.prevent="submitForm">
       <div class="form-control" :class="{ invalid: titleValidateError }">
         <label for="question-title">Title</label>
@@ -78,7 +79,8 @@ import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlu
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
-  questionName: string
+  questionName: string,
+  itemType: string
 }>()
 
 const currentName = ref('')
@@ -117,6 +119,21 @@ const canEdit = computed(() => {
   } else {
     return false
   }
+})
+
+const titleText = computed(() => {
+  if (props.questionName != '') {
+    const question = questionStore.getQuestion(props.questionName)
+    if (question && question.itemType === 'h') {
+      return 'Edit header'
+    } else {
+      return 'Edit question'
+    }
+  }
+  if (props.itemType === 'h') {
+    return 'Add header'
+  }
+  return 'Add question'
 })
 
 const submitButtonText = computed(() => {

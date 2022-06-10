@@ -42,9 +42,11 @@ describe('Test EditQuestion', () => {
         plugins: [router, pinia]
       },
       props: {
-        questionName: ''
+        questionName: '',
+        itemType: 'q'
       }
     })
+    expect(wrapper.text()).toContain('Add question')
     expect(wrapper.text()).toContain('Title')
     expect(wrapper.text()).toContain('Name')
     expect(wrapper.text()).toContain('Description')
@@ -73,9 +75,10 @@ describe('Test EditQuestion', () => {
         plugins: [router, pinia]
       },
       props: {
-        questionName: 'q1'
+        questionName: 'q1',
       }
     })
+    expect(wrapper.text()).toContain('Edit question')
     expect(wrapper.text()).not.toContain('Name')
     expect(wrapper.text()).toContain('Title')
     expect(wrapper.text()).toContain('Description')
@@ -89,6 +92,20 @@ describe('Test EditQuestion', () => {
     titleInput.setValue('Question 2')
     descriptionInput.setValue('Less important question')
     submitButton.trigger('click')
+  }),
+  it('can add header', async () => {
+    sessionStore.login('superman', 'abcd')
+    collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
+    const wrapper = mount(EditQuestion, {
+      global: {
+        plugins: [router, pinia]
+      },
+      props: {
+        questionName: '',
+        itemType: 'h'
+      }
+    })
+    expect(wrapper.text()).toContain('Add header')
   }),
   it('does not show inputs if not logged in', async () => {
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
