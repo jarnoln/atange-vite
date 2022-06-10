@@ -428,10 +428,9 @@ export const EventService = {
       name: question.name,
       title: question.title,
       description: question.description,
-      item_type: question.itemType,
+      item_type: question.itemType.toUpperCase(),
       order: question.order,
-      parent: question.parent,
-      creator: ''
+      parent: question.parent
     }
     const config = {
       headers: {

@@ -203,7 +203,14 @@ describe('Test EventService:createQuestion', () => {
     sessionStore.login('superman', 'abcd')
     expect(questionStore.count).toBe(0)
     expect(notificationStore.count).toBe(0)
-    await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})
+    await EventService.createQuestion({
+      name: 'q1',
+      title:'Question 1',
+      description: '',
+      itemType: 'Q',
+      order: 1,
+      parent: ''
+    })
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('question_created')
   }),

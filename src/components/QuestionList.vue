@@ -8,36 +8,62 @@
       <caption>Questions: {{ questionStore.count }}</caption>
       <thead>
         <tr>
-          <th class="text-left light-background">Question</th>
-          <th class="text-right light-background">Yes</th>
-          <th class="text-right light-background">No</th>
-          <th class="text-right light-background">Abstain</th>
-          <th class="text-right light-background">Approval</th>
-          <th class="text-left light-background" v-if="canEditQuestions">Actions</th>
+          <th class="text-right dim-background">#</th>
+          <th class="text-left dim-background">Question</th>
+          <th class="text-left dim-background">Type</th>
+          <th class="text-right dim-background">Y</th>
+          <th class="text-right dim-background">A</th>
+          <th class="text-right dim-background">N</th>
+          <th class="text-right dim-background">Approval</th>
+          <th class="text-left dim-background" v-if="canEditQuestions">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="question in questionStore.questions" :key="question.name">
-          <td>
-            <router-link :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
-              {{ question.title }}
-            </router-link>
-          </td>
-          <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
-          <td class="text-right">{{ questionStore.getApproval(question.name).no }}</td>
-          <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
-          <td class="text-right"> {{ questionStore.getApproval(question.name).approvalPct }} %</td>
-          <td v-if="canEditQuestions">
-            <router-link
-              :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
-                Edit
-            </router-link>
-          </td>
-        </tr>
+        <template v-for="question in questionStore.questions" :key="question.name">
+          <tr v-if="question.itemType === 'Q'">
+            <td class="text-right">{{ question.order }}</td>
+            <td>
+              <router-link :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
+                {{ question.title }}
+              </router-link>
+            </td>
+            <td>{{ question.itemType }}</td>
+            <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
+            <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
+            <td class="text-right">{{ questionStore.getApproval(question.name).no }}</td>
+            <td class="text-right"> {{ questionStore.getApproval(question.name).approvalPct }} %</td>
+            <td v-if="canEditQuestions">
+              <router-link
+                :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
+                  Edit
+              </router-link>
+            </td>
+          </tr>
+          <tr v-else>
+            <td class="text-right light-background">{{ question.order }}</td>
+            <td class="light-background"> {{ question.title }}</td>
+            <td class="light-background" colspan="5">{{ question.itemType }}</td>
+            <td class="light-background" v-if="canEditQuestions">
+              <router-link
+                :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
+                  Edit
+              </router-link>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </table>
     <p v-if="canEditQuestions">
-      <router-link class="btn" :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '' }}">Add question</router-link>
+      <router-link
+        class="btn"
+        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '', itemType: 'Q' }}">
+          Add question
+      </router-link>
+      <router-link
+        class="btn"
+        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '', itemType: 'H' }}">
+          Add header
+      </router-link>
     </p>
   </div>
 </template>

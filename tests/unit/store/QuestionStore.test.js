@@ -35,13 +35,13 @@ describe('Test QuestionStore', () => {
     expect(questionStore.questions[0].title).toBe(q1.title)
     expect(questionStore.questions[0].description).toBe(q1.description)
     expect(questionStore.questions[0].order).toBe(0)
-    expect(questionStore.questions[0].itemType).toBe('q')
+    expect(questionStore.questions[0].itemType).toBe('Q')
     expect(questionStore.questions[0].parent).toBe('')
     expect(questionStore.questions[1].name).toBe(q2.name)
     expect(questionStore.questions[1].title).toBe(q2.title)
     expect(questionStore.questions[1].description).toBe(q2.description)
     expect(questionStore.questions[1].order).toBe(1)
-    expect(questionStore.questions[1].itemType).toBe('q')
+    expect(questionStore.questions[1].itemType).toBe('Q')
     expect(questionStore.questions[1].parent).toBe('')
   }),
   it('does not store invalid questions', () => {

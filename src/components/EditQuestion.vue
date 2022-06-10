@@ -200,7 +200,7 @@ function submitForm() {
       EventService.updateQuestion(props.questionName, question)
     }
   } else {
-    questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value)
+    questionStore.addQuestion(currentName.value, currentTitle.value, currentDescription.value, props.itemType)
     // Get created question from store so that it has proper default attributes when sending it to backend
     const question = questionStore.getQuestion(currentName.value)
     if (question != undefined) {
@@ -216,6 +216,9 @@ function deleteQuestion() {
   if (props.questionName) {
     questionStore.deleteQuestion(props.questionName)
     EventService.deleteQuestion(props.questionName)
+    if (collectiveStore.currentCollective) {
+      router.push({ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }})
+    }
   }
 }
 </script>

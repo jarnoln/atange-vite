@@ -31,7 +31,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         name: '',
         title: '',
         description: '',
-        itemType: 'q',
+        itemType: 'Q',
         order: 0,
         parent: '',
         creator: '',
@@ -66,8 +66,9 @@ export const useQuestionStore = defineStore('QuestionStore', {
         name: string,
         title: string,
         description: string,
-        itemType: string = 'q',
+        itemType: string = 'Q',
         parent: string = '') : Boolean {
+      console.log('addQuestion itemType:', itemType)
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)
         return false
