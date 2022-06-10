@@ -4,6 +4,8 @@ import { Notification } from '../types'
 export const useNotificationStore = defineStore('NotificationStore', {
   state: () => ({
     notifications: [] as Notification[],
+    isLoadingCollectives: false,
+    isLoadingQuestions: false
   }),
   getters: {
     count(state): number {

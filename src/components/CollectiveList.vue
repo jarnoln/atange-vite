@@ -1,5 +1,8 @@
 <template>
-  <div id="collective-list-container">
+  <p v-if="notificationStore.isLoadingCollectives">
+    Loading...
+  </p>
+  <div v-else id="collective-list-container">
     <table id="collective-list-table">
       <tbody>
         <tr v-for="collective in collectiveStore.collectives" :key="collective.name">
@@ -17,10 +20,12 @@
 import { onBeforeMount } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { EventService } from '../services/EventService';
+import { useNotificationStore } from '../stores/NotificationStore'
 import { useSessionStore } from '../stores/SessionStore';
+import { EventService } from '../services/EventService';
 
 const collectiveStore = useCollectiveStore()
+const notificationStore = useNotificationStore()
 const sessionStore = useSessionStore()
 
 onBeforeMount(() => {

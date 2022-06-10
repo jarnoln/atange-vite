@@ -1,6 +1,9 @@
 <template>
   <div v-if="collectiveStore.currentCollective !== undefined">
-    <p v-if="questionStore.count === 0">No questions</p>
+    <p v-if="notificationStore.isLoadingQuestions">
+      Loading...
+    </p>
+    <p v-else-if="questionStore.count === 0">No questions</p>
     <table v-else id="questions-table">
       <caption>Questions: {{ questionStore.count }}</caption>
       <thead>
@@ -43,12 +46,14 @@
 import { computed } from '@vue/reactivity';
 import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useNotificationStore } from '../stores/NotificationStore';
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
+const notificationStore = useNotificationStore()
 
 const canEditQuestions = computed(() => {
   if (collectiveStore.currentCollective) {

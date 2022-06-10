@@ -80,10 +80,12 @@ export const EventService = {
   fetchCollectives: async () => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_collectives', 'Fetching collectives')
+    notificationStore.isLoadingCollectives = true
     const path: string = '/api/collectives/'
     return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_collectives')
+        notificationStore.isLoadingCollectives = false
         if (response.status === 200) {
           storeCollectives(response.data)
         } else {
@@ -93,6 +95,7 @@ export const EventService = {
       })
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_collectives')
+        notificationStore.isLoadingCollectives = false
         const message = 'Failed to fetch collectives. '
         handleApiError(error, message)
       })
@@ -100,10 +103,12 @@ export const EventService = {
   fetchQuestions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_questions', 'Fetching questions')
+    notificationStore.isLoadingQuestions = true
     const path: string = '/api/collective/' + collectiveName + '/questions/'
     return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_questions')
+        notificationStore.isLoadingQuestions = false
         if (response.status === 200) {
           storeQuestions(response.data)
         } else {
@@ -113,6 +118,7 @@ export const EventService = {
       })
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_questions')
+        notificationStore.isLoadingQuestions = false
         const message = 'Failed to fetch questions. '
         handleApiError(error, message)
       })
