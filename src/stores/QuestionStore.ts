@@ -31,7 +31,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         name: '',
         title: '',
         description: '',
-        itemType: 'Q',
+        itemType: 'q',
         order: 0,
         parent: '',
         creator: '',
@@ -75,12 +75,13 @@ export const useQuestionStore = defineStore('QuestionStore', {
         console.warn('Question with name', name, 'already exists')
         return false
       }
+      const order = this.questions.length
       this.questions.push({
         name: name,
         title: title,
         description: description,
-        itemType: 'Q',
-        order: 0,
+        itemType: 'q',
+        order: order,
         parent: '',
         creator: '',
         answers: []
