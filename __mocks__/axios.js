@@ -31,7 +31,10 @@ export default {
           if (url === '/api/collectives/') {
             dataOut = [{ name: 'jla', title: 'JLA', description: '', creator: 'superman' }]
           } else if (url === '/api/collective/jla/questions/') {
-            dataOut = [{ name: 'q1', title: 'Question 1', description: '' }]
+            dataOut = [
+              { name: 'q1', title: 'Question 1', description: '', item_type: 'Q', order: 13 },
+              { name: 'h1', title: 'Header 1', description: '', item_type: 'H', order: 1337 }
+            ]
           } else if (url === '/api/collective/jla/permissions/') {
             if (auth.isAuthorized) {
               dataOut = { 'can_edit': true, 'can_join': true }

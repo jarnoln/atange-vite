@@ -4,7 +4,7 @@ import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { useNotificationStore } from '../stores/NotificationStore'
-import { Collective, Question } from '../types'
+import { Collective, Question, Answer } from '../types'
 
 
 // Define the real backed server URL in environment variable VITE_BACKEND_URL
@@ -35,16 +35,18 @@ function storeCollectives(collectiveData: Collective[]) {
   collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description, item.creator))
 }
 
-function storeQuestions(questionData: Question[]) {
+function storeQuestions(questionData: any[]) {
   const questionStore = useQuestionStore()
   questionStore.clear()
   console.log('Fetched questions: ', questionData.length)
   questionData.forEach(question => {
     console.log(question)
-    questionStore.addQuestion(question.name, question.title, question.description)
-    question.answers.forEach(answer => {
-      questionStore.addAnswer(question.name, answer.user, answer.vote, answer.comment)
-    })
+    questionStore.addQuestion(question.name, question.title, question.description, question.item_type, question.order)
+    if (question.answers && Array.isArray(question.answers)) {
+      question.answers.forEach((answer: Answer) => {
+        questionStore.addAnswer(question.name, answer.user, answer.vote, answer.comment)
+      })
+    }
   })
 }
 
@@ -437,7 +439,11 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    notificationStore.notifyWaitOn('creating_question', 'Creating question ' + question.title)
+    if (question.itemType === 'H') {
+      notificationStore.notifyWaitOn('creating_question', 'Creating header ' + question.title)
+    } else {
+      notificationStore.notifyWaitOn('creating_question', 'Creating question ' + question.title)
+    }
     console.log('POST', path, dataOut)
     return apiClient.post(path, dataOut, config)
     .then(response => {

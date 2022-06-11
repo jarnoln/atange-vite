@@ -72,16 +72,24 @@ describe('Test EventService:fetchQuestions', () => {
   it('fetches and stores questions', async () => {
     expect(questionStore.count).toBe(0)
     await EventService.fetchQuestions('jla')
-    expect(questionStore.count).toBe(1)
+    expect(questionStore.count).toBe(2)
     expect(questionStore.questions[0].name).toBe('q1')
     expect(questionStore.questions[0].title).toBe('Question 1')
+    expect(questionStore.questions[0].itemType).toBe('Q')
+    expect(questionStore.questions[0].order).toBe(13)
+    expect(questionStore.questions[1].name).toBe('h1')
+    expect(questionStore.questions[1].title).toBe('Header 1')
+    expect(questionStore.questions[1].itemType).toBe('H')
+    expect(questionStore.questions[1].order).toBe(1337)
+
   }),
   it('clears previous questions when fetching new ones', async () => {
     questionStore.addQuestion('oq1', 'Old question 1', '')
     questionStore.addQuestion('oq2', 'Old question 2', '')
-    expect(questionStore.count).toBe(2)
+    questionStore.addQuestion('oq3', 'Old question 3', '')
+    expect(questionStore.count).toBe(3)
     await EventService.fetchQuestions('jla')
-    expect(questionStore.count).toBe(1)
+    expect(questionStore.count).toBe(2)
     expect(questionStore.questions[0].name).toBe('q1')
     expect(questionStore.questions[0].title).toBe('Question 1')
   })
