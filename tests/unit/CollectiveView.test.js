@@ -24,49 +24,37 @@ vi.mock('axios')
 const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 
+const collective = {
+  name: 'jla',
+  title: 'JLA',
+  description: 'Justice League of America',
+  creator: 'superman',
+  permissions: {
+    canEdit: false,
+    canJoin: false
+  }
+}
 
 describe('Test CollectiveView', () => {
   beforeEach(() => {
     collectiveStore.clear()
     sessionStore.clear()
-    const collective = {
-      name: 'jla',
-      title: 'JLA',
-      description: 'Justice League of America',
-      creator: 'superman'
-    }
     collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.creator)
     collectiveStore.selectCollective(collective.name)
   }),
-  it('shows "Edit collective"-button when logged and have edit permission', async () => {
-    sessionStore.login('superman', 'abcd')
-    collectiveStore.updateCollectivePermissions('jla', { canEdit: true, canJoin: true })
+  it('show collective information', async () => {
     const wrapper = mount(CollectiveView, {
+      props: {
+        collectiveName: collective.name
+      },
       global: {
         plugins: [pinia, router]
       }
     })
-    const editButton = wrapper.get('#edit-collective-button')
-    expect(editButton.exists()).toBe(true)
-    expect(editButton.text()).toBe("Edit JLA")
-  }),
-  it('does not show "Edit collective"-button if no edit permission', async () => {
-    sessionStore.login('batman', 'abcd')
-    const wrapper = mount(CollectiveView, {
-      global: {
-        plugins: [pinia, router]
-      }
-    })
-    const editButton = wrapper.find('#edit-collective-button')
-    expect(editButton.exists()).toBe(false)
-  }),
-  it('does not show "Edit collective"-button if not logged in', async () => {
-    const wrapper = mount(CollectiveView, {
-      global: {
-        plugins: [pinia, router]
-      }
-    })
-    const editButton = wrapper.find('#edit-collective-button')
-    expect(editButton.exists()).toBe(false)
+    await nextTick()
+    expect(collectiveStore.currentCollective).toEqual(collective)
+    const description = wrapper.get('#collective-description')
+    expect(description.isVisible()).toBe(true)
+    expect(description.text()).toBe(collective.description)
   })
 })

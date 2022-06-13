@@ -53,11 +53,8 @@ describe('Test CollectiveBaseView', () => {
     await nextTick()
     expect(collectiveStore.currentCollective).toEqual(collective)
     const title = wrapper.get('#collective-title')
-    const description = wrapper.get('#collective-description')
     expect(title.isVisible()).toBe(true)
-    expect(description.isVisible()).toBe(true)
     expect(title.text()).toBe(collective.title)
-    expect(description.text()).toBe(collective.description)
   }),
   it('show unknown if collective does not exist', () => {
     collectiveStore.clear()
@@ -70,5 +67,45 @@ describe('Test CollectiveBaseView', () => {
       }
     })
     expect(wrapper.text()).toContain('Unknown collective')
+  }),
+  it('shows "Edit collective"-button when logged and have edit permission', async () => {
+    sessionStore.login('superman', 'abcd')
+    collectiveStore.updateCollectivePermissions('jla', { canEdit: true, canJoin: true })
+    const wrapper = mount(CollectiveBaseView, {
+      props: {
+        collectiveName: 'jla'
+      },
+      global: {
+        plugins: [pinia, router]
+      }
+    })
+    const editButton = wrapper.get('#collective-edit-link')
+    expect(editButton.exists()).toBe(true)
+    expect(editButton.text()).toBe("[Edit]")
+  }),
+  it('does not show "Edit collective"-button if no edit permission', async () => {
+    sessionStore.login('batman', 'abcd')
+    const wrapper = mount(CollectiveBaseView, {
+      props: {
+        collectiveName: 'jla'
+      },
+      global: {
+        plugins: [pinia, router]
+      }
+    })
+    const editButton = wrapper.find('#collective-edit-link')
+    expect(editButton.exists()).toBe(false)
+  }),
+  it('does not show "Edit collective"-button if not logged in', async () => {
+    const wrapper = mount(CollectiveBaseView, {
+      props: {
+        collectiveName: 'jla'
+      },
+      global: {
+        plugins: [pinia, router]
+      }
+    })
+    const editButton = wrapper.find('#collective-edit-link')
+    expect(editButton.exists()).toBe(false)
   })
 })

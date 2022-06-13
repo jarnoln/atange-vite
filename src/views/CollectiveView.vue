@@ -4,6 +4,9 @@
       Edit {{ collectiveStore.currentCollective.title }}
     </router-link>
   </p> -->
+  <p id="collective-description" v-if="collectiveStore.currentCollective">
+    {{ collectiveStore.currentCollective.description }}
+  </p>
   <question-list></question-list>
 </template>
 
