@@ -6,6 +6,9 @@
       <router-link id="collective-view-link" :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">
         [Questions]
       </router-link>
+      <router-link id="collective-reorder-link" :to="{ name: 'collective-reorder', params: { collectiveName: collectiveStore.currentCollective.name }}">
+        [Reorder]
+      </router-link>
       <router-link id="collective-edit-link" :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">
         [Edit]
       </router-link>
