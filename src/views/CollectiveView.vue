@@ -1,9 +1,9 @@
 <template>
-  <p v-if="collectiveStore.currentCollective && canEdit">
+  <!-- <p v-if="collectiveStore.currentCollective && canEdit">
     <router-link id="edit-collective-button" class="btn" :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">
       Edit {{ collectiveStore.currentCollective.title }}
     </router-link>
-  </p>
+  </p> -->
   <question-list></question-list>
 </template>
 

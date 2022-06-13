@@ -80,7 +80,7 @@ import { EventService } from '../services/EventService'
 
 const props = defineProps<{
   questionName: string,
-  itemType: string
+  itemType?: string
 }>()
 
 const currentName = ref('')

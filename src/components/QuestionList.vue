@@ -69,10 +69,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from '@vue/reactivity';
+import { computed } from '@vue/reactivity'
 import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
-import { useNotificationStore } from '../stores/NotificationStore';
+import { useNotificationStore } from '../stores/NotificationStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 
