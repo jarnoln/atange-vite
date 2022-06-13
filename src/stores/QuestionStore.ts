@@ -114,6 +114,43 @@ export const useQuestionStore = defineStore('QuestionStore', {
       this.questions = this.questions.filter(question => question.name != name)
       return this.questions.length < originalLength
     },
+    switchQuestionOrder(index_1: any, index_2: any) {
+      if (index_1 === index_2) {
+        return false
+      }
+      this.questions.forEach((question, index) => question.order = index)
+      const firstOrder = this.questions[index_1].order
+      const secondOrder = this.questions[index_2].order
+      this.questions[index_1].order = secondOrder
+      this.questions[index_2].order = firstOrder
+      this.questions.sort((q1, q2) => (q1.order - q2.order))
+    },
+    moveQuestionUp(name: string) : Boolean {
+      const index = this.questions.findIndex(question => question.name === name)
+      if (index < 0) {
+        console.log('Question not found:', name)
+        return false
+      }
+      if (index == 0) {
+        console.log('Question already at top')
+        return false
+      }
+      this.switchQuestionOrder(index, index-1)
+      return true
+    },
+    moveQuestionDown(name: string) : Boolean {
+      const index = this.questions.findIndex(question => question.name === name)
+      if (index < 0) {
+        console.log('Question not found:', name)
+        return false
+      }
+      if (index >= this.questions.length - 1) {
+        console.log('Question already at bottom')
+        return false
+      }
+      this.switchQuestionOrder(index, index+1)
+      return true
+    },
     addAnswer(questionName: string, user: string, vote: number, comment: string) : Boolean {
       const question = this.questions.find(question => question.name === questionName)
       if (question != undefined) {
