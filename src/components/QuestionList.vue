@@ -8,7 +8,6 @@
       <caption>Questions: {{ questionStore.count }}</caption>
       <thead>
         <tr>
-          <th class="text-right dim-background">#</th>
           <th class="text-left dim-background">Question</th>
           <th class="text-left dim-background">Type</th>
           <th class="text-right dim-background">Y</th>
@@ -21,7 +20,6 @@
       <tbody>
         <template v-for="question in questionStore.questions" :key="question.name">
           <tr v-if="question.itemType === 'Q'">
-            <td class="text-right">{{ question.order }}</td>
             <td>
               <router-link :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
                 {{ question.title }}
@@ -40,7 +38,6 @@
             </td>
           </tr>
           <tr v-else>
-            <td class="text-right light-background">{{ question.order }}</td>
             <td class="light-background"> {{ question.title }}</td>
             <td class="light-background" colspan="5">{{ question.itemType }}</td>
             <td class="light-background" v-if="canEditQuestions">
