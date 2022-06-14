@@ -63,6 +63,7 @@ describe('Test ReorderQuestionsView', () => {
     expect(wrapper.text()).toContain('Question 1')
     expect(wrapper.text()).toContain('Question 2')
     expect(wrapper.text()).toContain('Question 3')
+    expect(wrapper.text()).toContain('Save changes')
     const q1_up = wrapper.get('#move-up-q1')
     const q2_up = wrapper.get('#move-up-q2')
     const q3_up = wrapper.get('#move-up-q3')
@@ -90,6 +91,7 @@ describe('Test ReorderQuestionsView', () => {
         plugins: [pinia, router]
       }
     })
+    expect(wrapper.text()).not.toContain('Save changes')
     const q1_up = wrapper.find('#move-up-q1')
     const q1_down = wrapper.find('#move-down-q1')
     expect(q1_up.exists()).toBe(false)

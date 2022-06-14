@@ -25,27 +25,34 @@
             </td>
             <td>{{ question.itemType }}</td>
             <template v-if="canEditQuestions">
-              <td><button :id="'move-up-' + question.name" @click="questionStore.moveQuestionUp(question.name)">Up</button></td>
-              <td><button :id="'move-down-' + question.name" @click="questionStore.moveQuestionDown(question.name)">Down</button></td>
+              <td><button :id="'move-up-' + question.name" @click="moveUp(question.name)">Up</button></td>
+              <td><button :id="'move-down-' + question.name" @click="moveDown(question.name)">Down</button></td>
             </template>
           </tr>
         </template>
       </tbody>
     </table>
+    <p v-if="canEditQuestions">
+      <button id="save-changes-btn" class="btn" :disabled="!unsavedChanges" @click="saveChangesToBackend">
+        Save changes
+      </button>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useNotificationStore } from '../stores/NotificationStore';
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
+import { EventService } from '../services/EventService'
 
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
 const notificationStore = useNotificationStore()
+const unsavedChanges = ref(false)
 
 const canEditQuestions = computed(() => {
   if (collectiveStore.currentCollective) {
@@ -56,4 +63,22 @@ const canEditQuestions = computed(() => {
   return false
 })
 
+function moveUp(questionName: string) {
+  questionStore.moveQuestionUp(questionName)
+  unsavedChanges.value = true
+}
+
+function moveDown(questionName: string) {
+  questionStore.moveQuestionDown(questionName)
+  unsavedChanges.value = true
+}
+
+function saveChangesToBackend() {
+  // TODO: Add support to backend to allow updating multiple questions with one API call
+  // instead making separate call to update each question
+  questionStore.questions.forEach(question => {
+    EventService.updateQuestion(question.name, question)
+  })
+  unsavedChanges.value = false
+}
 </script>
