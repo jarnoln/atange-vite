@@ -25,8 +25,8 @@
             </td>
             <td>{{ question.itemType }}</td>
             <template v-if="canEditQuestions">
-              <td><button @click="questionStore.moveQuestionUp(question.name)">Up</button></td>
-              <td><button @click="questionStore.moveQuestionDown(question.name)">Down</button></td>
+              <td><button :id="'move-up-' + question.name" @click="questionStore.moveQuestionUp(question.name)">Up</button></td>
+              <td><button :id="'move-down-' + question.name" @click="questionStore.moveQuestionDown(question.name)">Down</button></td>
             </template>
           </tr>
         </template>
