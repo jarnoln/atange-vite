@@ -9,7 +9,6 @@
       <thead>
         <tr>
           <th class="text-left dim-background">Question</th>
-          <th class="text-left dim-background">Type</th>
           <th class="text-right dim-background">Y</th>
           <th class="text-right dim-background">A</th>
           <th class="text-right dim-background">N</th>
@@ -25,7 +24,6 @@
                 {{ question.title }}
               </router-link>
             </td>
-            <td>{{ question.itemType }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).no }}</td>
@@ -38,8 +36,7 @@
             </td>
           </tr>
           <tr v-else>
-            <td class="light-background"> {{ question.title }}</td>
-            <td class="light-background" colspan="5">{{ question.itemType }}</td>
+            <td class="light-background" colspan="5"> {{ question.title }}</td>
             <td class="light-background" v-if="canEditQuestions">
               <router-link
                 :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
