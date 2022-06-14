@@ -79,11 +79,17 @@ describe('Test CollectiveBaseView', () => {
         plugins: [pinia, router]
       }
     })
-    const editButton = wrapper.get('#collective-edit-link')
-    expect(editButton.exists()).toBe(true)
-    expect(editButton.text()).toBe("[Edit]")
+    const viewLink = wrapper.get('#collective-view-link')
+    const editLink = wrapper.get('#collective-edit-link')
+    const reorderLink = wrapper.get('#collective-reorder-link')
+    expect(viewLink.exists()).toBe(true)
+    expect(editLink.exists()).toBe(true)
+    expect(reorderLink.exists()).toBe(true)
+    expect(viewLink.text()).toBe("Questions")
+    expect(editLink.text()).toBe("Edit")
+    expect(reorderLink.text()).toBe("Reorder")
   }),
-  it('does not show "Edit collective"-button if no edit permission', async () => {
+  it('does not show "Edit"-link if no edit permission', async () => {
     sessionStore.login('batman', 'abcd')
     const wrapper = mount(CollectiveBaseView, {
       props: {
@@ -93,10 +99,12 @@ describe('Test CollectiveBaseView', () => {
         plugins: [pinia, router]
       }
     })
-    const editButton = wrapper.find('#collective-edit-link')
-    expect(editButton.exists()).toBe(false)
+    const editLink = wrapper.find('#collective-edit-link')
+    const reorderLink = wrapper.find('#collective-reorder-link')
+    expect(editLink.exists()).toBe(false)
+    expect(reorderLink.exists()).toBe(false)
   }),
-  it('does not show "Edit collective"-button if not logged in', async () => {
+  it('does not show "Edit"-link if not logged in', async () => {
     const wrapper = mount(CollectiveBaseView, {
       props: {
         collectiveName: 'jla'
@@ -105,7 +113,9 @@ describe('Test CollectiveBaseView', () => {
         plugins: [pinia, router]
       }
     })
-    const editButton = wrapper.find('#collective-edit-link')
-    expect(editButton.exists()).toBe(false)
+    const editLink = wrapper.find('#collective-edit-link')
+    const reorderLink = wrapper.find('#collective-reorder-link')
+    expect(editLink.exists()).toBe(false)
+    expect(reorderLink.exists()).toBe(false)
   })
 })

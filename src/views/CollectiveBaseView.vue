@@ -2,17 +2,25 @@
   <div v-if="collectiveStore.currentCollective !== undefined">
     <h1 id="collective-title">{{ collectiveStore.currentCollective.title }}</h1>
     <!-- <p id="collective-description">{{ collectiveStore.currentCollective.description }}</p> -->
-    <div id="collective-navbar" v-if="canEditCollective">
-      <router-link id="collective-view-link" :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">
-        [Questions]
-      </router-link>
-      <router-link id="collective-reorder-link" :to="{ name: 'collective-reorder', params: { collectiveName: collectiveStore.currentCollective.name }}">
-        [Reorder]
-      </router-link>
-      <router-link id="collective-edit-link" :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">
-        [Edit]
-      </router-link>
-    </div>
+    <nav id="collective-navbar" class="dark-background" v-if="canEditCollective">
+      <ul>
+        <li>
+          <router-link id="collective-view-link" :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">
+            Questions
+          </router-link>
+        </li>
+        <li>
+          <router-link id="collective-reorder-link" active-class="active" :to="{ name: 'collective-reorder', params: { collectiveName: collectiveStore.currentCollective.name }}">
+            Reorder
+          </router-link>
+        </li>
+        <li>
+          <router-link id="collective-edit-link" active-class="active" :to="{ name: 'collective-edit', params: { collectiveName: collectiveStore.currentCollective.name }}">
+            Edit
+          </router-link>
+        </li>
+      </ul>
+    </nav>
     <div id="collective-view-container">
       <router-view></router-view>
     </div>
@@ -57,5 +65,41 @@ const canEditCollective = computed(() => {
   }
   return false
 })
-
 </script>
+
+<style scoped>
+#collective-navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  padding-left: 1rem;
+}
+
+#left-links {
+  padding-right: 2rem;
+}
+
+a {
+  text-decoration: none;
+  color: #cccccc;
+  padding: 1rem;
+}
+
+a:visited {
+  color:  #cccccc;
+}
+
+a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+a.active {
+  color: white;
+}
+</style>
