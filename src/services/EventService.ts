@@ -81,7 +81,7 @@ export const EventService = {
 // figure out way to test method
   fetchCollectives: async () => {
     const notificationStore = useNotificationStore()
-    notificationStore.notifyWaitOn('fetching_collectives', 'Fetching collectives')
+    notificationStore.notifyWaitOn('fetching_collectives', 'Fetching communities')
     notificationStore.isLoadingCollectives = true
     const path: string = '/api/collectives/'
     return apiClient.get(path)
@@ -324,13 +324,13 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    notificationStore.notifyWaitOn('creating_collective', 'Creating collective ' + title)
+    notificationStore.notifyWaitOn('creating_collective', 'Creating ' + title)
     console.log('POST', path, dataOut)
     return apiClient.post(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('creating_collective')
       if (response.status === 201) {
-        notificationStore.notifySuccess('collective_created', 'Created new collective: ' + title)
+        notificationStore.notifySuccess('collective_created', 'Created new community: ' + title)
       } else {
         notificationStore.notifyError('Expected status code 201, server returned code:' + response.status)
         console.log(response.data)
@@ -338,7 +338,7 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyWaitOff('creating_collective')
-      const message = 'Failed to create collective: ' + name + '. '
+      const message = 'Failed to create community: ' + name + '. '
       handleApiError(error, message)
     })
   },
@@ -362,13 +362,13 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    notificationStore.notifyWaitOn('updating_collective', 'Updating collective ' + collective.name)
+    notificationStore.notifyWaitOn('updating_collective', 'Updating ' + collective.name)
     console.log('PUT', path, dataOut)
     return apiClient.put(path, dataOut, config)
     .then(response => {
       notificationStore.notifyWaitOff('updating_collective')
       if (response.status === 200) {
-        notificationStore.notifySuccess('collective_updated', 'Updated collective: ' + collective.title)
+        notificationStore.notifySuccess('collective_updated', 'Updated ' + collective.title)
         console.log(response.data)
       } else {
         notificationStore.notifyError('Expected status code 200, server returned code:' + response.status)
@@ -377,7 +377,7 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyWaitOff('updating_collective')
-      const message = 'Failed to update collective: ' + collective.name + '. '
+      const message = 'Failed to update ' + collective.name + '. '
       handleApiError(error, message)
     })
   },
@@ -395,12 +395,12 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
-    notificationStore.notifyWaitOn('deleting_collective', 'Deleting collective ' + collective.title)
+    notificationStore.notifyWaitOn('deleting_collective', 'Deleting ' + collective.title)
     return apiClient.delete(path, config)
     .then(response => {
       notificationStore.notifyWaitOff('deleting_collective')
       if (response.status === 204) {
-        notificationStore.notifySuccess('collective_deleted', 'Deleted collective: ' + collective.title)
+        notificationStore.notifySuccess('collective_deleted', 'Deleted ' + collective.title)
       } else {
         notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
         console.log(response.data)
@@ -408,7 +408,7 @@ export const EventService = {
     })
     .catch(error => {
       notificationStore.notifyWaitOff('deleting_collective')
-      const message = 'Failed to delete collective: ' + collective.name + '. '
+      const message = 'Failed to delete ' + collective.name + '. '
       handleApiError(error, message)
     })
   },
@@ -422,7 +422,7 @@ export const EventService = {
     }
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
-      notificationStore.notifyError('No collective selected, can not create question')
+      notificationStore.notifyError('No community selected, can not create question')
       return null
     }
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + question.name + '/'
@@ -472,7 +472,7 @@ export const EventService = {
     }
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
-      notificationStore.notifyError('No collective selected, can not update question')
+      notificationStore.notifyError('No community selected, can not update question')
       return null
     }
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + currentName + '/'
@@ -523,7 +523,7 @@ export const EventService = {
     }
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
-      notificationStore.notifyError('No collective selected, can not delete question')
+      notificationStore.notifyError('No community selected, can not delete question')
       return null
     }
     const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/question/' + name + '/'
@@ -560,7 +560,7 @@ export const EventService = {
     }
     const collectiveStore = useCollectiveStore()
     if (!collectiveStore.currentCollective) {
-      notificationStore.notifyError('No collective selected, can not update answer')
+      notificationStore.notifyError('No community selected, can not update answer')
       return null
     }
     const collectiveName = collectiveStore.currentCollective.name

@@ -238,7 +238,7 @@ describe('Test EventService:createQuestion', () => {
     expect(await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('error')
-    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not create question')
+    expect(notificationStore.latestNotification.message).toBe('No community selected, can not create question')
   })
 })
 
@@ -268,7 +268,7 @@ describe('Test EventService:updateQuestion', () => {
     expect(await EventService.updateQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('error')
-    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not update question')
+    expect(notificationStore.latestNotification.message).toBe('No community selected, can not update question')
   })
 })
 
@@ -298,7 +298,7 @@ describe('Test EventService:deleteQuestion', () => {
     expect(await EventService.deleteQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('error')
-    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not delete question')
+    expect(notificationStore.latestNotification.message).toBe('No community selected, can not delete question')
   })
 })
 
@@ -328,6 +328,6 @@ describe('Test EventService:updateAnswer', () => {
     expect(await EventService.updateAnswer('q1', 'u1', 1, '')).toBe(null)
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('error')
-    expect(notificationStore.latestNotification.message).toBe('No collective selected, can not update answer')
+    expect(notificationStore.latestNotification.message).toBe('No community selected, can not update answer')
   })
 })

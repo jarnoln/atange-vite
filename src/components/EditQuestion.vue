@@ -124,7 +124,7 @@ const canEdit = computed(() => {
 const titleText = computed(() => {
   if (props.questionName != '') {
     const question = questionStore.getQuestion(props.questionName)
-    if (question && question.itemType === 'h') {
+    if (question && question.itemType === 'H') {
       return 'Edit header'
     } else {
       return 'Edit question'
