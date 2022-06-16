@@ -1,6 +1,11 @@
 <template>
   <div v-if="sessionStore.username">
     <h1> {{ sessionStore.username }}</h1>
+    <p>
+      <router-link id="edit-user-link" :to="{ name: 'user-edit' }">
+        Edit user information
+      </router-link>
+    </p>
     <h2> Deleting account</h2>
     <p>Warning: Deleting account is irreversible action. When it is gone it is gone, no backsies.</p>
     <form @submit.prevent="submitForm">
