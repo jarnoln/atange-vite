@@ -3,7 +3,10 @@ import { defineStore } from 'pinia'
 export const useSessionStore = defineStore('SessionStore', {
   state: () => ({
     username: '',
-    token: ''
+    token: '',
+    firstName: '',
+    lastName: '',
+    email: ''
   }),
   getters: {
     isLoggedIn: (state) => {

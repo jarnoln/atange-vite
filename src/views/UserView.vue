@@ -1,6 +1,20 @@
 <template>
   <div v-if="sessionStore.username">
-    <h1> {{ sessionStore.username }}</h1>
+    <h1>{{ sessionStore.username }}</h1>
+    <table>
+      <tr>
+        <th>First name</th>
+        <td>{{ sessionStore.firstName }}</td>
+      </tr>
+      <tr>
+        <th>Last name</th>
+        <td>{{ sessionStore.lastName }}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>{{ sessionStore.email }}</td>
+      </tr>
+    </table>
     <p>
       <router-link id="edit-user-link" :to="{ name: 'user-edit' }">
         Edit user information
