@@ -64,8 +64,8 @@ function submitForm() {
   sessionStore.firstName = currentFirstName.value
   sessionStore.lastName = currentLastName.value
   sessionStore.email = currentEmail.value
+  EventService.updateUserInfo()
   router.push({ name: 'user-view' })
-  // EventService.deleteCurrentUser(currentPassword.value)
 }
 </script>
 

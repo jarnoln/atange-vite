@@ -109,7 +109,22 @@ describe('Test EventService:fetchUserInfo', () => {
     // expect(sessionStore.lastName).toBe('Kent')
     // expect(sessionStore.email).toBe('')
   })
-}),
+})
+
+
+describe('Test EventService:updateUserInfo', () => {
+  it('updates user info', async () => {
+    sessionStore.login('superman', 'abcd')
+    sessionStore.firstName = 'Clark'
+    sessionStore.lastName = 'Kent'
+    sessionStore.email = 'clark.kent@dailyplanet.com'
+    expect(notificationStore.count).toBe(0)
+    await EventService.updateUserInfo()
+    expect(notificationStore.count).toBe(0)
+  })
+})
+
+
 describe('Test EventService:login', () => {
   it('sets username and token', async () => {
     expect(sessionStore.username).toBe('')

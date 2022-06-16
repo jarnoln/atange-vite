@@ -190,6 +190,38 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  updateUserInfo: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    notificationStore.notifyWaitOn('updating_user_info', 'Saving user info')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const dataOut = {
+      first_name: sessionStore.firstName,
+      last_name: sessionStore.lastName,
+      email: sessionStore.email
+    }
+    const path: string = '/api/user/' + sessionStore.username + '/'
+    console.log('PUT', path)
+    return apiClient.put(path, dataOut, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('updating_user_info')
+        if (response.status === 200) {
+          console.log('updated user_info:', response.data)
+        } else {
+          notificationStore.notifyError('updateUserInfo: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('updating_user_info')
+        const message = 'Failed to update user info. '
+        handleApiError(error, message)
+      })
+  },
   login: async (username: string, password: string) => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
