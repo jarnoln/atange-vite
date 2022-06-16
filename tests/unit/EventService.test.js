@@ -95,6 +95,21 @@ describe('Test EventService:fetchQuestions', () => {
   })
 })
 
+describe('Test EventService:fetchUserInfo', () => {
+  it('fetches and stores user info', async () => {
+    sessionStore.login('superman', 'abcd')
+    expect(sessionStore.token).toBe('abcd')
+    expect(sessionStore.firstName).toBe('')
+    expect(sessionStore.lastName).toBe('')
+    expect(sessionStore.email).toBe('')
+    expect(notificationStore.count).toBe(0)
+    await EventService.fetchUserInfo()
+    expect(notificationStore.count).toBe(0)
+    // expect(sessionStore.firstName).toBe('Clark')
+    // expect(sessionStore.lastName).toBe('Kent')
+    // expect(sessionStore.email).toBe('')
+  })
+}),
 describe('Test EventService:login', () => {
   it('sets username and token', async () => {
     expect(sessionStore.username).toBe('')

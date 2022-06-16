@@ -160,6 +160,36 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  fetchUserInfo: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    notificationStore.notifyWaitOn('fetching_user_info', 'Fetching user info')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/user/' + sessionStore.username + '/'
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_user_info')
+        if (response.status === 200) {
+          console.log('fetched user_info:', response.data)
+          sessionStore.firstName = response.data['first_name']
+          sessionStore.lastName = response.data['last_name']
+          sessionStore.email = response.data['email']
+        } else {
+          notificationStore.notifyError('fetchUserInfo: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_user_info')
+        const message = 'Failed to fetch user info. '
+        handleApiError(error, message)
+      })
+  },
   login: async (username: string, password: string) => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()

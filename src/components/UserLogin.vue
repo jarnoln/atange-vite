@@ -46,12 +46,13 @@ function getTitle() {
   return route.name
 }
 
-function submitForm() {
+async function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
       EventService.register(currentUsername.value, currentPassword.value)
   } else {
-      EventService.login(currentUsername.value, currentPassword.value)
+      await EventService.login(currentUsername.value, currentPassword.value)
+      EventService.fetchUserInfo()
   }
   router.push({ name: 'home' })
 }
