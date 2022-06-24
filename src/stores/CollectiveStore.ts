@@ -5,6 +5,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
   state: () => ({
     collectives: [] as Collective[],
     currentCollectiveName: '',
+    admins: [] as string[]  // List of current collective administrator usernames
   }),
   getters: {
     count: (state) => state.collectives.length,
@@ -21,6 +22,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
     clear() {
       this.collectives = []
       this.currentCollectiveName = ''
+      this.admins = []
     },
     addCollective(name: string, title: string, description: string, creator: string) {
       console.log('CollectiveStore:addCollective', name, title, description, creator)
@@ -71,6 +73,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       console.log('  collectives after:', this.collectives)
     },
     selectCollective(name: string) : boolean {
+      this.admins = []
       const index = this.collectives.findIndex(collective => collective.name === name)
       console.log('selectCollective(name=', name, ') index:', index)
       if (index > -1) {

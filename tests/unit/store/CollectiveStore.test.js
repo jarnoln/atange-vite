@@ -107,6 +107,19 @@ describe('Test CollectiveStore', () => {
     expect(collectiveStore.currentCollective.title).toEqual('Section 8')
     expect(collectiveStore.currentCollective.description).toEqual('')
   }),
+  it('changing active collective resets admins', () => {
+    collectiveStore.addCollective(
+      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+    collectiveStore.addCollective(
+      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+    expect(collectiveStore.currentCollective).toBe(undefined)
+    expect(collectiveStore.admins.length).toEqual(0)
+    collectiveStore.selectCollective(collective_2.name)
+    collectiveStore.admins = ['batman', 'superman']
+    expect(collectiveStore.admins.length).toEqual(2)
+    collectiveStore.selectCollective(collective_1.name)
+    expect(collectiveStore.admins.length).toEqual(0)
+  }),
   it('can update collective permissions', () => {
     collectiveStore.addCollective(
       collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
@@ -173,10 +186,13 @@ describe('Test CollectiveStore', () => {
     collectiveStore.addCollective(
       collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
     collectiveStore.selectCollective(collective_2.name)
+    collectiveStore.admins = ['batman', 'superman']
     expect(collectiveStore.collectives.length).toBe(2)
     expect(collectiveStore.currentCollective).toEqual(collective_2)
+    expect(collectiveStore.admins.length).toBe(2)
     collectiveStore.clear()
     expect(collectiveStore.collectives.length).toBe(0)
     expect(collectiveStore.currentCollective).toBe(undefined)
+    expect(collectiveStore.admins.length).toBe(0)
   })
 })
