@@ -474,6 +474,39 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
+  fetchAdmins: async (collectiveName: string) => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    notificationStore.notifyWaitOn('fetching_admins', 'Fetching admins')
+    const path: string = '/api/collective/' + collectiveName + '/admins/'
+    let config = {}
+    if (sessionStore.isLoggedIn) {
+      config = {
+        headers: {
+          'Authorization': 'Token ' + sessionStore.token
+        }
+      }
+    }
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_admins')
+        if (response.status === 200) {
+          console.log('fetched admins:', response.data)
+          const collectiveStore = useCollectiveStore()
+          collectiveStore.admins = response.data
+        } else {
+          notificationStore.notifyError('fetchAdmins: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('admins')
+        const message = 'Failed to fetch permissions. '
+        handleApiError(error, message)
+      })
+  },
+
   createQuestion: async (question: Question) => {
     // Creates question in the backend. Note: Does not add question to store.
     const notificationStore = useNotificationStore()

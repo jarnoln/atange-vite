@@ -54,6 +54,7 @@ onBeforeMount(async () => {
     collectiveStore.selectCollective(props.collectiveName)
     await EventService.fetchPermissions(props.collectiveName)
     await EventService.fetchQuestions(props.collectiveName)
+    await EventService.fetchAdmins(props.collectiveName)
   }
 })
 

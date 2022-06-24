@@ -234,6 +234,22 @@ describe('Test EventService:deleteCollective', () => {
   })
 })
 
+describe('Test EventService:fetchAdmins', () => {
+  it('fetches and stores admins', async () => {
+    expect(collectiveStore.admins.length).toBe(0)
+    await EventService.fetchAdmins('jla')
+    expect(collectiveStore.admins.length).toBe(1)
+    expect(collectiveStore.admins[0]).toBe('superman')
+  }),
+  it('clears previous admins when fetching new ones', async () => {
+    collectiveStore.admins = ['aquaman', 'batman']
+    expect(collectiveStore.admins.length).toBe(2)
+    await EventService.fetchAdmins('jla')
+    expect(collectiveStore.admins.length).toBe(1)
+    expect(collectiveStore.admins[0]).toBe('superman')
+  })
+})
+
 describe('Test EventService:createQuestion', () => {
   it('creates question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')

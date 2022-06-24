@@ -41,6 +41,8 @@ export default {
             } else {
               dataOut = { 'can_edit': false, 'can_join': false }
             }
+          } else if (url === '/api/collective/jla/admins/') {
+            dataOut = ['superman']
           } else if (url === '/api/user/superman/') {
             dataOut = [{ first_name: 'Clark', last_name: 'Kent', email: 'clark.kent@dailyplanet.com'}]
           }
