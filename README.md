@@ -3,7 +3,7 @@
 A simple polling/voting app.
 
 This repository contains sources for frontend.
-([Atange backend](https://github.com/jarnoln/atange-backend))
+Backend sources are here: ([Atange backend](https://github.com/jarnoln/atange-backend))
 
 Created using these:
 * Framework: [Vue 3](https://vuejs.org/) + [TypeScript](https://www.typescriptlang.org/)

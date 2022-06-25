@@ -1,6 +1,6 @@
 <template>
   <div v-if="canEdit">
-    <form @submit.prevent="submitForm">
+    <form id="collective-edit-form" @submit.prevent="submitForm">
       <div class="form-control" :class="{ invalid: titleValidateError }">
         <label for="collective-title">Title</label>
         <input
@@ -52,6 +52,7 @@
         {{ nameEditToggleButtonText }}
       </button>
     </p>
+    <edit-admins />
     <p v-if="showDeleteButton">
       <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
     </p>
@@ -66,6 +67,7 @@ import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
+import EditAdmins from './EditAdmins.vue'
 
 const currentName = ref('')
 const currentTitle = ref('')
