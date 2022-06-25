@@ -506,7 +506,91 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
-
+  addAdmin: async (username: string) => {
+    // Adds admin to collective in the backend.
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      notificationStore.notifyError('Not logged in')
+      return null
+    }
+    const collectiveStore = useCollectiveStore()
+    if (!collectiveStore.currentCollective) {
+      notificationStore.notifyError('No community selected, can not add admin')
+      return null
+    }
+    const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/admin/' + username + '/'
+    const dataOut = {}
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('adding_admin', 'Adding ' + username + ' to administrators')
+    console.log('POST', path, dataOut)
+    return apiClient.post(path, dataOut, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('adding_admin')
+      if (response.status === 204) {
+        notificationStore.notifySuccess('added_admin', 'Added ' + username + ' to administrators')
+        console.log(response.data)
+        return true
+      } else {
+        notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
+        console.log(response.data)
+        return false
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('adding_admin')
+      const message = 'Failed to add ' + username + ' to administrators.'
+      handleApiError(error, message)
+      return false
+    })
+  },
+  kickAdmin: async (username: string) => {
+    // Adds admin to collective in the backend.
+    console.log('EventService kickAdmin username =', username)
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    if (!sessionStore.isLoggedIn) {
+      notificationStore.notifyError('Not logged in')
+      return null
+    }
+    const collectiveStore = useCollectiveStore()
+    if (!collectiveStore.currentCollective) {
+      notificationStore.notifyError('No community selected, can not add admin')
+      return null
+    }
+    const path: string = '/api/collective/' + collectiveStore.currentCollective.name + '/admin/' + username + '/'
+    const dataOut = {}
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    notificationStore.notifyWaitOn('kicking_admin', 'Removing ' + username + ' from administrators')
+    console.log('DELETE', path, dataOut)
+    return apiClient.delete(path, config)
+    .then(response => {
+      notificationStore.notifyWaitOff('kicking_admin')
+      if (response.status === 204) {
+        notificationStore.notifySuccess('kicked_admin', 'Removed ' + username + ' from administrators')
+        console.log(response.data)
+        return true
+      } else {
+        notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
+        console.log(response.data)
+        return false
+      }
+    })
+    .catch(error => {
+      notificationStore.notifyWaitOff('kicking_admin')
+      const message = 'Failed to kick ' + username + ' from administrators.'
+      handleApiError(error, message)
+      return false
+    })
+  },
   createQuestion: async (question: Question) => {
     // Creates question in the backend. Note: Does not add question to store.
     const notificationStore = useNotificationStore()

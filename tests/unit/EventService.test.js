@@ -250,6 +250,32 @@ describe('Test EventService:fetchAdmins', () => {
   })
 })
 
+describe('Test EventService:addAdmin', () => {
+  it('adds admin', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
+    expect(notificationStore.count).toBe(0)
+    await EventService.addAdmin('superman')
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('added_admin')
+    expect(notificationStore.latestNotification.message).toBe('Added superman to administrators')
+  })
+})
+
+describe('Test EventService:kickAdmin', () => {
+  it('kicks admin', async () => {
+    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.selectCollective('jla')
+    sessionStore.login('superman', 'abcd')
+    expect(notificationStore.count).toBe(0)
+    await EventService.kickAdmin('superman')
+    expect(notificationStore.count).toBe(1)
+    expect(notificationStore.latestNotification.id).toBe('kicked_admin')
+    expect(notificationStore.latestNotification.message).toBe('Removed superman from administrators')
+  })
+})
+
 describe('Test EventService:createQuestion', () => {
   it('creates question', async () => {
     collectiveStore.addCollective('jla', 'JLA', '', 'superman')

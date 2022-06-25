@@ -10,6 +10,8 @@
           {{ admin }} <button class="btn" :id="'btn-kick-' + admin" style="padding: 0.1rem 2rem; margin: 0.2rem" @click="kickAdmin(admin)">Kick</button>
         </li>
       </ul>
+    </p>
+    <p>
       <form id="add-admin-form" @submit.prevent="submitForm">
         <div class="form-control" :class="{ invalid: usernameValidateError }">
           <label for="admin-username">New admin username</label>
@@ -71,14 +73,20 @@ const isFormValid = computed(() => {
   return true
 })
 
-function submitForm() {
+async function submitForm() {
   console.log('Add admin:', currentUsername.value)
-  collectiveStore.addAdmin(currentUsername.value)
+  const result = await EventService.addAdmin(currentUsername.value)
+  if (result) {
+    collectiveStore.addAdmin(currentUsername.value)
+  }
 }
 
-function kickAdmin(username: string) {
+async function kickAdmin(username: string) {
   console.log('Kick admin:', username)
-  collectiveStore.kickAdmin(username)
+  const result = await EventService.kickAdmin(username)
+  if (result) {
+    collectiveStore.kickAdmin(username)
+  }
 }
 </script>
 

@@ -73,7 +73,7 @@ export default {
         })
       },
       post: (url, dataIn, config) => {
-        console.log('PUT', url, dataIn, config)
+        console.log('axios POST', url, dataIn, config)
         let status = 401  // Unauthorized by default
         let dataOut = {}
         if (url === '/auth/token/login/') {
@@ -91,6 +91,8 @@ export default {
         } else if (url === '/auth/users/') {
           status = 201
           dataOut = { username: dataIn.username }
+        } else if (url === '/api/collective/jla/admin/superman/') {
+          status = 204
         } else {
           // For any other endpoint need to be logged in
           const auth = checkAuth(config)
