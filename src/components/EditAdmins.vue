@@ -7,9 +7,25 @@
     <p v-else>
       <ul>
         <li v-for="admin in collectiveStore.admins" :key="admin">
-          {{ admin }}
+          {{ admin }} <button class="btn" :id="'btn-kick-' + admin" style="padding: 0.1rem 2rem; margin: 0.2rem" @click="kickAdmin(admin)">Kick</button>
         </li>
       </ul>
+      <form id="add-admin-form" @submit.prevent="submitForm">
+        <div class="form-control" :class="{ invalid: usernameValidateError }">
+          <label for="admin-username">New admin username</label>
+          <input
+              id="admin-username"
+              name="admin-username"
+              type="text"
+              minlength="3"
+              size="50"
+              required
+              v-model.trim="currentUsername"
+              @input="validateUsername"
+          />
+        </div>
+        <button id="add-admin-button" :disabled="!isFormValid" class="btn" style="text-transform: capitalize">Add admin</button>
+      </form>
     </p>
   </div>
 </template>
@@ -17,7 +33,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import slugify from 'slugify'
+import { validateStringLongEnough, validateStringSlugified } from '../utils/validators'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { EventService } from '../services/EventService'
@@ -25,6 +41,9 @@ import { EventService } from '../services/EventService'
 const collectiveStore = useCollectiveStore()
 const sessionStore = useSessionStore()
 const router = useRouter()
+const currentUsername = ref('')
+const isUsernameValidated = ref(false)
+const usernameValidateError = ref('')
 
 const canEdit = computed(() => {
   if (!sessionStore.isLoggedIn) {
@@ -37,13 +56,30 @@ const canEdit = computed(() => {
   }
 })
 
+function validateUsername() {
+  usernameValidateError.value = validateStringLongEnough('Username', currentUsername.value, 3)
+  if (usernameValidateError.value === '') {
+    usernameValidateError.value = validateStringSlugified('Username', currentUsername.value)
+  }
+  isUsernameValidated.value = true
+}
+
 const isFormValid = computed(() => {
+  if (isUsernameValidated.value === false || usernameValidateError.value !== '') {
+    return false
+  }
   return true
 })
 
 function submitForm() {
+  console.log('Add admin:', currentUsername.value)
+  collectiveStore.addAdmin(currentUsername.value)
 }
 
+function kickAdmin(username: string) {
+  console.log('Kick admin:', username)
+  collectiveStore.kickAdmin(username)
+}
 </script>
 
 <style scoped>

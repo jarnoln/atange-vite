@@ -96,6 +96,19 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       }
       console.warn('updateCollectivePermissions: Collective not found with name', collectiveName)
       return false
+    },
+    addAdmin(username: string) {
+      console.log('addAdmin', username)
+      this.admins.push(username)
+    },
+    kickAdmin(username: string) {
+      console.log('kickAdmin', username)
+      const index = this.admins.findIndex(admin => admin === username)
+      if (index > -1) {
+        this.admins = this.admins.filter(admin => admin != username)
+      } else {
+        console.warn(username, 'is not is admins:', this.admins)
+      }
     }
   }
 })

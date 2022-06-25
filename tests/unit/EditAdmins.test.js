@@ -42,30 +42,51 @@ describe('Test EditAdmins', () => {
     expect(wrapper.text()).toContain('Admins')
     expect(wrapper.text()).toContain('batman')
     expect(wrapper.text()).toContain('superman')
-    /* const collectiveNameInput = wrapper.get('#collective-name')
-    const collectiveSubmitButton = wrapper.get('#collective-submit-button')
-    expect(collectiveNameInput.isVisible()).toBe(true)
-    expect(collectiveSubmitButton.isVisible()).toBe(true)
-    expect(collectiveSubmitButton.attributes().disabled).toBe('true')
-    expect(collectiveSubmitButton.text()).toBe('Create') */
+    const usernameInput = wrapper.get('#admin-username')
+    const addAdminButton = wrapper.get('#add-admin-button')
+    expect(usernameInput.isVisible()).toBe(true)
+    expect(addAdminButton.isVisible()).toBe(true)
+    expect(addAdminButton.attributes().disabled).toBe('true')
   }),
   it('can add new admin', async () => {
+    sessionStore.login('superman', 'abcd')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
-    /* sessionStore.login('superman', 'abcd')
-    const wrapper = mount(EditCollective, {
-      global: {
-        plugins: [router, pinia]
-      }
-    }) */
-  }),
-  it('can remove admin', async () => {
-    collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
-    /* sessionStore.login('superman', 'abcd')
+    collectiveStore.admins = ['superman']
+    expect(collectiveStore.admins.length).toBe(1)
     const wrapper = mount(EditAdmins, {
       global: {
         plugins: [router, pinia]
       }
-    }) */
+    })
+    const usernameInput = wrapper.get('#admin-username')
+    const addAdminButton = wrapper.get('#add-admin-button')
+    usernameInput.setValue('aquaman')
+    addAdminButton.trigger('click')
+    // await nextTick()
+    // expect(collectiveStore.admins.length).toBe(2)
+
+  }),
+  it('can remove admin', async () => {
+    collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
+    collectiveStore.admins = ['aquaman', 'superman']
+    sessionStore.login('superman', 'abcd')
+    const wrapper = mount(EditAdmins, {
+      global: {
+        plugins: [router, pinia]
+      }
+    })
+    const kickAquamanButton = wrapper.get('#btn-kick-aquaman')
+    const kickSupermanButton = wrapper.get('#btn-kick-superman')
+    expect(kickAquamanButton.isVisible()).toBe(true)
+    expect(kickSupermanButton.isVisible()).toBe(true)
+    expect(collectiveStore.admins.length).toBe(2)
+    kickAquamanButton.trigger('click')
+    await nextTick()
+    expect(collectiveStore.admins.length).toBe(1)
+    expect(collectiveStore.admins[0]).toBe('superman')
+    kickSupermanButton.trigger('click')
+    await nextTick()
+    expect(collectiveStore.admins.length).toBe(0)
   }),
   it('does not show admins if not logged in', async () => {
     collectiveStore.admins = ['batman', 'superman']
