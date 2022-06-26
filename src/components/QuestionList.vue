@@ -8,10 +8,10 @@
       <caption>Questions: {{ questionStore.count }}</caption>
       <thead>
         <tr>
-          <th class="text-left dim-background">Question</th>
-          <th class="text-right dim-background">Y</th>
-          <th class="text-right dim-background">A</th>
-          <th class="text-right dim-background">N</th>
+          <th class="text-left dim-background" style="width:90%">Question</th>
+          <th class="text-right dim-background">Yes</th>
+          <th class="text-right dim-background">Abs</th>
+          <th class="text-right dim-background">No</th>
           <th class="text-right dim-background">Approval</th>
           <th class="text-left dim-background" v-if="canEditQuestions">Actions</th>
         </tr>

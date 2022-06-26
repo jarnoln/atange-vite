@@ -64,7 +64,6 @@ describe('Test EditAdmins', () => {
     addAdminButton.trigger('click')
     // await nextTick()
     // expect(collectiveStore.admins.length).toBe(2)
-
   }),
   it('can remove admin', async () => {
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
@@ -80,11 +79,11 @@ describe('Test EditAdmins', () => {
     expect(kickAquamanButton.isVisible()).toBe(true)
     expect(kickSupermanButton.isVisible()).toBe(true)
     expect(collectiveStore.admins.length).toBe(2)
-    kickAquamanButton.trigger('click')
+    await kickAquamanButton.trigger('click')
     await nextTick()
     expect(collectiveStore.admins.length).toBe(1)
     expect(collectiveStore.admins[0]).toBe('superman')
-    kickSupermanButton.trigger('click')
+    await kickSupermanButton.trigger('click')
     await nextTick()
     expect(collectiveStore.admins.length).toBe(0)
   }),

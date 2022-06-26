@@ -109,11 +109,13 @@ export default {
         })
       },
       delete: (url, config) => {
+        console.log('axios DELETE', url)
         const auth = checkAuth(config)
         let status = 401
         if (auth.isTokenValid && auth.isAuthorized) {
           status = 204
         }
+        console.log('axios return status', status)
         return new Promise((resolve, reject) => {
           resolve({
             status: status

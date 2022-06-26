@@ -84,8 +84,9 @@ async function submitForm() {
 async function kickAdmin(username: string) {
   console.log('Kick admin:', username)
   const result = await EventService.kickAdmin(username)
+  console.log('EventService kickAdmin returned', result)
   if (result) {
-    collectiveStore.kickAdmin(username)
+    await collectiveStore.kickAdmin(username)
   }
 }
 </script>

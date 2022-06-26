@@ -54,7 +54,7 @@
     </p>
     <edit-admins />
     <p v-if="showDeleteButton">
-      <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete collective</button>
+      <button id="delete-collective-btn" class="btn btn-danger" @click="deleteSelectedCollective">Delete community</button>
     </p>
   </div>
 </template>

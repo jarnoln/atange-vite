@@ -102,10 +102,11 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.admins.push(username)
     },
     kickAdmin(username: string) {
-      console.log('kickAdmin', username)
+      console.log('CollectiveStore:kickAdmin', username)
       const index = this.admins.findIndex(admin => admin === username)
       if (index > -1) {
         this.admins = this.admins.filter(admin => admin != username)
+        console.log(this.admins)
       } else {
         console.warn(username, 'is not is admins:', this.admins)
       }

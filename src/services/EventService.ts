@@ -576,11 +576,9 @@ export const EventService = {
       notificationStore.notifyWaitOff('kicking_admin')
       if (response.status === 204) {
         notificationStore.notifySuccess('kicked_admin', 'Removed ' + username + ' from administrators')
-        console.log(response.data)
         return true
       } else {
         notificationStore.notifyError('Expected status code 204, server returned code:' + response.status)
-        console.log(response.data)
         return false
       }
     })
