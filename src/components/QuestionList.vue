@@ -50,12 +50,12 @@
     <p v-if="canEditQuestions">
       <router-link
         class="btn"
-        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '', itemType: 'Q' }}">
+        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, itemType: 'question' }}">
           Add question
       </router-link>
       <router-link
         class="btn"
-        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: '', itemType: 'H' }}">
+        :to="{ name: 'create-question', params: { collectiveName: collectiveStore.currentCollective.name, itemType: 'header' }}">
           Add header
       </router-link>
     </p>

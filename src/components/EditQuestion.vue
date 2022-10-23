@@ -79,7 +79,7 @@ import { validateStringLongEnough, validateStringNotDuplicate, validateStringSlu
 import { EventService } from '../services/EventService'
 
 const props = defineProps<{
-  questionName: string,
+  questionName?: string,
   itemType?: string
 }>()
 
@@ -98,7 +98,7 @@ const router = useRouter()
 
 onMounted(() => {
   console.log('EditQuestion:onMounted', props.questionName)
-  if (props.questionName != '') {
+  if (props.questionName != undefined) {
     const question = questionStore.getQuestion(props.questionName)
     if (question != undefined) {
       currentName.value = question.name
@@ -122,22 +122,23 @@ const canEdit = computed(() => {
 })
 
 const titleText = computed(() => {
-  if (props.questionName != '') {
+  console.log('questioName', props.questionName, 'itemType:', props.itemType)
+  if (props.questionName != undefined) {
     const question = questionStore.getQuestion(props.questionName)
-    if (question && question.itemType === 'H') {
+    if (question && question.itemType === 'header') {
       return 'Edit header'
     } else {
       return 'Edit question'
     }
   }
-  if (props.itemType === 'h') {
+  if (props.itemType === 'header') {
     return 'Add header'
   }
   return 'Add question'
 })
 
 const submitButtonText = computed(() => {
-  if (props.questionName === '') {
+  if (props.questionName === undefined) {
     return 'Create'
   } else {
     return 'Save'
@@ -154,7 +155,7 @@ const nameEditToggleButtonText = computed(() => {
 
 const isFormValid = computed(() => {
   console.log('isFormValid', props.questionName, isNameValidated.value, isTitleValidated.value)
-  if (props.questionName === '') {
+  if (props.questionName === undefined) {
     if (isNameValidated.value === false || nameValidateError.value !== '') {
       return false
     }
@@ -166,14 +167,15 @@ const isFormValid = computed(() => {
 })
 
 watch(currentTitle, function(newValue) {
-  if (props.questionName === '') {
+  if (props.questionName === undefined) {
     currentName.value = slugify(newValue, { lower: true, strict: true })
+    console.log('currentName', currentName.value)
     validateName()
   }
 })
 
 function validateName() {
-  console.log('validateName:', currentName.value)
+  // console.log('validateName:', currentName.value)
   nameValidateError.value = validateStringLongEnough('Name', currentName.value, 1)
   if (nameValidateError.value === '') {
     nameValidateError.value = validateStringSlugified('Name', currentName.value)
@@ -192,6 +194,7 @@ function validateTitle() {
 }
 
 function submitForm() {
+  console.log('submitForm')
   if (props.questionName) {
     questionStore.updateQuestion(props.questionName, currentTitle.value, currentDescription.value)
     const question = questionStore.getQuestion(props.questionName)

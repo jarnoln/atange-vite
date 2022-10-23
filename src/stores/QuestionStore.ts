@@ -69,7 +69,7 @@ export const useQuestionStore = defineStore('QuestionStore', {
         itemType: string = 'Q',
         order: number = -1,
         parent: string = '') : Boolean {
-      console.log('addQuestion itemType:', itemType, 'order:', order)
+      console.log('addQuestion name:', name, 'itemType:', itemType, 'order:', order)
       if (name.length < 1) {
         console.warn('addQuestion: Name too short:', name)
         return false
@@ -81,6 +81,11 @@ export const useQuestionStore = defineStore('QuestionStore', {
       if (this.getQuestion(name) != undefined) {
         console.warn('Question with name', name, 'already exists')
         return false
+      }
+      if (itemType === 'question') {
+        itemType = 'Q'
+      } else if (itemType === 'header') {
+        itemType = 'H'
       }
       if (order === -1) {
         order = this.questions.length

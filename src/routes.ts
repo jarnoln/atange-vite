@@ -29,7 +29,7 @@ export const routes: Array<RouteRecordRaw> = [
     children: [
       { path: '', name: 'collective-view', component: CollectiveView },
       { path: 'edit', name: 'collective-edit', component: EditCollective, meta: { requiresAuth: true } },
-      { path: 'add_question', name: 'create-question', component: EditQuestion, props: true, meta: { requiresAuth: true } },
+      { path: 'add/:itemType/', name: 'create-question', component: EditQuestion, props: true, meta: { requiresAuth: true } },
       { path: 'reorder', name: 'collective-reorder', component: ReorderQuestionsView, props: true, meta: { requiresAuth: true } },
       { path: 'q/:questionName', name: 'question', component: QuestionView, props: true },
       { path: 'q/:questionName/edit', name: 'question-edit', component: EditQuestion, props: true, meta: { requiresAuth: true } },

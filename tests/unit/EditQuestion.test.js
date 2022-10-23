@@ -42,8 +42,8 @@ describe('Test EditQuestion', () => {
         plugins: [router, pinia]
       },
       props: {
-        questionName: '',
-        itemType: 'q'
+        questionName: undefined,
+        itemType: 'question'
       }
     })
     expect(wrapper.text()).toContain('Add question')
@@ -101,8 +101,8 @@ describe('Test EditQuestion', () => {
         plugins: [router, pinia]
       },
       props: {
-        questionName: '',
-        itemType: 'h'
+        questionName: undefined,
+        itemType: 'header'
       }
     })
     expect(wrapper.text()).toContain('Add header')
