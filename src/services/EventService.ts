@@ -163,6 +163,10 @@ export const EventService = {
   fetchUserInfo: async () => {
     const notificationStore = useNotificationStore()
     const sessionStore = useSessionStore()
+    if (sessionStore.username === '') {
+      console.log('EventStore:fetchUsrerInfo: no user seleted. Aborting.')
+      return null
+    }
     notificationStore.notifyWaitOn('fetching_user_info', 'Fetching user info')
     const config = {
       headers: {
