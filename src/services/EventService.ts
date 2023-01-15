@@ -27,12 +27,12 @@ const apiClient = axios.create({
   }
 })
 
-function storeCollectives(collectiveData: Collective[]) {
+function storeCollectives(collectiveData: any[]) {
   const collectiveStore = useCollectiveStore()
   collectiveStore.clear()
   console.log('Fetched collectives: ', collectiveData.length)
   console.log(...collectiveData)
-  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description, item.isVisible, item.creator))
+  collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description, item.is_visible, item.creator))
 }
 
 function storeQuestions(questionData: any[]) {

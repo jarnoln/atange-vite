@@ -16,7 +16,8 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         return undefined
       }
       return state.collectives.find(collective => collective.name === state.currentCollectiveName)
-    }
+    },
+    visibleCollectives: (state) => state.collectives.filter(collective => collective.isVisible)
   },
   actions: {
     clear() {

@@ -5,7 +5,7 @@
   <div v-else id="collective-list-container">
     <table id="collective-list-table">
       <tbody>
-        <tr v-for="collective in collectiveStore.collectives" :key="collective.name">
+        <tr v-for="collective in collectiveStore.visibleCollectives" :key="collective.name">
           <td> <router-link :to="{ name: 'collective-view', params: { collectiveName: collective.name }}">{{ collective.title }}</router-link> </td>
         </tr>
       </tbody>
