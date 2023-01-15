@@ -25,6 +25,15 @@
             cols="60"
         />
       </div>
+      <div class="form-control">
+        <label for="collective-is-visible">Visible</label>
+        <input
+            id="collective-is-visible"
+            name="collective-is-visible"
+            type="checkbox"
+            v-model="currentIsVisible"
+        />
+      </div>
       <div v-show="isNameInputShown" v-if="collectiveStore.currentCollective === undefined" class="form-control" :class="{ invalid: nameValidateError }">
         <label for="collective-name">Name</label>
         <input
@@ -74,6 +83,7 @@ const currentTitle = ref('')
 const currentDescription = ref('')
 const nameValidateError = ref('')
 const titleValidateError = ref('')
+const currentIsVisible = ref(true)
 const isNameValidated = ref(false)
 const isTitleValidated = ref(false)
 const isNameInputShown = ref(false)
@@ -86,6 +96,7 @@ onMounted(() => {
     currentName.value = collectiveStore.currentCollective.name
     currentTitle.value = collectiveStore.currentCollective.title
     currentDescription.value = collectiveStore.currentCollective.description
+    currentIsVisible.value = collectiveStore.currentCollective.isVisible
     validateName()
     validateTitle()
   }
@@ -170,12 +181,13 @@ watch(currentTitle, function(newValue) {
 function submitForm() {
   console.log('EditCollective::submitForm', currentName.value, currentTitle.value)
   if (collectiveStore.currentCollective != undefined) {
-    collectiveStore.updateCurrentCollective(currentTitle.value, currentDescription.value, true)
+
+    collectiveStore.updateCurrentCollective(currentTitle.value, currentDescription.value, currentIsVisible.value)
     EventService.updateCollective(collectiveStore.currentCollective)
   } else {
     collectiveStore.addCollective(
-      currentName.value, currentTitle.value, currentDescription.value, true, sessionStore.username)
-    EventService.createCollective(currentName.value, currentTitle.value, currentDescription.value)
+      currentName.value, currentTitle.value, currentDescription.value, currentIsVisible.value, sessionStore.username)
+    EventService.createCollective(currentName.value, currentTitle.value, currentDescription.value, currentIsVisible.value)
   }
   router.push({ name: 'collective-view', params: { collectiveName: currentName.value }})
 }

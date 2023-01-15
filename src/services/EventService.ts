@@ -362,7 +362,7 @@ export const EventService = {
       handleApiError(error, message)
     })
   },
-  createCollective: async (name: string, title: string, description: string) => {
+  createCollective: async (name: string, title: string, description: string, isVisible: boolean) => {
     // Creates collective in the backend. Note: Does not add collective to store.
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()
@@ -383,7 +383,7 @@ export const EventService = {
       name: name,
       title: title,
       description: description,
-      is_visible: true,
+      is_visible: isVisible,
     }
     const config = {
       headers: {
@@ -421,7 +421,7 @@ export const EventService = {
       name: collective.name,
       title: collective.title,
       description: collective.description,
-      is_visible: true,
+      is_visible: collective.isVisible,
     }
     const config = {
       headers: {
