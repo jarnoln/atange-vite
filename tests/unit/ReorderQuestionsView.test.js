@@ -30,6 +30,7 @@ const collective = {
   name: 'jla',
   title: 'JLA',
   description: 'Justice League of America',
+  isVisible: true,
   creator: 'superman',
   permissions: {
     canEdit: true,
@@ -42,7 +43,7 @@ describe('Test ReorderQuestionsView', () => {
     collectiveStore.clear()
     questionStore.clear()
     sessionStore.clear()
-    collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.creator)
+    collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.isVisible, collective.creator)
     collectiveStore.selectCollective(collective.name)
     collectiveStore.updateCollectivePermissions('jla', { canEdit: true, canJoin: true })
     questionStore.addQuestion('q1', 'Question 1', '')

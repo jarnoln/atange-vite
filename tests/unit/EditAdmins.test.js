@@ -27,7 +27,7 @@ describe('Test EditAdmins', () => {
   beforeEach(() => {
     collectiveStore.clear()
     sessionStore.clear()
-    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', '', true, 'superman')
     collectiveStore.selectCollective('jsa')
   }),
   it('shows current admins', async () => {

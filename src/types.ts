@@ -2,6 +2,7 @@ export interface Collective {
   name: string
   title: string
   description: string
+  isVisible: boolean
   creator: string
   permissions: Permissions
 }

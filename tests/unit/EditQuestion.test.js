@@ -31,7 +31,7 @@ describe('Test EditQuestion', () => {
     sessionStore.clear()
     collectiveStore.clear()
     questionStore.clear()
-    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', '', true, 'superman')
     collectiveStore.selectCollective('jsa')
   }),
   it('can add question', async () => {

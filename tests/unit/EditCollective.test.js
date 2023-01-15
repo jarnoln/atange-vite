@@ -58,7 +58,7 @@ describe('Test EditCollective', () => {
     // expect(collectiveStore.collectives.length).toBe(1)
   }),
   it('can edit existing collective', async () => {
-    collectiveStore.addCollective('jsa', 'JSA', 'Justice League of America', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', 'Justice League of America', true, 'superman')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
     collectiveStore.selectCollective('jsa')
     sessionStore.login('superman', 'abcd')
@@ -82,7 +82,7 @@ describe('Test EditCollective', () => {
     // expect(collectiveSubmitButton.attributes().disabled).toBe('true')
   }),
   it('can delete collective', async () => {
-    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', '', true, 'superman')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: true, canJoin: true })
     collectiveStore.selectCollective('jsa')
     sessionStore.login('superman', 'abcd')
@@ -115,7 +115,7 @@ describe('Test EditCollective', () => {
     expect(wrapper.text()).not.toContain('Cancel')
   }),
   it('does not show inputs if no permission to edit', async () => {
-    collectiveStore.addCollective('jsa', 'JSA', '', 'superman')
+    collectiveStore.addCollective('jsa', 'JSA', '', true, 'superman')
     collectiveStore.updateCollectivePermissions('jsa', { canEdit: false, canJoin: true })
     collectiveStore.selectCollective('jsa')
     sessionStore.login('superman', 'abcd')

@@ -28,7 +28,7 @@ const sessionStore = useSessionStore()
 describe('Test QuestionList', () => {
   it('shows question titles', async () => {
     // The render method returns a collection of utilities to query your component.
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     questionStore.addQuestion('q1', 'Question 1', 'A very important question')
     questionStore.addQuestion('q2', 'Question 2', 'A less important question')

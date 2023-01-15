@@ -24,8 +24,8 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.currentCollectiveName = ''
       this.admins = []
     },
-    addCollective(name: string, title: string, description: string, creator: string) {
-      console.log('CollectiveStore:addCollective', name, title, description, creator)
+    addCollective(name: string, title: string, description: string, isVisible: boolean, creator: string) {
+      console.log('CollectiveStore:addCollective', name, title, description, isVisible, creator)
       if (name.length < 1) {
         console.warn('addCollective: Name too short:', name)
         return false
@@ -43,6 +43,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
         title: title,
         description: description,
         creator: creator,
+        isVisible: isVisible,
         permissions: {
           canEdit: false,
           canJoin: false
@@ -61,8 +62,8 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       this.collectives = this.collectives.filter(collective => collective.name != collectiveName)
       // console.log('collectives after:', this.collectives)
     },
-    updateCurrentCollective(title: string, description: string) {
-      console.log('updateCurrentCollective', title, description)
+    updateCurrentCollective(title: string, description: string, isVisible: boolean) {
+      console.log('updateCurrentCollective', title, description, isVisible)
       console.log('  collectives before:', this.collectives)
       const collective = this.currentCollective
       if (collective === undefined) {
@@ -70,6 +71,7 @@ export const useCollectiveStore = defineStore('CollectiveStore', {
       }
       collective.title = title
       collective.description = description
+      collective.isVisible = isVisible
       console.log('  collectives after:', this.collectives)
     },
     selectCollective(name: string) : boolean {

@@ -29,7 +29,7 @@ export default {
         if (auth.isTokenValid) {
           status = 200
           if (url === '/api/collectives/') {
-            dataOut = [{ name: 'jla', title: 'JLA', description: '', creator: 'superman' }]
+            dataOut = [{ name: 'jla', title: 'JLA', description: '', isVisible:true, creator: 'superman' }]
           } else if (url === '/api/collective/jla/questions/') {
             dataOut = [
               { name: 'q1', title: 'Question 1', description: '', item_type: 'Q', order: 13 },

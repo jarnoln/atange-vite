@@ -32,7 +32,7 @@ describe('Test QuestionView', () => {
     sessionStore.clear()
     questionStore.clear()
     collectiveStore.clear()
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
   }),
   it('shows question information', async () => {

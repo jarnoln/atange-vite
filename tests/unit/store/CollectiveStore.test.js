@@ -13,6 +13,7 @@ const collective_1 = {
   name: 'jla',
   title: 'JLA',
   description: 'Justice League of America',
+  isVisible: true,
   creator: 'superman',
   permissions: {
     canEdit: false,
@@ -24,6 +25,7 @@ const collective_2 = {
   name: 'jsa',
   title: 'JSA',
   description: 'Justice Society of America',
+  isVisible: true,
   creator: 'flash',
   permissions: {
     canEdit: false,
@@ -40,12 +42,14 @@ describe('Test CollectiveStore', () => {
       collective_1.name,
       collective_1.title,
       collective_1.description,
+      collective_1.isVisible,
       collective_1.creator
       )).toBe(true)
     expect(collectiveStore.collectives.length).toBe(1)
     expect(collectiveStore.count).toBe(1)
     expect(collectiveStore.collectives[0].name).toBe(collective_1.name)
     expect(collectiveStore.collectives[0].title).toBe(collective_1.title)
+    expect(collectiveStore.collectives[0].isVisible).toBe(true)
     expect(collectiveStore.collectives[0].description).toBe(collective_1.description)
     expect(collectiveStore.collectives[0].creator).toBe(collective_1.creator)
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
@@ -54,6 +58,7 @@ describe('Test CollectiveStore', () => {
       collective_2.name,
       collective_2.title,
       collective_2.description,
+      collective_2.isVisible,
       collective_2.creator
     )).toBe(true)
     expect(collectiveStore.collectives.length).toBe(2)
@@ -65,6 +70,7 @@ describe('Test CollectiveStore', () => {
       '',
       collective_1.title,
       collective_1.description,
+      collective_1.isVisible,
       collective_1.creator
     )).toBe(false)
     expect(collectiveStore.collectives.length).toBe(0)
@@ -72,6 +78,7 @@ describe('Test CollectiveStore', () => {
       collective_1.name,
       '',
       collective_1.description,
+      collective_1.isVisible,
       collective_1.creator
     )).toBe(false)
     expect(collectiveStore.collectives.length).toBe(0)
@@ -79,15 +86,16 @@ describe('Test CollectiveStore', () => {
       collective_1.name,
       collective_1.title,
       collective_1.description,
+      collective_1.isVisible,
       ''
     )).toBe(false)
     expect(collectiveStore.collectives.length).toBe(0)
   }),
   it('can select active collective', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     expect(collectiveStore.collectives.length).toBe(2)
     expect(collectiveStore.currentCollective).toBe(undefined)
     collectiveStore.selectCollective(collective_2.name)
@@ -97,21 +105,22 @@ describe('Test CollectiveStore', () => {
   }),
   it('can update current collective', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     collectiveStore.selectCollective(collective_2.name)
     expect(collectiveStore.currentCollective).toEqual(collective_2)
-    collectiveStore.updateCurrentCollective('Section 8', '')
+    collectiveStore.updateCurrentCollective('Section 8', '', false)
     expect(collectiveStore.currentCollective.name).toEqual(collective_2.name)
     expect(collectiveStore.currentCollective.title).toEqual('Section 8')
     expect(collectiveStore.currentCollective.description).toEqual('')
+    expect(collectiveStore.currentCollective.isVisible).toEqual(false)
   }),
   it('changing active collective resets admins', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     expect(collectiveStore.currentCollective).toBe(undefined)
     expect(collectiveStore.admins.length).toEqual(0)
     collectiveStore.selectCollective(collective_2.name)
@@ -122,9 +131,9 @@ describe('Test CollectiveStore', () => {
   }),
   it('can update collective permissions', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
     expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
     expect(collectiveStore.collectives[1].permissions.canEdit).toBe(false)
@@ -142,7 +151,7 @@ describe('Test CollectiveStore', () => {
   }),
   it('does not update permissions if collective does not exist', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     expect(collectiveStore.collectives[0].permissions.canEdit).toBe(false)
     expect(collectiveStore.collectives[0].permissions.canJoin).toBe(false)
     expect(collectiveStore.updateCollectivePermissions('nonexistent', { canEdit: true, canJoin: true})).toBe(false)
@@ -151,9 +160,9 @@ describe('Test CollectiveStore', () => {
   }),
   it('can delete collectives', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_1.isVisible, collective_2.creator)
     collectiveStore.selectCollective(collective_1.name)
     expect(collectiveStore.collectives.length).toBe(2)
     expect(collectiveStore.currentCollective).toEqual(collective_1)
@@ -165,7 +174,7 @@ describe('Test CollectiveStore', () => {
   }),
   it('try to delete unknown collective', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     expect(collectiveStore.collectives.length).toBe(1)
     collectiveStore.deleteCollective('unknown')
     expect(collectiveStore.collectives.length).toBe(1)
@@ -175,16 +184,16 @@ describe('Test CollectiveStore', () => {
   it('can get collective names', () => {
     expect(collectiveStore.collectiveNames).toEqual([])
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_2.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_2.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     expect(collectiveStore.collectiveNames).toEqual(['jla', 'jsa'])
   }),
   it('can be cleared', () => {
     collectiveStore.addCollective(
-      collective_1.name, collective_1.title, collective_1.description, collective_1.creator)
+      collective_1.name, collective_1.title, collective_1.description, collective_1.isVisible, collective_1.creator)
     collectiveStore.addCollective(
-      collective_2.name, collective_2.title, collective_2.description, collective_2.creator)
+      collective_2.name, collective_2.title, collective_2.description, collective_2.isVisible, collective_2.creator)
     collectiveStore.selectCollective(collective_2.name)
     collectiveStore.admins = ['batman', 'superman']
     expect(collectiveStore.collectives.length).toBe(2)

@@ -28,6 +28,7 @@ const collective = {
   name: 'jla',
   title: 'JLA',
   description: 'Justice League of America',
+  isVisible: true,
   creator: 'superman',
   permissions: {
     canEdit: false,
@@ -39,7 +40,7 @@ describe('Test CollectiveView', () => {
   beforeEach(() => {
     collectiveStore.clear()
     sessionStore.clear()
-    collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.creator)
+    collectiveStore.addCollective(collective.name, collective.title, collective.description, collective.isVisible, collective.creator)
     collectiveStore.selectCollective(collective.name)
   }),
   it('show collective information', async () => {

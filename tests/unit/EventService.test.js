@@ -41,8 +41,8 @@ describe('Test EventService:fetchCollectives', () => {
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
   }),
   it('clears previous collectives when fetching new ones', async () => {
-    collectiveStore.addCollective('jsa', 'JSA', '', 'flash')
-    collectiveStore.addCollective('checkmate', 'Checkmate', '', 'stein')
+    collectiveStore.addCollective('jsa', 'JSA', '', true, 'flash')
+    collectiveStore.addCollective('checkmate', 'Checkmate', '', true, 'stein')
     collectiveStore.selectCollective('jsa')
     expect(collectiveStore.currentCollective.name).toBe('jsa')
     expect(collectiveStore.count).toBe(2)
@@ -200,17 +200,17 @@ describe('Test EventService:createCollective', () => {
 
 describe('Test EventService:updateCollective', () => {
   it('updates collective', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
-    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
+    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club', isVisible: true})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('collective_updated')
   }),
   it('does not update collective if not logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     expect(notificationStore.count).toBe(0)
-    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club'})
+    await EventService.updateCollective({name: 'jla', title:'JC', description: 'Justice Club', isVisible: true})
     expect(notificationStore.count).toBe(1)
     expect(notificationStore.latestNotification.id).toBe('error')
     expect(notificationStore.latestNotification.message).toBe('Not logged in')
@@ -252,7 +252,7 @@ describe('Test EventService:fetchAdmins', () => {
 
 describe('Test EventService:addAdmin', () => {
   it('adds admin', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
@@ -265,7 +265,7 @@ describe('Test EventService:addAdmin', () => {
 
 describe('Test EventService:kickAdmin', () => {
   it('kicks admin', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
@@ -278,7 +278,7 @@ describe('Test EventService:kickAdmin', () => {
 
 describe('Test EventService:createQuestion', () => {
   it('creates question', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(questionStore.count).toBe(0)
@@ -295,7 +295,7 @@ describe('Test EventService:createQuestion', () => {
     expect(notificationStore.latestNotification.id).toBe('question_created')
   }),
   it('does not create question if not logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     expect(notificationStore.count).toBe(0)
     expect(await EventService.createQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
@@ -316,7 +316,7 @@ describe('Test EventService:createQuestion', () => {
 
 describe('Test EventService:updateQuestion', () => {
   it('updates question', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
@@ -325,7 +325,7 @@ describe('Test EventService:updateQuestion', () => {
     expect(notificationStore.latestNotification.id).toBe('question_updated')
   }),
   it('does not update question if not logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     expect(notificationStore.count).toBe(0)
     expect(await EventService.updateQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
@@ -346,7 +346,7 @@ describe('Test EventService:updateQuestion', () => {
 
 describe('Test EventService:deleteQuestion', () => {
   it('deletes question', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
@@ -355,7 +355,7 @@ describe('Test EventService:deleteQuestion', () => {
     expect(notificationStore.latestNotification.id).toBe('question_deleted')
   }),
   it('does not delete question if not logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     expect(notificationStore.count).toBe(0)
     expect(await EventService.deleteQuestion({name: 'q1', title:'Question 1', description: ''})).toBe(null)
@@ -376,7 +376,7 @@ describe('Test EventService:deleteQuestion', () => {
 
 describe('Test EventService:updateAnswer', () => {
   it('updates answer', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     sessionStore.login('superman', 'abcd')
     expect(notificationStore.count).toBe(0)
@@ -385,7 +385,7 @@ describe('Test EventService:updateAnswer', () => {
     expect(notificationStore.latestNotification.id).toBe('answer_updated')
   }),
   it('does not update answer if not logged in', async () => {
-    collectiveStore.addCollective('jla', 'JLA', '', 'superman')
+    collectiveStore.addCollective('jla', 'JLA', '', true, 'superman')
     collectiveStore.selectCollective('jla')
     expect(notificationStore.count).toBe(0)
     expect(await EventService.updateAnswer('q1', 'u1', 1, '')).toBe(null)
