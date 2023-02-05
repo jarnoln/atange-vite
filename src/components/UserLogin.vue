@@ -69,7 +69,7 @@ function validateUsername() {
 
 function validatePassword() {
   if (route.name === 'register') {
-    passwordValidateError.value = validateStringLongEnough('Password', currentPassword.value, 6)
+    passwordValidateError.value = validateStringLongEnough('Password', currentPassword.value, 8)
   }
   isPasswordValidated.value = true
 }
