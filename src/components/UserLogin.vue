@@ -49,7 +49,9 @@ function getTitle() {
 async function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
-      EventService.register(currentUsername.value, currentPassword.value)
+      await EventService.register(currentUsername.value, currentPassword.value)
+      await EventService.login(currentUsername.value, currentPassword.value)
+      EventService.fetchUserInfo()
   } else {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
