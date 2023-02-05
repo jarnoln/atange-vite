@@ -32,6 +32,7 @@ import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { validateStringLongEnough, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
+import { useNotificationStore } from '../stores/NotificationStore'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
@@ -49,9 +50,13 @@ function getTitle() {
 async function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
   if (route.name === 'register') {
+      const notificationStore = useNotificationStore()
       await EventService.register(currentUsername.value, currentPassword.value)
-      await EventService.login(currentUsername.value, currentPassword.value)
-      EventService.fetchUserInfo()
+      if (notificationStore.latestNotification.id === 'registered') {
+        console.log('Registration successful. Logging in automatically.')
+        await EventService.login(currentUsername.value, currentPassword.value)
+        EventService.fetchUserInfo()
+      }
   } else {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
