@@ -4,6 +4,7 @@ import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
 import { useNotificationStore } from '../stores/NotificationStore'
+import { useUserGroupStore } from '../stores/UserGroupStore'
 import { Collective, Question, Answer } from '../types'
 
 
@@ -33,6 +34,14 @@ function storeCollectives(collectiveData: any[]) {
   console.log('Fetched collectives: ', collectiveData.length)
   console.log(...collectiveData)
   collectiveData.forEach(item => collectiveStore.addCollective(item.name, item.title, item.description, item.is_visible, item.creator))
+}
+
+function storeUserGroups(userGroupData: any[]) {
+  const userGroupStore = useUserGroupStore()
+  userGroupStore.clear()
+  console.log('Fetched user groups: ', userGroupData.length)
+  console.log(...userGroupData)
+  userGroupData.forEach(item => userGroupStore.addUserGroup(item.name, item.title, item.type, item.collective))
 }
 
 function storeQuestions(questionData: any[]) {
@@ -99,6 +108,27 @@ export const EventService = {
         notificationStore.notifyWaitOff('fetching_collectives')
         notificationStore.isLoadingCollectives = false
         const message = 'Failed to fetch collectives. '
+        handleApiError(error, message)
+      })
+  },
+  fetchUserGroups: async () => {
+    const notificationStore = useNotificationStore()
+    const userGroupStore = useUserGroupStore()
+    notificationStore.notifyWaitOn('fetching_user_groups', 'Fetching user groups')
+    const path: string = '/api/user_groups/'
+    return apiClient.get(path)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_user_groups')
+        if (response.status === 200) {
+          storeUserGroups(response.data)
+        } else {
+          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_user_groups')
+        const message = 'Failed to fetch user groups. '
         handleApiError(error, message)
       })
   },

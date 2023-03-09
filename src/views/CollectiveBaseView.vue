@@ -49,6 +49,7 @@ onBeforeMount(async () => {
   console.log('CollectiveBaseView about to be mounted')
   if (collectiveStore.count === 0) {
     await EventService.fetchCollectives()
+    await EventService.fetchUserGroups()
   }
   if ((props.collectiveName) && (props.collectiveName != collectiveStore.currentCollectiveName)) {
     collectiveStore.selectCollective(props.collectiveName)

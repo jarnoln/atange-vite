@@ -5,6 +5,7 @@ import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 import { useNotificationStore } from '../../src/stores/NotificationStore'
 import { useQuestionStore } from '../../src/stores/QuestionStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
+import { useUserGroupStore } from '../../src/stores/UserGroupStore'
 
 
 vi.mock('axios')
@@ -18,6 +19,7 @@ const collectiveStore = useCollectiveStore()
 const notificationStore = useNotificationStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
+const userGroupStore = useUserGroupStore()
 
 
 beforeEach(() => {
@@ -25,6 +27,7 @@ beforeEach(() => {
   notificationStore.clear()
   questionStore.clear()
   sessionStore.clear()
+  userGroupStore.clear()
 })
 
 describe('Test EventService:fetchCollectives', () => {
@@ -52,6 +55,29 @@ describe('Test EventService:fetchCollectives', () => {
     expect(collectiveStore.collectives[0].title).toBe('JLA')
     expect(collectiveStore.currentCollective).toBe(undefined)
     // expect(testFetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/collectives/')
+  })
+})
+
+describe('Test EventService:fetchUserGroups', () => {
+  it('fetches and stores user groups', async () => {
+    expect(userGroupStore.count).toBe(0)
+    await EventService.fetchUserGroups()
+    expect(userGroupStore.count).toBe(1)
+    expect(userGroupStore.userGroups[0].name).toBe('metropolis')
+    expect(userGroupStore.userGroups[0].title).toBe('Metropolis')
+    expect(userGroupStore.userGroups[0].type).toBe('district')
+    expect(userGroupStore.userGroups[0].collective).toBe('')
+  }),
+  it('clears previous collectives when fetching new ones', async () => {
+    userGroupStore.addUserGroup('gotham', 'Gotham', 'district', '')
+    userGroupStore.addUserGroup('human', 'Human', 'species', '')
+    expect(userGroupStore.count).toBe(2)
+    await EventService.fetchUserGroups()
+    expect(userGroupStore.count).toBe(1)
+    expect(userGroupStore.userGroups[0].name).toBe('metropolis')
+    expect(userGroupStore.userGroups[0].title).toBe('Metropolis')
+    expect(userGroupStore.userGroups[0].type).toBe('district')
+    expect(userGroupStore.userGroups[0].collective).toBe('')
   })
 })
 

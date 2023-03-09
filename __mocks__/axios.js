@@ -45,6 +45,8 @@ export default {
             dataOut = ['superman']
           } else if (url === '/api/user/superman/') {
             dataOut = [{ first_name: 'Clark', last_name: 'Kent', email: 'clark.kent@dailyplanet.com'}]
+          } else if (url === '/api/user_groups/') {
+            dataOut = [{ name: 'metropolis', title: 'Metropolis', type: 'district', collective: '' }]
           }
         }
         return new Promise((resolve, reject) => {
