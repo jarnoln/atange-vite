@@ -7,6 +7,13 @@ export interface Collective {
   permissions: Permissions
 }
 
+export interface UserGroup {
+  name: string
+  title: string
+  type: string
+  collective: string
+}
+
 export interface Permissions {
   canEdit: boolean
   canJoin: boolean
