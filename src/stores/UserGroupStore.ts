@@ -3,15 +3,21 @@ import { UserGroup } from '../types'
 
 export const useUserGroupStore = defineStore('UserGroupStore', {
   state: () => ({
-    userGroups: [] as UserGroup[]
+    userGroups: [] as UserGroup[],
+    loaded: false
   }),
   getters: {
     count: (state) => state.userGroups.length,
     userGroupNames: (state) => state.userGroups.map(ug => ug.name),
+    hasElections: (state) => state.userGroups.some(ug => ug.type === 'election'),
+    elections: (state) => state.userGroups.filter(ug => ug.type === 'election'),
+    districts: (state) => state.userGroups.filter(ug => ug.type === 'district'),
+    parties: (state) => state.userGroups.filter(ug => ug.type === 'party'),
   },
   actions: {
     clear() {
       this.userGroups = []
+      this.loaded = true
     },
     addUserGroup(name: string, title: string, type: string, collective: string) {
       console.log('UserGroupStore:addUserGroup', name, title, type, collective)
@@ -29,7 +35,12 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
         type: type,
         collective: collective
       })
+      this.loaded = true
       return true
+    },
+    hasGroupOfType(type: string) {
+
+      return false
     }
   }
 })
