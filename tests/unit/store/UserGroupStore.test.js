@@ -47,6 +47,7 @@ describe('Test UserGroupStore', () => {
     expect(userGroupStore.parties.length).toBe(0)
     expect(userGroupStore.elections.length).toBe(0)
     expect(userGroupStore.hasElections).toBe(false)
+    expect(userGroupStore.getElectionTitle()).toBe('')
     expect(userGroupStore.addUserGroup(
       district_1.name,
       district_1.title,
@@ -94,6 +95,7 @@ describe('Test UserGroupStore', () => {
     expect(userGroupStore.parties.length).toBe(1)
     expect(userGroupStore.elections.length).toBe(1)
     expect(userGroupStore.hasElections).toBe(true)
+    expect(userGroupStore.getElectionTitle()).toBe(election_1.title)
   }),
   it('does not store user groups with missing information', () => {
     expect(userGroupStore.count).toBe(0)

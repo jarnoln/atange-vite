@@ -6,7 +6,8 @@ export const useSessionStore = defineStore('SessionStore', {
     token: '',
     firstName: '',
     lastName: '',
-    email: ''
+    email: '',
+    isCandidate: false
   }),
   getters: {
     isLoggedIn: (state) => {

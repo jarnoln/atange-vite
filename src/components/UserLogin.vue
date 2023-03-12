@@ -43,6 +43,7 @@ import { validateStringLongEnough, validateStringSlugified } from '../utils/vali
 import { EventService } from '../services/EventService'
 import { useNotificationStore } from '../stores/NotificationStore'
 import { useUserGroupStore } from '../stores/UserGroupStore'
+import { useSessionStore } from '../stores/SessionStore'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
@@ -69,7 +70,8 @@ function getTitle() {
 
 async function submitForm() {
   console.log(route.name, currentUsername.value, currentPassword.value)
-  if (route.name === 'register') {
+  const isRegistering = route.name === 'register'
+  if (isRegistering) {
       const notificationStore = useNotificationStore()
       await EventService.register(currentUsername.value, currentPassword.value)
       if (notificationStore.latestNotification.id === 'registered') {
@@ -81,7 +83,16 @@ async function submitForm() {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
   }
-  router.push({ name: 'user-edit' })
+  const sessionStore = useSessionStore()
+  sessionStore.isCandidate = currentCandidate.value
+  if (sessionStore.isLoggedIn) {
+    if (isRegistering) {
+      // If registration and login were successful, move to page for editing user information
+      router.push({ name: 'user-edit' })
+    } else {
+      router.push({ name: 'home' })
+    }
+  }
 }
 
 function validateUsername() {
@@ -122,14 +133,8 @@ function showCandidateCheckbox() {
 }
 
 function getElectionTitle() {
-  // Assuming there is only one election at a time
-  if (route.name === 'register') {
-    const userGroupStore = useUserGroupStore()
-    if (userGroupStore.elections.length > 0) {
-      return userGroupStore.elections[0].title
-    }
-  }
-  return ''
+  const userGroupStore = useUserGroupStore()
+  return userGroupStore.getElectionTitle()
 }
 </script>
 

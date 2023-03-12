@@ -29,6 +29,17 @@
             v-model.trim="currentEmail"
         />
       </div>
+
+      <div class="form-control" v-if="showCandidateCheckbox()">
+        <label for="candidate">Are you a candidate in this election: {{ getElectionTitle() }}?</label>
+        <input
+          id="candidate"
+          name="candidate"
+          type="checkbox"
+          v-model="currentCandidate"
+        />
+      </div>
+
       <p>
         <button id="save-user-info-button" class="btn">Save</button>
       </p>
@@ -46,17 +57,21 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { EventService } from '../services/EventService'
 import { useSessionStore } from '../stores/SessionStore'
+import { useUserGroupStore } from '../stores/UserGroupStore'
 
 const sessionStore = useSessionStore()
+const userGroupStore = useUserGroupStore()
 const currentFirstName = ref('')
 const currentLastName = ref('')
 const currentEmail = ref('')
+const currentCandidate = ref(false)
 const router = useRouter()
 
 onBeforeMount(() => {
   currentFirstName.value = sessionStore.firstName
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
+  currentCandidate.value = sessionStore.isCandidate
 })
 
 function submitForm() {
@@ -67,6 +82,18 @@ function submitForm() {
   EventService.updateUserInfo()
   router.push({ name: 'user-view' })
 }
+
+function showCandidateCheckbox() {
+  if (userGroupStore.hasElections) {
+    return true
+  }
+  return false
+}
+
+function getElectionTitle() {
+  return userGroupStore.getElectionTitle()
+}
+
 </script>
 
 <style scoped>
