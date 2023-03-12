@@ -47,7 +47,7 @@ import { useSessionStore } from '../stores/SessionStore'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
-const currentCandidate= ref(false)
+const currentCandidate = ref(false)
 const usernameValidateError = ref('')
 const passwordValidateError = ref('')
 const isUsernameValidated = ref(false)

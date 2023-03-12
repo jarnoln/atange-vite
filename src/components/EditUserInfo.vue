@@ -40,6 +40,30 @@
         />
       </div>
 
+      <div class="form-control" v-if="showPartySelection()">
+        <div><label for="select-party">Party</label></div>
+        <div>
+          <select id="select-party" name="parties" v-model="currentParty">
+             <option value="">Choose your party</option>
+             <option v-for="party in userGroupStore.parties" value="party.name">
+               {{ party.title }}
+             </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-control" v-if="showDistrictSelection()">
+        <div><label for="select-district">District</label></div>
+        <div>
+          <select id="select-district" name="districts" v-model="currentDistrict">
+             <option value="">Choose your district</option>
+             <option v-for="district in userGroupStore.districts" value="district.name">
+               {{ district.title }}
+             </option>
+          </select>
+        </div>
+      </div>
+
       <p>
         <button id="save-user-info-button" class="btn">Save</button>
       </p>
@@ -65,13 +89,19 @@ const currentFirstName = ref('')
 const currentLastName = ref('')
 const currentEmail = ref('')
 const currentCandidate = ref(false)
+const currentParty = ref('')
+const currentDistrict = ref('')
 const router = useRouter()
 
-onBeforeMount(() => {
+
+onBeforeMount(async () => {
   currentFirstName.value = sessionStore.firstName
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
   currentCandidate.value = sessionStore.isCandidate
+  if (userGroupStore.count === 0) {
+    await EventService.fetchUserGroups()
+  }
 })
 
 function submitForm() {
@@ -79,6 +109,7 @@ function submitForm() {
   sessionStore.firstName = currentFirstName.value
   sessionStore.lastName = currentLastName.value
   sessionStore.email = currentEmail.value
+  sessionStore.isCandidate = currentCandidate.value
   EventService.updateUserInfo()
   router.push({ name: 'user-view' })
 }
@@ -86,6 +117,24 @@ function submitForm() {
 function showCandidateCheckbox() {
   if (userGroupStore.hasElections) {
     return true
+  }
+  return false
+}
+
+function showPartySelection() {
+  if (currentCandidate.value) {
+    if (userGroupStore.parties.length > 0) {
+        return true
+    }
+  }
+  return false
+}
+
+function showDistrictSelection() {
+  if (currentCandidate.value) {
+    if (userGroupStore.districts.length > 0) {
+        return true
+    }
   }
   return false
 }
