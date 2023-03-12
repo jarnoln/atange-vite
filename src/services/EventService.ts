@@ -256,6 +256,34 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  joinGroup: async (groupName: string) => {
+    console.log('joinGroup', groupName)
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    notificationStore.notifyWaitOn('updating_memberships', 'Updating memberships')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/group/' + groupName + '/join/'
+    console.log('POST', path)
+    return apiClient.post(path, {}, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('updating_memberships')
+        if (response.status === 204) {
+          console.log('added user to group', groupName, ':', response.data)
+        } else {
+          notificationStore.notifyError('updateUserInfo: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('updating_memberships')
+        const message = 'Failed to update membership. '
+        handleApiError(error, message)
+      })
+  },
   login: async (username: string, password: string) => {
     const sessionStore = useSessionStore()
     const notificationStore = useNotificationStore()

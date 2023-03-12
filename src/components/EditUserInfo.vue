@@ -45,7 +45,7 @@
         <div>
           <select id="select-party" name="parties" v-model="currentParty">
              <option value="">Choose your party</option>
-             <option v-for="party in userGroupStore.parties" value="party.name">
+             <option v-for="party in userGroupStore.parties" :value="party.name" :key="party.name">
                {{ party.title }}
              </option>
           </select>
@@ -57,7 +57,7 @@
         <div>
           <select id="select-district" name="districts" v-model="currentDistrict">
              <option value="">Choose your district</option>
-             <option v-for="district in userGroupStore.districts" value="district.name">
+             <option v-for="district in userGroupStore.districts" :value="district.name" :key="district.name">
                {{ district.title }}
              </option>
           </select>
@@ -111,6 +111,12 @@ function submitForm() {
   sessionStore.email = currentEmail.value
   sessionStore.isCandidate = currentCandidate.value
   EventService.updateUserInfo()
+  if (currentParty.value !== '') {
+    EventService.joinGroup(currentParty.value)
+  }
+  if (currentDistrict.value !== '') {
+    EventService.joinGroup(currentDistrict.value)
+  }
   router.push({ name: 'user-view' })
 }
 
