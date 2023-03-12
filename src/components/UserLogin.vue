@@ -78,10 +78,12 @@ async function submitForm() {
         console.log('Registration successful. Logging in automatically.')
         await EventService.login(currentUsername.value, currentPassword.value)
         EventService.fetchUserInfo()
+        EventService.fetchMemberships()
       }
   } else {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
+      EventService.fetchMemberships()
   }
   const sessionStore = useSessionStore()
   sessionStore.isCandidate = currentCandidate.value

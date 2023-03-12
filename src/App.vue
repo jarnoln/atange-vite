@@ -12,6 +12,7 @@ import NavBar from './components/NavBar.vue'
 import Notifications from './components/Notifications.vue'
 import { useSessionStore } from './stores/SessionStore';
 import { onBeforeMount } from 'vue'
+import { EventService } from './services/EventService'
 
 onBeforeMount(() => {
   if (localStorage.username && localStorage.token) {
@@ -19,6 +20,8 @@ onBeforeMount(() => {
     const sessionStore = useSessionStore()
     sessionStore.username = localStorage.username
     sessionStore.token = localStorage.token
+    EventService.fetchUserInfo()
+    EventService.fetchMemberships()
   }
 })
 </script>

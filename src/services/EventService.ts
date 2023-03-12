@@ -194,7 +194,7 @@ export const EventService = {
     const notificationStore = useNotificationStore()
     const sessionStore = useSessionStore()
     if (sessionStore.username === '') {
-      console.log('EventStore:fetchUsrerInfo: no user seleted. Aborting.')
+      console.log('EventStore:fetchUserInfo: no user seleted. Aborting.')
       return null
     }
     notificationStore.notifyWaitOn('fetching_user_info', 'Fetching user info')
@@ -221,6 +221,38 @@ export const EventService = {
       .catch(error => {
         notificationStore.notifyWaitOff('fetching_user_info')
         const message = 'Failed to fetch user info. '
+        handleApiError(error, message)
+      })
+  },
+  fetchMemberships: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    if (sessionStore.username === '') {
+      console.log('EventStore:fetchMemberships: no user seleted. Aborting.')
+      return null
+    }
+    notificationStore.notifyWaitOn('fetching_memberships', 'Fetching memberships')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/user/' + sessionStore.username + '/memberships/'
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_memberships')
+        if (response.status === 200) {
+          console.log('fetched memberships:', response.data)
+          sessionStore.memberships = response.data
+        } else {
+          notificationStore.notifyError('fetchMemberships: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_memberships')
+        const message = 'Failed to fetch memberships. '
         handleApiError(error, message)
       })
   },

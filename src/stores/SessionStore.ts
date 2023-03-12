@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { UserGroup } from '../types'
 
 export const useSessionStore = defineStore('SessionStore', {
   state: () => ({
@@ -7,11 +8,18 @@ export const useSessionStore = defineStore('SessionStore', {
     firstName: '',
     lastName: '',
     email: '',
-    isCandidate: false
+    isCandidate: false,
+    memberships: [] as UserGroup[],
   }),
   getters: {
     isLoggedIn: (state) => {
       return ((state.username.length > 0) && (state.token.length > 0))
+    },
+    party: (state) => {
+      return state.memberships.find(ug => ug.type === 'party')
+    },
+    district: (state) => {
+      return state.memberships.find(ug => ug.type === 'district')
     }
   },
   actions: {
