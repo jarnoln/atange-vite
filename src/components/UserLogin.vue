@@ -23,25 +23,45 @@
       />
       <p v-if="passwordValidateError">{{ passwordValidateError }}</p>
     </div>
+    <div class="form-control" v-if="showCandidateCheckbox()">
+      <label for="candidate">Are you a candidate in this election: {{ getElectionTitle() }}?</label>
+      <input
+          id="candidate"
+          name="candidate"
+          type="checkbox"
+          v-model="currentCandidate"
+      />
+    </div>
     <button id="submit-button" :disabled="!isFormValid()" class="btn" style="text-transform: capitalize">{{ getTitle() }}</button>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { validateStringLongEnough, validateStringSlugified } from '../utils/validators'
 import { EventService } from '../services/EventService'
 import { useNotificationStore } from '../stores/NotificationStore'
+import { useUserGroupStore } from '../stores/UserGroupStore'
 
 const currentUsername = ref('')
 const currentPassword = ref('')
+const currentCandidate= ref(false)
 const usernameValidateError = ref('')
 const passwordValidateError = ref('')
 const isUsernameValidated = ref(false)
 const isPasswordValidated = ref(false)
 const route = useRoute()
 const router = useRouter()
+
+
+onBeforeMount(async () => {
+  console.log('UserLogin about to be mounted')
+  const userGroupStore = useUserGroupStore()
+  if (userGroupStore.count === 0) {
+    await EventService.fetchUserGroups()
+  }
+})
 
 function getTitle() {
   return route.name
@@ -61,7 +81,7 @@ async function submitForm() {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
   }
-  router.push({ name: 'home' })
+  router.push({ name: 'user-edit' })
 }
 
 function validateUsername() {
@@ -89,6 +109,27 @@ function isFormValid() {
     return false
   }
   return true
+}
+
+function showCandidateCheckbox() {
+  if (route.name === 'register') {
+    const userGroupStore = useUserGroupStore()
+    if (userGroupStore.hasElections) {
+      return true
+    }
+  }
+  return false
+}
+
+function getElectionTitle() {
+  // Assuming there is only one election at a time
+  if (route.name === 'register') {
+    const userGroupStore = useUserGroupStore()
+    if (userGroupStore.elections.length > 0) {
+      return userGroupStore.elections[0].title
+    }
+  }
+  return ''
 }
 </script>
 
