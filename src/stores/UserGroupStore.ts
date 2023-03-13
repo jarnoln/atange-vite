@@ -38,9 +38,6 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       this.loaded = true
       return true
     },
-    hasGroupOfType(type: string) {
-      return false
-    },
     getElectionName() {
       // Assuming there is at most one election
       if (this.elections.length === 1) {

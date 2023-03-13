@@ -14,6 +14,10 @@
         <th>Email</th>
         <td>{{ sessionStore.email }}</td>
       </tr>
+      <tr v-if="sessionStore.isCandidate">
+        <th>Candidate in </th>
+        <td>{{ sessionStore.electionTitle }}</td>
+      </tr>
       <tr v-if="sessionStore.party">
         <th>Party</th>
         <td>{{ sessionStore.party.title }}</td>
@@ -23,14 +27,14 @@
         <td>{{ sessionStore.district.title }}</td>
       </tr>
     </table>
-    <p v-if="sessionStore.memberships.length > 0">
+    <!-- <p v-if="sessionStore.memberships.length > 0">
       Memberships:
       <ul>
         <li v-for="membership in sessionStore.memberships" :key="membership.name">
           {{ membership.title }}
         </li>
       </ul>
-    </p>
+    </p> -->
     <p>
       <router-link id="edit-user-link" :to="{ name: 'user-edit' }">
         Edit user information

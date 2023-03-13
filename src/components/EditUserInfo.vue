@@ -37,7 +37,7 @@
       <div class="form-control" v-if="showPartySelection()">
         <div><label for="select-party">Party</label></div>
         <div>
-          <select id="select-party" name="parties" v-model="currentParty">
+          <select id="select-party" name="parties" v-model="currentParty" :disabled="!allowEditParty()">
              <option value="">Choose your party</option>
              <option v-for="party in userGroupStore.parties" :value="party.name" :key="party.name">
                {{ party.title }}
@@ -49,7 +49,7 @@
       <div class="form-control" v-if="showDistrictSelection()">
         <div><label for="select-district">District</label></div>
         <div>
-          <select id="select-district" name="districts" v-model="currentDistrict">
+          <select id="select-district" name="districts" v-model="currentDistrict" :disabled="!allowEditDistrict()">
              <option value="">Choose your district</option>
              <option v-for="district in userGroupStore.districts" :value="district.name" :key="district.name">
                {{ district.title }}
@@ -87,11 +87,14 @@ const currentParty = ref('')
 const currentDistrict = ref('')
 const router = useRouter()
 
-
 onBeforeMount(async () => {
+  await EventService.fetchUserInfo()
   currentFirstName.value = sessionStore.firstName
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
+  if (userGroupStore.count === 0) {
+    await EventService.fetchUserGroups()
+  }
   currentCandidate.value = sessionStore.isCandidate
   if (sessionStore.party !== undefined) {
     currentParty.value = sessionStore.party.name
@@ -99,10 +102,15 @@ onBeforeMount(async () => {
   if (sessionStore.district !== undefined) {
     currentDistrict.value = sessionStore.district.name
   }
-  if (userGroupStore.count === 0) {
-    await EventService.fetchUserGroups()
-  }
 })
+
+function allowEditParty() {
+  return sessionStore.party === undefined
+}
+
+function allowEditDistrict() {
+  return sessionStore.district === undefined
+}
 
 function submitForm() {
   console.log('Saving user info')

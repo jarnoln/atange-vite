@@ -17,6 +17,17 @@ export const useSessionStore = defineStore('SessionStore', {
     isCandidate: (state) => {
       return state.memberships.find(ug => ug.type === 'election') !== undefined
     },
+    electionTitle: (state) => {
+      const election = state.memberships.find(ug => ug.type === 'election')
+      if (election === undefined) {
+        return ''
+      } else {
+        return election.title
+      }
+    },
+    election: (state) => {
+      return state.memberships.find(ug => ug.type === 'election')
+    },
     party: (state) => {
       return state.memberships.find(ug => ug.type === 'party')
     },
@@ -28,6 +39,7 @@ export const useSessionStore = defineStore('SessionStore', {
     clear() {
       this.username = '',
       this.token = '',
+      this.memberships = []
       localStorage.removeItem('username')
       localStorage.removeItem('token')
     },
