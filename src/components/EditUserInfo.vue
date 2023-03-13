@@ -30,14 +30,8 @@
         />
       </div>
 
-      <div class="form-control" v-if="showCandidateCheckbox()">
-        <label for="candidate">Are you a candidate in this election: {{ getElectionTitle() }}?</label>
-        <input
-          id="candidate"
-          name="candidate"
-          type="checkbox"
-          v-model="currentCandidate"
-        />
+      <div class="form-control" v-if="sessionStore.isCandidate">
+        Candidate in {{ getElectionTitle() }}
       </div>
 
       <div class="form-control" v-if="showPartySelection()">
@@ -99,7 +93,12 @@ onBeforeMount(async () => {
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
   currentCandidate.value = sessionStore.isCandidate
-  currentParty.value = sessionStore.party
+  if (sessionStore.party !== undefined) {
+    currentParty.value = sessionStore.party.name
+  }
+  if (sessionStore.district !== undefined) {
+    currentDistrict.value = sessionStore.district.name
+  }
   if (userGroupStore.count === 0) {
     await EventService.fetchUserGroups()
   }
@@ -122,18 +121,12 @@ function submitForm() {
       EventService.joinGroup(currentDistrict.value)
     }
   }
+  EventService.fetchMemberships()
   router.push({ name: 'user-view' })
 }
 
-function showCandidateCheckbox() {
-  if (userGroupStore.hasElections) {
-    return true
-  }
-  return false
-}
-
 function showPartySelection() {
-  if (currentCandidate.value) {
+  if (sessionStore.isCandidate) {
     if (userGroupStore.parties.length > 0) {
         return true
     }
@@ -142,7 +135,7 @@ function showPartySelection() {
 }
 
 function showDistrictSelection() {
-  if (currentCandidate.value) {
+  if (sessionStore.isCandidate) {
     if (userGroupStore.districts.length > 0) {
         return true
     }

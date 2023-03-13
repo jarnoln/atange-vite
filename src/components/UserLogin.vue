@@ -86,7 +86,17 @@ async function submitForm() {
       EventService.fetchMemberships()
   }
   const sessionStore = useSessionStore()
-  // sessionStore.isCandidate = currentCandidate.value
+  if (currentCandidate.value === true) {
+    // Add user to election as candidate
+    if (sessionStore.isLoggedIn) {
+      const userGroupStore = useUserGroupStore()
+      const electionName = userGroupStore.getElectionName()
+      if (electionName !== '') {
+        await EventService.joinGroup(electionName)
+        EventService.fetchMemberships()
+      }
+    }
+  }
   if (sessionStore.isLoggedIn) {
     if (isRegistering) {
       // If registration and login were successful, move to page for editing user information
