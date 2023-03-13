@@ -86,7 +86,7 @@ async function submitForm() {
       EventService.fetchMemberships()
   }
   const sessionStore = useSessionStore()
-  sessionStore.isCandidate = currentCandidate.value
+  // sessionStore.isCandidate = currentCandidate.value
   if (sessionStore.isLoggedIn) {
     if (isRegistering) {
       // If registration and login were successful, move to page for editing user information

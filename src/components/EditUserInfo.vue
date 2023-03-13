@@ -99,6 +99,7 @@ onBeforeMount(async () => {
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
   currentCandidate.value = sessionStore.isCandidate
+  currentParty.value = sessionStore.party
   if (userGroupStore.count === 0) {
     await EventService.fetchUserGroups()
   }
@@ -109,13 +110,17 @@ function submitForm() {
   sessionStore.firstName = currentFirstName.value
   sessionStore.lastName = currentLastName.value
   sessionStore.email = currentEmail.value
-  sessionStore.isCandidate = currentCandidate.value
   EventService.updateUserInfo()
   if (currentParty.value !== '') {
-    EventService.joinGroup(currentParty.value)
+    if (sessionStore.party === undefined)  // Allow joining only one party
+    {
+      EventService.joinGroup(currentParty.value)
+    }
   }
   if (currentDistrict.value !== '') {
-    EventService.joinGroup(currentDistrict.value)
+    if (sessionStore.district === undefined) { // Allow joining only one district
+      EventService.joinGroup(currentDistrict.value)
+    }
   }
   router.push({ name: 'user-view' })
 }

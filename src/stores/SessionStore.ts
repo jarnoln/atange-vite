@@ -8,12 +8,14 @@ export const useSessionStore = defineStore('SessionStore', {
     firstName: '',
     lastName: '',
     email: '',
-    isCandidate: false,
     memberships: [] as UserGroup[],
   }),
   getters: {
     isLoggedIn: (state) => {
       return ((state.username.length > 0) && (state.token.length > 0))
+    },
+    isCandidate: (state) => {
+      return state.memberships.find(ug => ug.type === 'election') !== undefined
     },
     party: (state) => {
       return state.memberships.find(ug => ug.type === 'party')
