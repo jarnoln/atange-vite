@@ -15,10 +15,17 @@ export const useUserStore = defineStore('UserStore', {
       this.users = []
       this.loaded = true
     },
+    getUser(username: string) {
+        return this.users.find(user => user.username === username)
+    },
     addUser(username: string, firstName: string, lastName: string) {
       console.log('UserStore:addUser', username, firstName, lastName)
       if (username.length < 1) {
         console.warn('addUser: UserName too short:', username)
+        return false
+      }
+      if (this.getUser(username) !== undefined) {
+        console.warn('addUser: Username already exists:', username)
         return false
       }
       this.users.push({
