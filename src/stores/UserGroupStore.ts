@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { UserGroup } from '../types'
+import { UserGroup, User } from '../types'
 
 export const useUserGroupStore = defineStore('UserGroupStore', {
   state: () => ({
     userGroups: [] as UserGroup[],
+    candidates: [] as User[],
     loaded: false
   }),
   getters: {
@@ -17,7 +18,11 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
   actions: {
     clear() {
       this.userGroups = []
+      this.candidates = []
       this.loaded = true
+    },
+    clearCandidates() {
+      this.candidates = []
     },
     addUserGroup(name: string, title: string, type: string, collective: string) {
       console.log('UserGroupStore:addUserGroup', name, title, type, collective)
@@ -37,6 +42,13 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       })
       this.loaded = true
       return true
+    },
+    addCandidate(username: string, firstName: string, lastName: string) {
+      this.candidates.push({
+        username: username,
+        firstName: firstName,
+        lastName: lastName
+      })
     },
     getElectionName() {
       // Assuming there is at most one election

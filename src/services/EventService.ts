@@ -44,6 +44,14 @@ function storeUserGroups(userGroupData: any[]) {
   userGroupData.forEach(item => userGroupStore.addUserGroup(item.name, item.title, item.type, item.collective))
 }
 
+function storeCandidates(candidateData: any[]) {
+  const userGroupStore = useUserGroupStore()
+  userGroupStore.clearCandidates()
+  console.log('Fetched user candidates: ', candidateData.length)
+  console.log(...candidateData)
+  candidateData.forEach(item => userGroupStore.addCandidate(item.username, item.first_name, item.last_name))
+}
+
 function storeQuestions(questionData: any[]) {
   const questionStore = useQuestionStore()
   questionStore.clear()
@@ -113,7 +121,6 @@ export const EventService = {
   },
   fetchUserGroups: async () => {
     const notificationStore = useNotificationStore()
-    const userGroupStore = useUserGroupStore()
     notificationStore.notifyWaitOn('fetching_user_groups', 'Fetching user groups')
     const path: string = '/api/user_groups/'
     return apiClient.get(path)
@@ -132,6 +139,40 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  fetchCandidates: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    const userGroupStore = useUserGroupStore()
+    const electionName = userGroupStore.getElectionName()
+    if (electionName === '') {
+      console.warn('fetchCandidates: No election. Exiting.')
+      return undefined
+    }
+    notificationStore.notifyWaitOn('fetching_candidates', 'Fetching candidates')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/group/' + electionName + '/member_details/'
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_candidates')
+        if (response.status === 200) {
+          storeCandidates(response.data)
+        } else {
+          notificationStore.notifyError('fetchCandidates: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_candidates')
+        const message = 'Failed to fetch candidates. '
+        handleApiError(error, message)
+      })
+  },
+
   fetchQuestions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_questions', 'Fetching questions')
@@ -272,6 +313,7 @@ export const EventService = {
     }
     const path: string = '/api/user/' + sessionStore.username + '/'
     console.log('PUT', path)
+    console.log(dataOut)
     return apiClient.put(path, dataOut, config)
       .then(response => {
         notificationStore.notifyWaitOff('updating_user_info')
