@@ -7,6 +7,12 @@ export interface Collective {
   permissions: Permissions
 }
 
+export interface User {
+  username: string
+  firstName: string
+  lastName: string
+}
+
 export interface UserGroup {
   name: string
   title: string
