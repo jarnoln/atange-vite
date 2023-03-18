@@ -30,6 +30,7 @@ const userGroupStore = useUserGroupStore()
 
 onBeforeMount(async () => {
   await EventService.fetchUserGroups()
+  await EventService.fetchAllUserGroupMembers()
   EventService.fetchCandidates()
 })
 </script>

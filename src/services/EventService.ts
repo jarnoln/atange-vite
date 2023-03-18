@@ -120,6 +120,7 @@ export const EventService = {
       })
   },
   fetchUserGroups: async () => {
+    // Fetch list of all user groups (with name, title, type and collective, but not members)
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_user_groups', 'Fetching user groups')
     const path: string = '/api/user_groups/'
@@ -138,6 +139,37 @@ export const EventService = {
         const message = 'Failed to fetch user groups. '
         handleApiError(error, message)
       })
+  },
+  fetchUserGroupMembers: async (userGroupName: string) => {
+    // Fetch members of given user group as list of usernames
+    const path = '/api/group/' + userGroupName + '/members/'
+    console.log('GET', path)
+    return apiClient.get(path)
+      .then(response => {
+        if (response.status === 200) {
+          const userGroupStore = useUserGroupStore()
+          userGroupStore.setUserGroupMembers(userGroupName, response.data)
+        } else {
+          const notificationStore = useNotificationStore()
+          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        const message = 'Failed to fetch user group members:' + userGroupName
+        handleApiError(error, message)
+      })
+  },
+  fetchAllUserGroupMembers: async () => {
+    // Fetch members of all user groups. Return promise that resolves when all fethes have finished.
+    const ugPromises = [] as any[]
+    const userGroupStore = useUserGroupStore()
+    const notificationStore = useNotificationStore()
+    notificationStore.notifyWaitOn('fetching_user_group_members', 'Fetching user group members')
+    userGroupStore.userGroups.forEach(ug => {
+      ugPromises.push(EventService.fetchUserGroupMembers(ug.name))
+    });
+    return Promise.all(ugPromises).then(() => notificationStore.notifyWaitOff('fetching_user_group_members'))
   },
   fetchCandidates: async () => {
     const notificationStore = useNotificationStore()

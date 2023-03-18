@@ -44,6 +44,13 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       this.loaded = true
       return true
     },
+    setUserGroupMembers(userGroupName: string, members: string[]) {
+      const index = this.userGroups.findIndex(ug => ug.name === userGroupName)
+      if (index !== -1) {
+        this.userGroups[index].members = members
+        console.log('usergroup', userGroupName, 'members set to', members)
+      }
+    },
     addCandidate(username: string, firstName: string, lastName: string) {
       this.candidates.push({
         username: username,
