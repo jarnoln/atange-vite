@@ -18,6 +18,7 @@ export interface UserGroup {
   title: string
   type: string
   collective: string
+  members: string[]
 }
 
 export interface Permissions {
@@ -41,6 +42,15 @@ export interface Question {
     parent: string
     creator: string
     answers: Answer[]
+}
+
+export interface Candidate {
+  username: string
+  firstName: string
+  lastName: string
+  party: UserGroup | null
+  district: UserGroup | null
+  answers: Answer[]
 }
 
 export interface Notification {
