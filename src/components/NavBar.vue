@@ -5,6 +5,9 @@
         <router-link id="navbar-home" active-class="active" :to="{ name: 'home' }">
           Home
         </router-link>
+        <router-link id="navbar-candidates" active-class="active" :to="{ name: 'candidates' }">
+          Candidates
+        </router-link>
       </li>
       <li>
         <router-link id="navbar-about" active-class="active" :to="{ name: 'about' }">
