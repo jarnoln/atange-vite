@@ -5,11 +5,15 @@
       <thead>
         <tr>
             <th>Name</th>
+            <th>Party</th>
+            <th>District</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="candidate in userGroupStore.candidates" :key="candidate.username">
           <td>{{ candidate.firstName }} {{ candidate.lastName }}</td>
+          <td><div v-if="candidate.party">{{ candidate.party.title }}</div></td>
+          <td><div v-if="candidate.district">{{ candidate.district.title }}</div></td>
         </tr>
       </tbody>
     </table>
