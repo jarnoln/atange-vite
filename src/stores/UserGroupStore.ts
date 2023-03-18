@@ -52,12 +52,22 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       }
     },
     addCandidate(username: string, firstName: string, lastName: string) {
+      // Check if candidate is member of any party
+      const party = this.parties.find(party => {
+        return party.members.find(member => member === username) !== undefined ? true : false
+      })
+      console.log('Party for candidate', username, ':', party)
+      // Check if candidate is member of any district
+      const district = this.districts.find(district => {
+        return district.members.find(member => member === username) !== undefined ? true : false
+      })
+      console.log('District for candidate', username, ':', district)
       this.candidates.push({
         username: username,
         firstName: firstName,
         lastName: lastName,
-        party: null,
-        district: null,
+        party: party === undefined ? null : party,
+        district: district === undefined ? null : district,
         answers: []
       })
     },
