@@ -27,11 +27,11 @@
         </tr>
       </tbody>
     </table>
-    <ol>
-      <li v-for="question in questionStore.questionItems" :key="question.name" style="font-size: small;">
-        {{ question.title }}
-      </li>
-    </ol>
+    <p>
+      <div v-for="question in questionStore.questionItems" :key="question.name" style="font-size: small;">
+          {{ question.order }} {{ question.title }}
+      </div>
+    </p>
   </div>
 </template>
 
