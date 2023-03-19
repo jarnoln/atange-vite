@@ -5,6 +5,8 @@
         <router-link id="navbar-home" active-class="active" :to="{ name: 'home' }">
           Home
         </router-link>
+      </li>
+      <li v-if="userGroupStore.hasElections">
         <router-link id="navbar-candidates" active-class="active" :to="{ name: 'candidates' }">
           Candidates
         </router-link>
@@ -39,9 +41,18 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useSessionStore } from '../stores/SessionStore'
+import { useUserGroupStore } from '../stores/UserGroupStore'
 import { EventService } from '../services/EventService'
+import { onBeforeMount } from 'vue'
 
 const sessionStore = useSessionStore()
+const userGroupStore = useUserGroupStore()
+
+onBeforeMount(() => {
+  if (!userGroupStore.loaded) {
+    EventService.fetchUserGroups()
+  }
+})
 
 function isLoggedIn() {
   return sessionStore.isLoggedIn
