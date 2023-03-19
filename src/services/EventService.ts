@@ -181,14 +181,9 @@ export const EventService = {
       return undefined
     }
     notificationStore.notifyWaitOn('fetching_candidates', 'Fetching candidates')
-    const config = {
-      headers: {
-        'Authorization': 'Token ' + sessionStore.token
-      }
-    }
     const path: string = '/api/group/' + electionName + '/member_details/'
     console.log('GET', path)
-    return apiClient.get(path, config)
+    return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_candidates')
         if (response.status === 200) {
