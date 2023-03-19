@@ -12,6 +12,9 @@ export const useQuestionStore = defineStore('QuestionStore', {
     },
     questionNames: (state) => {
       return state.questions.map(question => question.name)
+    },
+    questionItems: state => {
+      return state.questions.filter(question => question.itemType === 'Q')
     }
   },
   actions: {
@@ -61,6 +64,25 @@ export const useQuestionStore = defineStore('QuestionStore', {
     getApproval(questionName: string) : Approval {
       const answers = this.getAnswers(questionName)
       return approval(answers)
+    },
+    getUserAnswer(questionName: string, username: string) {
+      const question = this.getQuestion(questionName)
+      if (question != undefined) {
+        const answer = question.answers.find(answer => answer.user === username)
+        return answer
+      }
+      return undefined
+    },
+    getUserAnswerLetter(questionName: string, username: string) {
+      const answer = this.getUserAnswer(questionName, username)
+      if (answer != undefined) {
+        if (answer.vote === 1) {
+          return 'Y'
+        } else if (answer.vote === -1) {
+          return 'N'
+        }
+      }
+      return '-'
     },
     addQuestion(
         name: string,

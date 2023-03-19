@@ -7,6 +7,9 @@
             <th>Name</th>
             <th>Party</th>
             <th>District</th>
+            <th v-for="question in questionStore.questionItems" :key="question.name" class="text-center">
+              {{ question.order }}
+            </th>
         </tr>
       </thead>
       <tbody>
@@ -14,28 +17,43 @@
           <td>{{ candidate.firstName }} {{ candidate.lastName }}</td>
           <td><div v-if="candidate.party">{{ candidate.party.title }}</div></td>
           <td><div v-if="candidate.district">{{ candidate.district.title }}</div></td>
+          <td
+            v-for="question in questionStore.questionItems"
+            :key="question.name"
+            :class="'answer' + questionStore.getUserAnswerLetter(question.name, candidate.username)"
+            class="answerCell">
+            {{ questionStore.getUserAnswerLetter(question.name, candidate.username) }}
+          </td>
         </tr>
       </tbody>
     </table>
+    <ol>
+      <li v-for="question in questionStore.questionItems" :key="question.name" style="font-size: small;">
+        {{ question.title }}
+      </li>
+    </ol>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue'
-// import { RouterLink } from 'vue-router'
+import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useQuestionStore } from '../stores/QuestionStore'
 import { useUserGroupStore } from '../stores/UserGroupStore'
-// import { useNotificationStore } from '../stores/NotificationStore'
-// import { useSessionStore } from '../stores/SessionStore';
 import { EventService } from '../services/EventService';
 
+const collectiveStore = useCollectiveStore()
+const questionStore = useQuestionStore()
 const userGroupStore = useUserGroupStore()
-// const notificationStore = useNotificationStore()
-// const sessionStore = useSessionStore()
 
 onBeforeMount(async () => {
   await EventService.fetchUserGroups()
   await EventService.fetchAllUserGroupMembers()
   EventService.fetchCandidates()
+  await EventService.fetchCollectives()
+  collectiveStore.visibleCollectives.forEach(collective => {
+    EventService.fetchQuestions(collective.name)
+  })
 })
 </script>
 
@@ -56,4 +74,19 @@ a:hover {
 td:hover {
   background-color: rgb(240, 220, 255);
 }
+
+.answerCell {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.answerY {
+  background-color: rgb(100, 255, 100);
+}
+
+.answerN {
+  background-color: rgb(255, 100, 100);
+}
+
 </style>
