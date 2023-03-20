@@ -83,6 +83,7 @@ async function submitForm() {
   } else {
       await EventService.login(currentUsername.value, currentPassword.value)
       EventService.fetchUserInfo()
+      EventService.fetchUserDescription()
       EventService.fetchMemberships()
   }
   const sessionStore = useSessionStore()

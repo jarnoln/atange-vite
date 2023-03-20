@@ -58,6 +58,13 @@
         </div>
       </div>
 
+      <div class="form-control">
+        <div><label for="description">Description</label></div>
+        <div>
+          <textarea id="description" name="description" v-model="currentDescription" rows="10" cols="50">
+          </textarea>
+        </div>
+      </div>
       <p>
         <button id="save-user-info-button" class="btn">Save</button>
       </p>
@@ -85,13 +92,16 @@ const currentEmail = ref('')
 const currentCandidate = ref(false)
 const currentParty = ref('')
 const currentDistrict = ref('')
+const currentDescription = ref('')
 const router = useRouter()
 
 onBeforeMount(async () => {
   await EventService.fetchUserInfo()
+  await EventService.fetchUserDescription()
   currentFirstName.value = sessionStore.firstName
   currentLastName.value = sessionStore.lastName
   currentEmail.value = sessionStore.email
+  currentDescription.value = sessionStore.description
   if (userGroupStore.count === 0) {
     await EventService.fetchUserGroups()
   }
@@ -117,7 +127,9 @@ function submitForm() {
   sessionStore.firstName = currentFirstName.value
   sessionStore.lastName = currentLastName.value
   sessionStore.email = currentEmail.value
+  sessionStore.description = currentDescription.value
   EventService.updateUserInfo()
+  EventService.updateUserDescription()
   if (currentParty.value !== '') {
     if (sessionStore.party === undefined)  // Allow joining only one party
     {

@@ -26,6 +26,12 @@
         <th>District</th>
         <td>{{ sessionStore.district.title }}</td>
       </tr>
+      <tr v-if="sessionStore.description">
+        <th colspan="2">Description</th>
+      </tr>
+      <tr v-if="sessionStore.description">
+        <td colspan="2">{{ sessionStore.description }}</td>
+      </tr>
     </table>
     <!-- <p v-if="sessionStore.memberships.length > 0">
       Memberships:

@@ -325,6 +325,38 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  fetchUserDescription: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    if (sessionStore.username === '') {
+      console.log('EventStore:fetchUserDescription: no user seleted. Aborting.')
+      return null
+    }
+    notificationStore.notifyWaitOn('fetching_user_description', 'Fetching user description')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/user/' + sessionStore.username + '/description/'
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_user_description')
+        if (response.status === 200) {
+          console.log('fetched user_info:', response.data)
+          sessionStore.description = response.data['description']
+        } else {
+          notificationStore.notifyError('fetchUserDescription: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_user_description')
+        const message = 'Failed to fetch user description. '
+        handleApiError(error, message)
+      })
+  },
   fetchMemberships: async () => {
     const notificationStore = useNotificationStore()
     const sessionStore = useSessionStore()
@@ -387,6 +419,37 @@ export const EventService = {
       .catch(error => {
         notificationStore.notifyWaitOff('updating_user_info')
         const message = 'Failed to update user info. '
+        handleApiError(error, message)
+      })
+  },
+  updateUserDescription: async () => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    notificationStore.notifyWaitOn('updating_user_description', 'Saving user description')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const dataOut = {
+      description: sessionStore.description,
+    }
+    const path: string = '/api/user/' + sessionStore.username + '/description/'
+    console.log('PUT', path)
+    console.log(dataOut)
+    return apiClient.put(path, dataOut, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('updating_user_description')
+        if (response.status === 200) {
+          console.log('updated user_info:', response.data)
+        } else {
+          notificationStore.notifyError('updateUserDescription: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('updating_user_description')
+        const message = 'Failed to update user description. '
         handleApiError(error, message)
       })
   },
