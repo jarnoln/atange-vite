@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
+import { useSettingsStore } from '../stores/SettingsStore'
 import { useNotificationStore } from '../stores/NotificationStore'
 import { useUserGroupStore } from '../stores/UserGroupStore'
 import { Collective, Question, Answer } from '../types'
@@ -27,6 +28,17 @@ const apiClient = axios.create({
     'Content-Type': 'application/json'
   }
 })
+
+function storeSettings(settingsData: any) {
+  const settingsStore = useSettingsStore()
+  console.log('Fetched settings: ')
+  console.log(settingsData)
+  const title = settingsData['title']
+  const oneCollective = settingsData['one_collective']
+  const usersCanCreateCollectives = settingsData['users_can_create_collectives']
+  const requireNames = settingsData['require_names']
+  settingsStore.set(title, oneCollective, usersCanCreateCollectives, requireNames)
+}
 
 function storeCollectives(collectiveData: any[]) {
   const collectiveStore = useCollectiveStore()
@@ -96,6 +108,27 @@ export const EventService = {
 // For some reason unit tests were not able to call fetchCollectives
 // so moved functionality out here so that can test until can
 // figure out way to test method
+  fetchGlobalSettings: async () => {
+    const notificationStore = useNotificationStore()
+    notificationStore.notifyWaitOn('fetching_settings', 'Fetching settings')
+    const path: string = '/api/settings/'
+    return apiClient.get(path)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_settings')
+        notificationStore.isLoadingCollectives = false
+        if (response.status === 200) {
+          storeSettings(response.data)
+        } else {
+          notificationStore.notifyError('Login: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_settings')
+        const message = 'Failed to fetch settings. '
+        handleApiError(error, message)
+      })
+  },
   fetchCollectives: async () => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_collectives', 'Fetching communities')

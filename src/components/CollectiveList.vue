@@ -10,7 +10,7 @@
         </tr>
       </tbody>
     </table>
-    <p v-if="sessionStore.isLoggedIn">
+    <p v-if="sessionStore.isLoggedIn && settingsStore.usersCanCreateCollectives">
       <router-link class="btn" id="create-collective-button" :to="{ name: 'create-collective' }">Create new</router-link>
     </p>
   </div>
@@ -22,11 +22,13 @@ import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useNotificationStore } from '../stores/NotificationStore'
 import { useSessionStore } from '../stores/SessionStore';
+import { useSettingsStore } from '../stores/SettingsStore';
 import { EventService } from '../services/EventService';
 
 const collectiveStore = useCollectiveStore()
 const notificationStore = useNotificationStore()
 const sessionStore = useSessionStore()
+const settingsStore = useSettingsStore()
 
 onBeforeMount(() => {
   EventService.fetchCollectives()

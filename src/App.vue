@@ -11,6 +11,7 @@ import { RouterView } from 'vue-router'
 import NavBar from './components/NavBar.vue'
 import Notifications from './components/Notifications.vue'
 import { useSessionStore } from './stores/SessionStore';
+import { useSettingsStore } from './stores/SettingsStore';
 import { onBeforeMount } from 'vue'
 import { EventService } from './services/EventService'
 
@@ -22,6 +23,10 @@ onBeforeMount(() => {
     sessionStore.token = localStorage.token
     EventService.fetchUserInfo()
     EventService.fetchMemberships()
+  }
+  const settingsStore = useSettingsStore()
+  if (settingsStore.settingsLoaded === false) {
+    EventService.fetchGlobalSettings()
   }
 })
 </script>
