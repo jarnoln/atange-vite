@@ -73,6 +73,17 @@ export const useQuestionStore = defineStore('QuestionStore', {
       }
       return undefined
     },
+    getUserAnswerString(questionName: string, username: string) {
+      const answer = this.getUserAnswer(questionName, username)
+      if (answer != undefined) {
+        if (answer.vote === 1) {
+          return 'Yes'
+        } else if (answer.vote === -1) {
+          return 'No'
+        }
+      }
+      return '-'
+    },
     getUserAnswerLetter(questionName: string, username: string) {
       const answer = this.getUserAnswer(questionName, username)
       if (answer != undefined) {

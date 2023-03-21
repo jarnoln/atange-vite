@@ -25,18 +25,34 @@
         <td colspan="2">{{ candidate.description }}</td>
       </tr>
     </table>
+    <h2>Answers</h2>
+    <table>
+      <tr v-for="question in questionStore.questionItems" :key="question.name">
+        <td>{{ question.order }}</td>
+        <td>{{ question.title }}</td>
+        <td :class="'answer' + questionStore.getUserAnswerLetter(question.name, candidate.username)"
+            class="answerCell">
+            {{ questionStore.getUserAnswerString(question.name, candidate.username) }}
+        </td>
+      </tr>
+    </table>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 import { EventService } from '../services/EventService'
+import { useCollectiveStore } from '../stores/CollectiveStore'
+import { useQuestionStore } from '../stores/QuestionStore'
 import { useUserGroupStore } from '../stores/UserGroupStore'
 
 const props = defineProps<{
   candidateName: string
 }>()
 
+const collectiveStore = useCollectiveStore()
+const questionStore = useQuestionStore()
 const userGroupStore = useUserGroupStore()
 const candidate = ref(userGroupStore.getEmptyCandidate())
 
@@ -45,8 +61,14 @@ onBeforeMount(async () => {
     await EventService.fetchUserGroups()
     await EventService.fetchAllUserGroupMembers()
   }
+  if (collectiveStore.count === 0) {
+    await EventService.fetchCollectives()
+  }
   if (userGroupStore.candidates.length === 0) {
     await EventService.fetchCandidates()
+  }
+  if (questionStore.count === 0) {
+    await EventService.fetchAllQuestions()
   }
   const currentCandidate = userGroupStore.getCandidate(props.candidateName)
   if (currentCandidate) {
@@ -58,15 +80,18 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
-.form-control {
-  margin: 0.5rem 0;
+.answerCell {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-label {
-  font-weight: bold;
+.answerY {
+  background-color: rgb(100, 255, 100);
 }
 
-input {
-  display: block;
+.answerN {
+  background-color: rgb(255, 100, 100);
 }
+
 </style>

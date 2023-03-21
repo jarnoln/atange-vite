@@ -83,10 +83,6 @@ a:hover {
   text-decoration: underline;
 }
 
-td:hover {
-  background-color: rgb(240, 220, 255);
-}
-
 .answerCell {
   text-align: center;
   padding-left: 10px;

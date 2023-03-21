@@ -194,7 +194,7 @@ export const EventService = {
       })
   },
   fetchAllUserGroupMembers: async () => {
-    // Fetch members of all user groups. Return promise that resolves when all fethes have finished.
+    // Fetch members of all user groups. Return promise that resolves when all fetches have finished.
     const ugPromises = [] as any[]
     const userGroupStore = useUserGroupStore()
     const notificationStore = useNotificationStore()
@@ -231,7 +231,6 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
-
   fetchQuestions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
     notificationStore.notifyWaitOn('fetching_questions', 'Fetching questions')
@@ -254,6 +253,15 @@ export const EventService = {
         const message = 'Failed to fetch questions. '
         handleApiError(error, message)
       })
+  },
+  fetchAllQuestions: async () => {
+    // Fetch questions from of all collectives. Return promise that resolves when all fetches have finished.
+    const questionPromises = [] as any[]
+    const collectiveStore = useCollectiveStore()
+    collectiveStore.visibleCollectives.forEach(collective => {
+      questionPromises.push(EventService.fetchQuestions(collective.name))
+    });
+    return Promise.all(questionPromises)
   },
   fetchPermissions: async (collectiveName: string) => {
     const notificationStore = useNotificationStore()
