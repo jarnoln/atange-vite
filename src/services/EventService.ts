@@ -345,6 +345,8 @@ export const EventService = {
         notificationStore.notifyWaitOff('fetching_user_description')
         if (response.status === 200) {
           console.log('fetched user_info:', response.data)
+          sessionStore.candidateNumber = response.data['candidate_number']
+          sessionStore.homepage = response.data['home_page']
           sessionStore.description = response.data['description']
         } else {
           notificationStore.notifyError('fetchUserDescription: Expected status code 200, server returned ' + response.status)
@@ -431,8 +433,18 @@ export const EventService = {
         'Authorization': 'Token ' + sessionStore.token
       }
     }
+    let candidateNumber = null
+    let homepage = null
+    if (sessionStore.homepage) {
+      homepage = sessionStore.homepage
+    }
+    if (sessionStore.candidateNumber > 0) {
+      candidateNumber = sessionStore.candidateNumber
+    }
     const dataOut = {
+      candidate_number: candidateNumber,
       description: sessionStore.description,
+      home_page: homepage,
     }
     const path: string = '/api/user/' + sessionStore.username + '/description/'
     console.log('PUT', path)

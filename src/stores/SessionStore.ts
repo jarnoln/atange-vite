@@ -9,6 +9,8 @@ export const useSessionStore = defineStore('SessionStore', {
     lastName: '',
     email: '',
     description: '',
+    candidateNumber: 0,
+    homepage: '',
     memberships: [] as UserGroup[],
   }),
   getters: {

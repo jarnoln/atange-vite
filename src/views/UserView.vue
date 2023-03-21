@@ -10,10 +10,6 @@
         <th>Last name</th>
         <td>{{ sessionStore.lastName }}</td>
       </tr>
-      <tr>
-        <th>Email</th>
-        <td>{{ sessionStore.email }}</td>
-      </tr>
       <tr v-if="sessionStore.isCandidate">
         <th>Candidate in </th>
         <td>{{ sessionStore.electionTitle }}</td>
@@ -25,6 +21,14 @@
       <tr v-if="sessionStore.district">
         <th>District</th>
         <td>{{ sessionStore.district.title }}</td>
+      </tr>
+      <tr v-if="sessionStore.candidateNumber">
+        <th>Number</th>
+        <td>{{ sessionStore.candidateNumber }}</td>
+      </tr>
+      <tr v-if="sessionStore.homepage">
+        <th>Home page</th>
+        <td><a :href="sessionStore.homepage">{{ sessionStore.homepage }}</a></td>
       </tr>
       <tr v-if="sessionStore.description">
         <th colspan="2">Description</th>
@@ -66,12 +70,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { EventService } from '../services/EventService'
 import { useSessionStore } from '../stores/SessionStore'
 
 const sessionStore = useSessionStore()
 const currentPassword = ref('')
+
+onBeforeMount(async () => {
+  await EventService.fetchUserInfo()
+  await EventService.fetchUserDescription()
+})
 
 function submitForm() {
   console.log('Deleting user')

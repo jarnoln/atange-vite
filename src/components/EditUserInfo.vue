@@ -30,8 +30,18 @@
         />
       </div>
 
-      <div class="form-control" v-if="sessionStore.isCandidate">
+      <div v-if="sessionStore.isCandidate">
         Candidate in {{ getElectionTitle() }}
+      </div>
+
+      <div class="form-control" v-if="sessionStore.isCandidate">
+        <label for="candidate-number">Number</label>
+        <input
+            id="candidate-number"
+            name="candidate-number"
+            type="text"
+            v-model.number="currentCandidateNumber"
+        />
       </div>
 
       <div class="form-control" v-if="showPartySelection()">
@@ -56,6 +66,16 @@
              </option>
           </select>
         </div>
+      </div>
+
+      <div class="form-control" v-if="sessionStore.isCandidate">
+        <label for="homepage">Homepage</label>
+        <input
+            id="homepage"
+            name="homepage"
+            type="text"
+            v-model.trim="currentHomepage"
+        />
       </div>
 
       <div class="form-control">
@@ -93,6 +113,8 @@ const currentCandidate = ref(false)
 const currentParty = ref('')
 const currentDistrict = ref('')
 const currentDescription = ref('')
+const currentCandidateNumber = ref(0)
+const currentHomepage = ref('')
 const router = useRouter()
 
 onBeforeMount(async () => {
@@ -112,6 +134,8 @@ onBeforeMount(async () => {
   if (sessionStore.district !== undefined) {
     currentDistrict.value = sessionStore.district.name
   }
+  currentCandidateNumber.value = sessionStore.candidateNumber
+  currentHomepage.value = sessionStore.homepage
 })
 
 function allowEditParty() {
@@ -127,6 +151,8 @@ function submitForm() {
   sessionStore.firstName = currentFirstName.value
   sessionStore.lastName = currentLastName.value
   sessionStore.email = currentEmail.value
+  sessionStore.candidateNumber = currentCandidateNumber.value
+  sessionStore.homepage = currentHomepage.value
   sessionStore.description = currentDescription.value
   EventService.updateUserInfo()
   EventService.updateUserDescription()
