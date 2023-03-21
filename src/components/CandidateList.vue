@@ -51,13 +51,21 @@ const questionStore = useQuestionStore()
 const userGroupStore = useUserGroupStore()
 
 onBeforeMount(async () => {
-  await EventService.fetchUserGroups()
-  await EventService.fetchAllUserGroupMembers()
-  EventService.fetchCandidates()
-  await EventService.fetchCollectives()
-  collectiveStore.visibleCollectives.forEach(collective => {
-    EventService.fetchQuestions(collective.name)
-  })
+  if (!userGroupStore.loaded) {
+    await EventService.fetchUserGroups()
+    await EventService.fetchAllUserGroupMembers()
+  }
+  if (userGroupStore.candidates.length === 0) {
+    EventService.fetchCandidates()
+  }
+  if (collectiveStore.count === 0) {
+    await EventService.fetchCollectives()
+  }
+  if (questionStore.count === 0) {
+    collectiveStore.visibleCollectives.forEach(collective => {
+      EventService.fetchQuestions(collective.name)
+    })
+  }
 })
 </script>
 

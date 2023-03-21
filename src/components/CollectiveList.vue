@@ -31,7 +31,9 @@ const sessionStore = useSessionStore()
 const settingsStore = useSettingsStore()
 
 onBeforeMount(() => {
-  EventService.fetchCollectives()
+  if (collectiveStore.count === 0) {
+    EventService.fetchCollectives()
+  }
 })
 </script>
 
