@@ -206,7 +206,6 @@ export const EventService = {
   },
   fetchCandidates: async () => {
     const notificationStore = useNotificationStore()
-    const sessionStore = useSessionStore()
     const userGroupStore = useUserGroupStore()
     const electionName = userGroupStore.getElectionName()
     if (electionName === '') {

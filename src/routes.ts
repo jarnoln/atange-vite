@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router'
 import AboutView from './views/AboutView.vue'
+import CandidateView from './views/CandidateView.vue'
 import CandidatesView from './views/CandidatesView.vue'
 import CollectiveView from './views/CollectiveView.vue'
 import CollectiveBaseView from './views/CollectiveBaseView.vue'
@@ -24,8 +25,8 @@ export const routes: Array<RouteRecordRaw> = [
   { path: '/user/edit', name: 'user-edit', component: EditUserView, meta: { requiresAuth: true } },
   { path: '/new', name: 'create-collective', component: EditCollective, meta: { requiresAuth: true } },
   {
-    name: 'collective',
     path: '/c/:collectiveName',
+    name: 'collective',
     component: CollectiveBaseView,
     props: true,
     children: [
@@ -37,5 +38,6 @@ export const routes: Array<RouteRecordRaw> = [
       { path: 'q/:questionName/edit', name: 'question-edit', component: EditQuestion, props: true, meta: { requiresAuth: true } },
     ]
   },
+  { path: '/candidate/:candidateName', name: 'candidate-view', component: CandidateView, props: true },
   { path: '/:notFound(.*)', name: 'not-found', component: PageNotFoundView }
 ]

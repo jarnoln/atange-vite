@@ -19,7 +19,7 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
     clear() {
       this.userGroups = []
       this.candidates = []
-      this.loaded = true
+      this.loaded = false
     },
     clearCandidates() {
       this.candidates = []
@@ -68,8 +68,36 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
         lastName: lastName,
         party: party === undefined ? null : party,
         district: district === undefined ? null : district,
+        candidateNumber: 0,
+        homepage: '',
+        description: '',
         answers: []
       })
+    },
+    getCandidate(username: string) {
+      console.log('UserGroupStore:getCandidate', username)
+      const candidate = this.candidates.find(candidate => candidate.username === username)
+      console.log('Found:', candidate)
+      if (candidate === undefined) {
+        return undefined
+      } else {
+        return candidate
+        // return { ...candidate }  // Return copy of candidate. This should not be used to alter questions.
+      }
+    },
+    getEmptyCandidate() {
+      const candidate : Candidate = {
+        username: '',
+        firstName: '',
+        lastName: '',
+        party: null,
+        district: null,
+        candidateNumber: 0,
+        homepage: '',
+        description: '',
+        answers: []
+      }
+      return candidate
     },
     getElectionName() {
       // Assuming there is at most one election

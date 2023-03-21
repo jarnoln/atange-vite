@@ -50,6 +50,9 @@ export interface Candidate {
   lastName: string
   party: UserGroup | null
   district: UserGroup | null
+  candidateNumber: number
+  homepage: string
+  description: string
   answers: Answer[]
 }
 

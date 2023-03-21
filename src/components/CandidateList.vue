@@ -14,7 +14,11 @@
       </thead>
       <tbody>
         <tr v-for="candidate in userGroupStore.candidates" :key="candidate.username">
-          <td>{{ candidate.firstName }} {{ candidate.lastName }}</td>
+          <td>
+            <router-link :to="{ name: 'candidate-view', params: { candidateName: candidate.username }}">
+              {{ candidate.firstName }} {{ candidate.lastName }}
+            </router-link>
+          </td>
           <td><div v-if="candidate.party">{{ candidate.party.title }}</div></td>
           <td><div v-if="candidate.district">{{ candidate.district.title }}</div></td>
           <td
