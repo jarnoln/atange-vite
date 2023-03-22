@@ -10,6 +10,7 @@ import EditUserView from './views/EditUserView.vue'
 import HomeView from './views/HomeView.vue'
 import PageNotFoundView from './views/PageNotFoundView.vue'
 import ReorderQuestionsView from './views/ReorderQuestionsView.vue'
+import QuestionListView from './views/QuestionListView.vue'
 import QuestionView from './views/QuestionView.vue'
 import UserLogin from './components/UserLogin.vue'
 import UserView from './views/UserView.vue'
@@ -24,6 +25,7 @@ export const routes: Array<RouteRecordRaw> = [
   { path: '/user', name: 'user-view', component: UserView, meta: { requiresAuth: true } },
   { path: '/user/edit', name: 'user-edit', component: EditUserView, meta: { requiresAuth: true } },
   { path: '/new', name: 'create-collective', component: EditCollective, meta: { requiresAuth: true } },
+  { path: '/questions', name: 'question-list', component: QuestionListView },
   {
     path: '/c/:collectiveName',
     name: 'collective',

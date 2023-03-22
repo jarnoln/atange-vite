@@ -11,6 +11,11 @@
           Candidates
         </router-link>
       </li>
+      <li v-if="settingsStore.oneCollective">
+        <router-link id="navbar-question-list" active-class="active" :to="{ name: 'question-list' }">
+          Questions
+        </router-link>
+      </li>
       <li>
         <router-link id="navbar-about" active-class="active" :to="{ name: 'about' }">
           About
