@@ -28,6 +28,9 @@
           Login
         </router-link>
       </li>
+      <li v-if="isLoggedIn()">
+        <router-link id="navbar-username" :to="{ name: 'user-view' }">Profile</router-link>
+      </li>
       <li v-if="!isLoggedIn()">
         <router-link id="navbar-register" active-class="active" :to="{ name: 'register' }">
           Register

@@ -37,7 +37,7 @@
             <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).no }}</td>
-            <td class="text-right"> {{ questionStore.getApproval(question.name).approvalPct }}%</td>
+            <td class="text-right"> {{ questionStore.getApproval(question.name).approvalPct?.toFixed(0) }}%</td>
             <td v-if="canEditQuestions">
               <router-link
                 :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
