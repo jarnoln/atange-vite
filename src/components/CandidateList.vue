@@ -35,7 +35,9 @@
     </table>
     <p>
       <div v-for="question in questionStore.questionItems" :key="question.name" style="font-size: small;">
+        <router-link v-if="collectiveStore.currentCollective" :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
           {{ question.order }} {{ question.title }}
+        </router-link>
       </div>
     </p>
   </div>
@@ -67,6 +69,12 @@ onBeforeMount(async () => {
   if (collectiveStore.count === 0) {
     await EventService.fetchCollectives()
   }
+  if (collectiveStore.count === 1) {
+    if (collectiveStore.currentCollectiveName === '') {
+      const collectiveName = collectiveStore.collectives[0].name
+      collectiveStore.selectCollective(collectiveName)
+    }
+  }
   if (questionStore.count === 0) {
     collectiveStore.visibleCollectives.forEach(collective => {
       EventService.fetchQuestions(collective.name)
@@ -76,12 +84,12 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
-td a {
+a {
   color: black;
   text-decoration: none;
 }
 
-td a:visited {
+a:visited {
   color: black;
 }
 
