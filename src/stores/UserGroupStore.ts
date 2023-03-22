@@ -77,6 +77,14 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
         answers: []
       })
     },
+    updateCandidateDescription(username: string, description: string, homepage: string, candidateNumber: number) {
+      const index = this.candidates.findIndex(candidate => candidate.username === username)
+      if (index >= 0) {
+        this.candidates[index].description = description
+        this.candidates[index].homepage = homepage
+        this.candidates[index].candidateNumber = candidateNumber
+      }
+    },
     getCandidate(username: string) {
       console.log('UserGroupStore:getCandidate', username)
       const candidate = this.candidates.find(candidate => candidate.username === username)

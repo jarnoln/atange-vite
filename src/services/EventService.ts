@@ -366,6 +366,42 @@ export const EventService = {
         handleApiError(error, message)
       })
   },
+  fetchCandidateDescription: async (username: string) => {
+    const notificationStore = useNotificationStore()
+    const sessionStore = useSessionStore()
+    const userGroupStore = useUserGroupStore()
+    if (username === '') {
+      console.log('EventStore:fetchCandidateDescription: no user seleted. Aborting.')
+      return null
+    }
+    notificationStore.notifyWaitOn('fetching_user_description', 'Fetching user description')
+    const config = {
+      headers: {
+        'Authorization': 'Token ' + sessionStore.token
+      }
+    }
+    const path: string = '/api/user/' + username + '/description/'
+    console.log('GET', path)
+    return apiClient.get(path, config)
+      .then(response => {
+        notificationStore.notifyWaitOff('fetching_user_description')
+        if (response.status === 200) {
+          console.log('fetched user_info:', response.data)
+          const description = response.data['description']
+          const homepage = response.data['home_page']
+          const number = response.data['candidate_number']
+          userGroupStore.updateCandidateDescription(username, description, homepage, number)
+        } else {
+          notificationStore.notifyError('fetchUserDescription: Expected status code 200, server returned ' + response.status)
+          console.log(response.data)
+        }
+      })
+      .catch(error => {
+        notificationStore.notifyWaitOff('fetching_user_description')
+        const message = 'Failed to fetch user description. '
+        handleApiError(error, message)
+      })
+  },
   fetchMemberships: async () => {
     const notificationStore = useNotificationStore()
     const sessionStore = useSessionStore()

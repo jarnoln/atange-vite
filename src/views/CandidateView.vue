@@ -72,6 +72,7 @@ onBeforeMount(async () => {
   if (questionStore.count === 0) {
     await EventService.fetchAllQuestions()
   }
+  await EventService.fetchCandidateDescription(props.candidateName)
   const currentCandidate = userGroupStore.getCandidate(props.candidateName)
   if (currentCandidate) {
     candidate.value = currentCandidate
