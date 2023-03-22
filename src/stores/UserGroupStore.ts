@@ -5,7 +5,8 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
   state: () => ({
     userGroups: [] as UserGroup[],
     candidates: [] as Candidate[],
-    loaded: false
+    loaded: false,
+    membersLoaded: false
   }),
   getters: {
     count: (state) => state.userGroups.length,
@@ -20,6 +21,7 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       this.userGroups = []
       this.candidates = []
       this.loaded = false
+      this.membersLoaded = false
     },
     clearCandidates() {
       this.candidates = []
@@ -45,6 +47,7 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       return true
     },
     setUserGroupMembers(userGroupName: string, members: string[]) {
+      this.membersLoaded = true
       const index = this.userGroups.findIndex(ug => ug.name === userGroupName)
       if (index !== -1) {
         this.userGroups[index].members = members
@@ -81,8 +84,7 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
       if (candidate === undefined) {
         return undefined
       } else {
-        return candidate
-        // return { ...candidate }  // Return copy of candidate. This should not be used to alter questions.
+        return { ...candidate }  // Return copy of candidate. This should not be used to alter questions.
       }
     },
     getEmptyCandidate() {

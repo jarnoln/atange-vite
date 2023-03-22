@@ -57,6 +57,8 @@ const userGroupStore = useUserGroupStore()
 onBeforeMount(async () => {
   if (!userGroupStore.loaded) {
     await EventService.fetchUserGroups()
+  }
+  if (!userGroupStore.membersLoaded) {
     await EventService.fetchAllUserGroupMembers()
   }
   if (userGroupStore.candidates.length === 0) {

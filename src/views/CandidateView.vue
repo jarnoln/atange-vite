@@ -59,6 +59,8 @@ const candidate = ref(userGroupStore.getEmptyCandidate())
 onBeforeMount(async () => {
   if (!userGroupStore.loaded) {
     await EventService.fetchUserGroups()
+  }
+  if (!userGroupStore.membersLoaded) {
     await EventService.fetchAllUserGroupMembers()
   }
   if (collectiveStore.count === 0) {
