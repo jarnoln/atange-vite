@@ -22,7 +22,7 @@ console.log('backend server:', server)
 
 const apiClient = axios.create({
   baseURL: server,
-  timeout: 2000,
+  timeout: 10000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json'
