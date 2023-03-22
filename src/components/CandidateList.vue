@@ -1,6 +1,8 @@
 <template>
   <div id="candidate-list-container" v-if="userGroupStore.candidates.length > 0">
-    <h1>Candidates</h1>
+    <h1 v-if="settingsStore.oneCollective && collectiveStore.currentCollective">{{ collectiveStore.currentCollective.title }}</h1>
+    <h1 v-else>Candidates</h1>
+    <p v-if="settingsStore.oneCollective && collectiveStore.currentCollective">{{ collectiveStore.currentCollective.description }}</p>
     <table id="candidate-list-table">
       <thead>
         <tr>
@@ -43,11 +45,13 @@
 import { onBeforeMount } from 'vue'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
+import { useSettingsStore } from '../stores/SettingsStore'
 import { useUserGroupStore } from '../stores/UserGroupStore'
 import { EventService } from '../services/EventService';
 
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
+const settingsStore = useSettingsStore()
 const userGroupStore = useUserGroupStore()
 
 onBeforeMount(async () => {
