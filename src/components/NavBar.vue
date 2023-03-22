@@ -6,7 +6,7 @@
           Home
         </router-link>
       </li>
-      <li v-if="userGroupStore.hasElections">
+      <li v-if="userGroupStore.hasElections && !settingsStore.oneCollective">
         <router-link id="navbar-candidates" active-class="active" :to="{ name: 'candidates' }">
           Candidates
         </router-link>
@@ -41,16 +41,21 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { useSessionStore } from '../stores/SessionStore'
+import { useSettingsStore } from '../stores/SettingsStore';
 import { useUserGroupStore } from '../stores/UserGroupStore'
 import { EventService } from '../services/EventService'
 import { onBeforeMount } from 'vue'
 
 const sessionStore = useSessionStore()
+const settingsStore = useSettingsStore()
 const userGroupStore = useUserGroupStore()
 
 onBeforeMount(() => {
   if (!userGroupStore.loaded) {
     EventService.fetchUserGroups()
+  }
+  if (!settingsStore.settingsLoaded) {
+    EventService.fetchGlobalSettings()
   }
 })
 
