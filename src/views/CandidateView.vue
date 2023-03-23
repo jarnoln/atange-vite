@@ -3,29 +3,29 @@
     <h1>{{ candidate.firstName }} {{ candidate.lastName }}</h1>
     <table>
       <tr v-if="candidate.party">
-        <th>Party</th>
+        <th>{{ $t('party') }}</th>
         <td>{{ candidate.party.title }}</td>
       </tr>
       <tr v-if="candidate.district">
-        <th>District</th>
+        <th>{{ $t('district') }}</th>
         <td>{{ candidate.district.title }}</td>
       </tr>
       <tr v-if="candidate.candidateNumber">
-        <th>Number</th>
+        <th>{{ $t('candidateNumber') }}</th>
         <td>{{ candidate.candidateNumber }}</td>
       </tr>
       <tr v-if="candidate.homepage">
-        <th>Home page</th>
+        <th>{{ $t('homepage') }}</th>
         <td><a :href="candidate.homepage">{{ candidate.homepage }}</a></td>
       </tr>
       <tr v-if="candidate.description">
-        <th colspan="2">Description</th>
+        <th colspan="2">{{ $t('description') }}</th>
       </tr>
       <tr v-if="candidate.description">
         <td colspan="2">{{ candidate.description }}</td>
       </tr>
     </table>
-    <h2>Answers</h2>
+    <h2>{{ $t('answers') }}</h2>
     <table>
       <tr v-for="question in questionStore.questionItems" :key="question.name">
         <td>{{ question.order }}</td>

@@ -24,7 +24,7 @@
       <p v-if="passwordValidateError">{{ passwordValidateError }}</p>
     </div>
     <div class="form-control" v-if="showCandidateCheckbox()">
-      <label for="candidate">Are you a candidate in this election: {{ getElectionTitle() }}?</label>
+      <label for="candidate">{{ $t('areYouCandidateInThisElection') }}: {{ getElectionTitle() }}?</label>
       <input
           id="candidate"
           name="candidate"

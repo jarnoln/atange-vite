@@ -3,7 +3,7 @@
     <h1> {{ sessionStore.username }}</h1>
     <form @submit.prevent="submitForm">
       <div class="form-control">
-        <label for="first-name">First name</label>
+        <label for="first-name">{{ $t('firstName') }}</label>
         <input
             id="first-name"
             name="first-name"
@@ -12,7 +12,7 @@
         />
       </div>
       <div class="form-control">
-        <label for="last-name">Last name</label>
+        <label for="last-name">{{ $t('lastName') }}</label>
         <input
             id="last-name"
             name="last-name"
@@ -35,7 +35,7 @@
       </div>
 
       <div class="form-control" v-if="sessionStore.isCandidate">
-        <label for="candidate-number">Number</label>
+        <label for="candidate-number">{{ $t('candidateNumber') }}</label>
         <input
             id="candidate-number"
             name="candidate-number"
@@ -45,7 +45,7 @@
       </div>
 
       <div class="form-control" v-if="showPartySelection()">
-        <div><label for="select-party">Party</label></div>
+        <div><label for="select-party">{{ $t('party') }}</label></div>
         <div>
           <select id="select-party" name="parties" v-model="currentParty" :disabled="!allowEditParty()">
              <option value="">Choose your party</option>
@@ -57,7 +57,7 @@
       </div>
 
       <div class="form-control" v-if="showDistrictSelection()">
-        <div><label for="select-district">District</label></div>
+        <div><label for="select-district">{{ $t('district') }}</label></div>
         <div>
           <select id="select-district" name="districts" v-model="currentDistrict" :disabled="!allowEditDistrict()">
              <option value="">Choose your district</option>
@@ -69,7 +69,7 @@
       </div>
 
       <div class="form-control" v-if="sessionStore.isCandidate">
-        <label for="homepage">Homepage</label>
+        <label for="homepage">{{ $t('homepage') }}</label>
         <input
             id="homepage"
             name="homepage"
@@ -79,19 +79,19 @@
       </div>
 
       <div class="form-control">
-        <div><label for="description">Description</label></div>
+        <div><label for="description">{{ $t('description') }}</label></div>
         <div>
           <textarea id="description" name="description" v-model="currentDescription" rows="10" cols="50">
           </textarea>
         </div>
       </div>
       <p>
-        <button id="save-user-info-button" class="btn">Save</button>
+        <button id="save-user-info-button" class="btn">{{ $t('save') }}</button>
       </p>
     </form>
     <p>
       <router-link id="user-view-link" :to="{ name: 'user-view' }">
-        Back
+        {{ $t('back') }}
       </router-link>
     </p>
   </div>

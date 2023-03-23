@@ -3,11 +3,11 @@
     <h1>{{ sessionStore.username }}</h1>
     <table>
       <tr>
-        <th>First name</th>
+        <th>{{ $t('firstName') }}</th>
         <td>{{ sessionStore.firstName }}</td>
       </tr>
       <tr>
-        <th>Last name</th>
+        <th>{{ $t('lastName') }}</th>
         <td>{{ sessionStore.lastName }}</td>
       </tr>
       <tr v-if="sessionStore.isCandidate">
@@ -15,23 +15,23 @@
         <td>{{ sessionStore.electionTitle }}</td>
       </tr>
       <tr v-if="sessionStore.party">
-        <th>Party</th>
+        <th>{{ $t('party') }}</th>
         <td>{{ sessionStore.party.title }}</td>
       </tr>
       <tr v-if="sessionStore.district">
-        <th>District</th>
+        <th>{{ $t('district') }}</th>
         <td>{{ sessionStore.district.title }}</td>
       </tr>
       <tr v-if="sessionStore.candidateNumber">
-        <th>Number</th>
+        <th>{{ $t('candidateNumber') }}</th>
         <td>{{ sessionStore.candidateNumber }}</td>
       </tr>
       <tr v-if="sessionStore.homepage">
-        <th>Home page</th>
+        <th>{{ $t('homepage') }}</th>
         <td><a :href="sessionStore.homepage">{{ sessionStore.homepage }}</a></td>
       </tr>
       <tr v-if="sessionStore.description">
-        <th colspan="2">Description</th>
+        <th colspan="2">{{ $t('description') }}</th>
       </tr>
       <tr v-if="sessionStore.description">
         <td colspan="2">{{ sessionStore.description }}</td>
