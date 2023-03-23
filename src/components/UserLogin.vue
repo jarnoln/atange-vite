@@ -2,7 +2,7 @@
   <h1 style="text-transform: capitalize; text-align: left;"> {{ getTitle() }} </h1>
   <form @submit.prevent="submitForm">
     <div class="form-control" :class="{ invalid: usernameValidateError }">
-      <label for="user-name">Name</label>
+      <label for="user-name">{{ $t('name') }}</label>
       <input
           id="user-name"
           name="user-name"
@@ -13,7 +13,7 @@
       <p v-if="usernameValidateError">{{ usernameValidateError }}</p>
     </div>
     <div class="form-control" :class="{ invalid: passwordValidateError }">
-      <label for="password">Password</label>
+      <label for="password">{{ $t('password') }}</label>
       <input
           id="password"
           name="password"
@@ -32,7 +32,9 @@
           v-model="currentCandidate"
       />
     </div>
-    <button id="submit-button" :disabled="!isFormValid()" class="btn" style="text-transform: capitalize">{{ getTitle() }}</button>
+    <button id="submit-button" :disabled="!isFormValid()" class="btn" style="text-transform: capitalize">
+      {{ getTitle() }}
+    </button>
   </form>
 </template>
 

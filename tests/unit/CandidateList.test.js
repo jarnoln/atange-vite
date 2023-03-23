@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 // import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createI18n } from 'vue-i18n'
 import { routes } from '../../src/routes'
 // import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 // import { useNotificationStore } from '../../src/stores/NotificationStore'
@@ -23,6 +24,15 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const messages = {
+  'en': {},
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
+})
+
 // const collectiveStore = useCollectiveStore()
 // const notificationStore = useNotificationStore()
 const sessionStore = useSessionStore()
@@ -37,7 +47,7 @@ describe('Test CandidateList', () => {
   it('shows candidates title', async () => {
     const { getByText } = render(CandidateList, {
       global: {
-        plugins: [router, pinia]
+        plugins: [router, pinia, i18n]
       }
     })
     await nextTick()

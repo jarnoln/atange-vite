@@ -4,6 +4,7 @@ import { createTestingPinia } from '@pinia/testing'
 import { setActivePinia, createPinia } from 'pinia'
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createI18n } from 'vue-i18n'
 import { routes } from '../../src/routes'
 import { useSessionStore } from '../../src/stores/SessionStore'
 import NavBar from '../../src/components/NavBar.vue'
@@ -20,6 +21,20 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const messages = {
+  'en': {
+    about: 'About',
+    home: 'Home',
+    login: 'Login',
+    register: 'Register',
+  },
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
+})
+
 const sessionStore = useSessionStore()
 
 
@@ -27,7 +42,7 @@ describe('Test NavBar', () => {
   it('show login and register links when not logged in', async () => {
     const wrapper = mount(NavBar, {
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     await nextTick()
@@ -41,7 +56,7 @@ describe('Test NavBar', () => {
   it('show username and logout link when logged in', async () => {
     const wrapper = mount(NavBar, {
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     sessionStore.login('superman', 'abcd')

@@ -3,29 +3,29 @@
     <ul id="right-links">
       <li>
         <router-link id="navbar-home" active-class="active" :to="{ name: 'home' }">
-          Home
+          {{ $t('home') }}
         </router-link>
       </li>
       <li v-if="userGroupStore.hasElections && !settingsStore.oneCollective">
         <router-link id="navbar-candidates" active-class="active" :to="{ name: 'candidates' }">
-          Candidates
+          {{ $t('candidates') }}
         </router-link>
       </li>
       <li v-if="settingsStore.oneCollective">
         <router-link id="navbar-question-list" active-class="active" :to="{ name: 'question-list' }">
-          Questions
+          {{ $t('questions') }}
         </router-link>
       </li>
       <li>
         <router-link id="navbar-about" active-class="active" :to="{ name: 'about' }">
-          About
+          {{ $t('about') }}
         </router-link>
       </li>
     </ul>
     <ul id="left-links">
       <li v-if="!isLoggedIn()">
         <router-link id="navbar-login" active-class="active" :to="{ name: 'login' }">
-          Login
+          {{ $t('login') }}
         </router-link>
       </li>
       <li v-if="isLoggedIn()">
@@ -33,7 +33,7 @@
       </li>
       <li v-if="!isLoggedIn()">
         <router-link id="navbar-register" active-class="active" :to="{ name: 'register' }">
-          Register
+          {{ $t('register') }}
         </router-link>
       </li>
       <li v-if="isLoggedIn()">

@@ -1,14 +1,14 @@
 <template>
   <div id="candidate-list-container" v-if="userGroupStore.candidates.length > 0">
     <h1 v-if="settingsStore.oneCollective && collectiveStore.currentCollective">{{ collectiveStore.currentCollective.title }}</h1>
-    <h1 v-else>Candidates</h1>
+    <h1 v-else>{{ $t('candidates') }}</h1>
     <p v-if="settingsStore.oneCollective && collectiveStore.currentCollective">{{ collectiveStore.currentCollective.description }}</p>
     <table id="candidate-list-table">
       <thead>
         <tr>
-            <th>Name</th>
-            <th>Party</th>
-            <th>District</th>
+            <th>{{ $t('name') }}</th>
+            <th>{{ $t('party') }}</th>
+            <th>{{ $t('district') }}</th>
             <th v-for="question in questionStore.questionItems" :key="question.name" class="text-center">
               {{ question.order }}
             </th>
