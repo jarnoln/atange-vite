@@ -7,6 +7,7 @@
   "back": "Takaisin",
   "candidates": "Ehdokkaat",
   "candidateNumber": "Ehdokasnumero",
+  "candidateListInstructions": "Saat lisätietoja ehdokkaasta klikkaamalla nimeä.",
   "description": "Esittely",
   "district": "Vaalipiiri",
   "doVote": "Äänestä",
@@ -25,5 +26,7 @@
   "questions": "Kysymykset",
   "register": "Rekisteröidy",
   "save": "Tallenna",
-  "yes": "Kyllä"
+  "username": "Käyttäjätunnus",
+  "yes": "Kyllä",
+  "-": "-"
 }

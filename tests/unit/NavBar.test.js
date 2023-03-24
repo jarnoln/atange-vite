@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { createI18n } from 'vue-i18n'
 import { routes } from '../../src/routes'
 import { useSessionStore } from '../../src/stores/SessionStore'
+import en from '../../src/locales/en.json'
 import NavBar from '../../src/components/NavBar.vue'
 
 // vi.mock('axios')
@@ -22,12 +23,7 @@ const pinia = createTestingPinia({
 })
 
 const messages = {
-  'en': {
-    about: 'About',
-    home: 'Home',
-    login: 'Login',
-    register: 'Register',
-  },
+  'en': en
 }
 
 const i18n = createI18n({

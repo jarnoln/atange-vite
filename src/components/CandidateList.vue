@@ -28,18 +28,20 @@
             :key="question.name"
             :class="'answer' + questionStore.getUserAnswerLetter(question.name, candidate.username)"
             class="answerCell">
-            {{ questionStore.getUserAnswerLetter(question.name, candidate.username) }}
+            {{ $t(questionStore.getUserAnswerString(question.name, candidate.username)) }}
           </td>
         </tr>
       </tbody>
     </table>
+    <h3>{{ $t('questions') }}</h3>
     <p>
-      <div v-for="question in questionStore.questionItems" :key="question.name" style="font-size: small;">
+      <div v-for="question in questionStore.questionItems" :key="question.name" style="font-size: medium;">
         <router-link v-if="collectiveStore.currentCollective" :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
           {{ question.order }} {{ question.title }}
         </router-link>
       </div>
     </p>
+    <p>{{ $t('candidateListInstructions') }}</p>
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
-  <h1 style="text-transform: capitalize; text-align: left;"> {{ getTitle() }} </h1>
+  <h1 style="text-transform: capitalize; text-align: left;"> {{ $t(getTitle()) }} </h1>
   <form @submit.prevent="submitForm">
     <div class="form-control" :class="{ invalid: usernameValidateError }">
-      <label for="user-name">{{ $t('name') }}</label>
+      <label for="user-name">{{ $t('username') }}</label>
       <input
           id="user-name"
           name="user-name"
@@ -33,7 +33,7 @@
       />
     </div>
     <button id="submit-button" :disabled="!isFormValid()" class="btn" style="text-transform: capitalize">
-      {{ getTitle() }}
+      {{ $t(getTitle()) }}
     </button>
   </form>
 </template>

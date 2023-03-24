@@ -77,9 +77,9 @@ export const useQuestionStore = defineStore('QuestionStore', {
       const answer = this.getUserAnswer(questionName, username)
       if (answer != undefined) {
         if (answer.vote === 1) {
-          return 'Yes'
+          return 'yes'
         } else if (answer.vote === -1) {
-          return 'No'
+          return 'no'
         }
       }
       return '-'

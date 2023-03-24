@@ -54,7 +54,7 @@
     <p>Warning: Deleting account is irreversible action. When it is gone it is gone, no backsies.</p>
     <form @submit.prevent="submitForm">
       <div class="form-control">
-        <label for="password">Password</label>
+        <label for="password">{{ $t('password') }}</label>
         <input
             id="password"
             name="password"
