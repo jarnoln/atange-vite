@@ -3,6 +3,8 @@ import { render, fireEvent } from '@testing-library/vue'
 import { beforeEach, describe, expect, it, test, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createI18n } from 'vue-i18n'
+import en from '../../src/locales/en.json'
 import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 import { useQuestionStore } from '../../src/stores/QuestionStore'
@@ -21,6 +23,15 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const messages = {
+  'en': en
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
+})
+
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
@@ -37,7 +48,7 @@ describe('Test QuestionList', () => {
         collectiveName: 'jla'
       },
       global: {
-        plugins: [router, pinia]
+        plugins: [i18n, pinia, router]
       }
     })
     await nextTick()

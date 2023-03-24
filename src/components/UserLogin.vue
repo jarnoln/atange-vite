@@ -67,7 +67,11 @@ onBeforeMount(async () => {
 })
 
 function getTitle() {
-  return route.name
+  if (route.name === null || route.name === undefined) {
+    return ''
+  } else {
+    return route.name
+  }
 }
 
 async function submitForm() {

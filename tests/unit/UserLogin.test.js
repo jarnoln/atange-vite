@@ -35,7 +35,7 @@ describe('Test UserLogin', () => {
         plugins: [i18n, router, pinia]
       }
     })
-    expect(wrapper.text()).toContain('Name')
+    expect(wrapper.text()).toContain('Username')
     expect(wrapper.text()).toContain('Password')
     const userNameInput = wrapper.get('#user-name')
     const passwordInput = wrapper.get('#password')
