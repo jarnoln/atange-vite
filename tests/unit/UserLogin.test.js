@@ -2,8 +2,10 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
+import { createI18n } from 'vue-i18n'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
+import en from '../../src/locales/en.json'
 import UserLogin from '../../src/components/UserLogin.vue'
 
 vi.mock('axios')
@@ -17,11 +19,20 @@ const pinia = createTestingPinia({
   createSpy: vitest.fn,
 })
 
+const messages = {
+  'en': en
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
+})
+
 describe('Test UserLogin', () => {
   test('test using test utils', async () => {
     const wrapper = mount(UserLogin, {
       global: {
-        plugins: [router, pinia]
+        plugins: [i18n, router, pinia]
       }
     })
     expect(wrapper.text()).toContain('Name')

@@ -2,10 +2,11 @@ import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createI18n } from 'vue-i18n'
 import { routes } from '../../src/routes'
 import { useSessionStore } from '../../src/stores/SessionStore'
+import en from '../../src/locales/en.json'
 import EditUserView from '../../src/views/EditUserView.vue'
-import { nextTick } from 'vue'
 
 
 vi.mock('axios')
@@ -20,6 +21,15 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const messages = {
+  'en': en
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
+})
+
 const sessionStore = useSessionStore()
 
 
@@ -31,7 +41,7 @@ describe('Test EditUserView', () => {
     sessionStore.login('superman', 'abcd')
     const wrapper = mount(EditUserView, {
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     expect(wrapper.text()).toContain('First name')
@@ -54,7 +64,7 @@ describe('Test EditUserView', () => {
   it('does not show edit fields or save button if not logged in', () => {
     const wrapper = mount(EditUserView, {
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     expect(wrapper.text()).not.toContain('First name')

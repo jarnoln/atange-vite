@@ -3,8 +3,10 @@ import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
 import { createTestingPinia } from '@pinia/testing'
+import { createI18n } from 'vue-i18n'
 import { useSessionStore } from '../../src/stores/SessionStore'
 import UserView from '../../src/views/UserView.vue'
+import en from '../../src/locales/en.json'
 
 vi.mock('axios')
 
@@ -18,6 +20,11 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const i18n = createI18n({
+  locale: 'en',
+  'en': en
+})
+
 const sessionStore = useSessionStore()
 
 
@@ -29,7 +36,7 @@ describe('Test UserView', () => {
     sessionStore.login('superman', 'abcd')
     const wrapper = mount(UserView, {
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     expect(wrapper.text()).toContain('superman')
@@ -38,7 +45,7 @@ describe('Test UserView', () => {
   it('does not shows username or delete button if not logged in', () => {
     const wrapper = mount(UserView, {
       global: {
-        plugins: [pinia, router],
+        plugins: [i18n, pinia, router],
       }
     })
     expect(wrapper.text()).not.toContain('superman')

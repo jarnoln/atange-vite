@@ -6,7 +6,8 @@ import App from './App.vue'
 import { routes } from './routes'
 import { useNotificationStore } from './stores/NotificationStore'
 import { useSessionStore } from './stores/SessionStore'
-
+import en from './locales/en.json'
+import fi from './locales/fi.json'
 
 const router = createRouter({
   history: createWebHistory(), // Use browser built-in history
@@ -28,48 +29,8 @@ router.beforeEach((to, from, next) => {
 
 
 const messages = {
-  'en': {
-    about: 'About',
-    answers: 'Answers',
-    areYouCandidateInThisElection: 'Are you a candidate in this election',
-    back: 'Back',
-    candidates: 'Candidates',
-    candidateNumber: 'Number',
-    description: 'Description',
-    district: 'District',
-    firstName: 'First name',
-    home: 'Home',
-    homepage: 'Homepage',
-    lastName: 'Last name',
-    login: 'Login',
-    name: 'Name',
-    party: 'Party',
-    password: 'Password',
-    questions: 'Questions',
-    register: 'Register',
-    save: 'Save'
-  },
-  'fi': {
-    about: 'Tiedot',
-    answers: 'Vastaukset',
-    areYouCandidateInThisElection: 'Oletko ehdokas näissä vaaleissa',
-    back: 'Takaisin',
-    candidates: 'Ehdokkaat',
-    candidateNumber: 'Ehdokasnumero',
-    description: 'Esittely',
-    district: 'Vaalipiiri',
-    firstName: 'Etunimi',
-    home: 'Etusivu',
-    homepage: 'Kotisivu',
-    lastName: 'Sukunimi',
-    login: 'Kirjaudu',
-    name: 'Nimi',
-    party: 'Puolue',
-    password: 'Salasana',
-    questions: 'Kysymykset',
-    register: 'Rekisteröidy',
-    save: 'Tallenna'
-  }
+  'en': en,
+  'fi': fi
 }
 
 const i18n = createI18n({

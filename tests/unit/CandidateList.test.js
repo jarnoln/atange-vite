@@ -11,6 +11,7 @@ import { routes } from '../../src/routes'
 import { useUserGroupStore } from '../../src/stores/UserGroupStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
 import CandidateList from '../../src/components/CandidateList.vue'
+import en from '../../src/locales/en.json'
 
 vi.mock('axios')
 
@@ -25,7 +26,7 @@ const pinia = createTestingPinia({
 })
 
 const messages = {
-  'en': {},
+  'en': en,
 }
 
 const i18n = createI18n({
