@@ -5,34 +5,41 @@
     </p>
     <p v-else-if="questionStore.count === 0">No questions</p>
     <table v-else id="questions-table">
-      <caption>Questions: {{ questionStore.count }}</caption>
+      <caption>{{ $t('questions') }}: {{ questionStore.questionItems.length }}</caption>
       <thead>
         <tr>
-          <th class="text-left dim-background" style="width:90%">Question</th>
-          <th colspan="3" class="text-left dim-background" v-if="sessionStore.isLoggedIn">Actions</th>
-          <th class="text-right dim-background">Yes</th>
-          <th class="text-right dim-background">Abs</th>
-          <th class="text-right dim-background">No</th>
-          <th class="text-right dim-background">Approval</th>
+          <th colspan="2" class="text-left dim-background" style="width:90%">{{ $t('question') }}</th>
+          <th colspan="3" class="text-left dim-background" v-if="sessionStore.isLoggedIn">{{ $t('doVote') }}</th>
+          <th class="text-right dim-background">{{ $t('yes') }}</th>
+          <th class="text-right dim-background">{{ $t('abstain') }}</th>
+          <th class="text-right dim-background">{{ $t('no') }}</th>
+          <th class="text-right dim-background">{{ $t('approval') }}</th>
           <th class="text-left dim-background" v-if="canEditQuestions">Actions</th>
         </tr>
       </thead>
       <tbody>
         <template v-for="question in questionStore.questions" :key="question.name">
           <tr v-if="question.itemType === 'Q' || question.itemType === 'question'">
+            <td>{{ question.order }}</td>
             <td>
               <router-link :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
                 {{ question.title }}
               </router-link>
             </td>
             <td class="text-right" v-if="sessionStore.isLoggedIn">
-              <button class="btn-small" id="answer-yes-btn" @click="voteYes(question.name)">Yes</button>
+              <button class="btn-vote" id="answer-yes-btn" @click="voteYes(question.name)">
+                {{ $t('yes') }}
+              </button>
             </td>
             <td class="text-right" v-if="sessionStore.isLoggedIn">
-              <button class="btn-small" id="answer-abstain-btn" @click="voteAbstain(question.name)">Abstain</button>
+              <button class="btn-vote" id="answer-abstain-btn" @click="voteAbstain(question.name)">
+                {{ $t('abstain') }}
+              </button>
             </td>
             <td class="text-right" v-if="sessionStore.isLoggedIn">
-              <button class="btn-small" id="answer-no-btn" @click="voteNo(question.name)">No</button>
+              <button class="btn-vote" id="answer-no-btn" @click="voteNo(question.name)">
+                {{ $t('no') }}
+              </button>
             </td>
             <td class="text-right">{{ questionStore.getApproval(question.name).yes }}</td>
             <td class="text-right">{{ questionStore.getApproval(question.name).abstain }}</td>
@@ -46,7 +53,7 @@
             </td>
           </tr>
           <tr v-else>
-            <td class="light-background" :colspan="sessionStore.isLoggedIn ? 8 : 5"> {{ question.title }}</td>
+            <td class="light-background" :colspan="sessionStore.isLoggedIn ? 9 : 4"> {{ question.title }}</td>
             <td class="light-background" v-if="canEditQuestions">
               <router-link
                 :to="{ name: 'question-edit', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
@@ -138,7 +145,8 @@ caption {
   /* caption-side: bottom; */
 }
 
-.btn-small {
+.btn-vote {
+  width: 50px;
   font: inherit;
   text-decoration: none;
   border: 2px solid #512483;
@@ -149,7 +157,7 @@ caption {
   margin: 0 0.5rem 0 0;
 }
 
-.btn-small:hover {
+.btn-vote:hover {
   box-shadow: none;
   border: 2px solid black;
   background-color: #613493;

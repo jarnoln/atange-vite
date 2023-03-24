@@ -29,7 +29,9 @@
         </router-link>
       </li>
       <li v-if="isLoggedIn()">
-        <router-link id="navbar-edit-profile" :to="{ name: 'user-edit' }">Edit profile</router-link>
+        <router-link id="navbar-edit-profile" :to="{ name: 'user-edit' }">
+          {{ $t('editProfile') }}
+        </router-link>
       </li>
       <li v-if="!isLoggedIn()">
         <router-link id="navbar-register" active-class="active" :to="{ name: 'register' }">
@@ -37,10 +39,14 @@
         </router-link>
       </li>
       <li v-if="isLoggedIn()">
-        <router-link id="navbar-username" :to="{ name: 'user-view' }">{{ getUsername() }}</router-link>
+        <router-link id="navbar-username" :to="{ name: 'user-view' }">
+          {{ getUsername() }}
+        </router-link>
       </li>
       <li v-if="isLoggedIn()">
-        <a href="#" id="navbar-logout" @click="logout()">Logout</a>
+        <a href="#" id="navbar-logout" @click="logout()">
+          {{ $t('logout') }}
+        </a>
       </li>
     </ul>
   </nav>
