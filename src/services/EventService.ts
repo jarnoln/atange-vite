@@ -34,10 +34,11 @@ function storeSettings(settingsData: any) {
   console.log('Fetched settings: ')
   console.log(settingsData)
   const title = settingsData['title']
+  const allowRegister = settingsData['allow_register']
   const oneCollective = settingsData['one_collective']
   const usersCanCreateCollectives = settingsData['users_can_create_collectives']
   const requireNames = settingsData['require_names']
-  settingsStore.set(title, oneCollective, usersCanCreateCollectives, requireNames)
+  settingsStore.set(title, allowRegister, oneCollective, usersCanCreateCollectives, requireNames)
 }
 
 function storeCollectives(collectiveData: any[]) {

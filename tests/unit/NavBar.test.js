@@ -7,6 +7,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { createI18n } from 'vue-i18n'
 import { routes } from '../../src/routes'
 import { useSessionStore } from '../../src/stores/SessionStore'
+import { useSettingsStore } from '../../src/stores/SettingsStore'
 import en from '../../src/locales/en.json'
 import NavBar from '../../src/components/NavBar.vue'
 
@@ -32,10 +33,12 @@ const i18n = createI18n({
 })
 
 const sessionStore = useSessionStore()
+const settingsStore = useSettingsStore()
 
 
 describe('Test NavBar', () => {
   it('show login and register links when not logged in', async () => {
+    settingsStore.allowRegister = true
     const wrapper = mount(NavBar, {
       global: {
         plugins: [i18n, pinia, router]

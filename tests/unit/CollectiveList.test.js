@@ -8,6 +8,7 @@ import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
 import { useNotificationStore } from '../../src/stores/NotificationStore'
 import { useSessionStore } from '../../src/stores/SessionStore'
+import { useSettingsStore } from '../../src/stores/SettingsStore'
 import CollectiveList from '../../src/components/CollectiveList.vue'
 
 vi.mock('axios')
@@ -25,11 +26,13 @@ const pinia = createTestingPinia({
 const collectiveStore = useCollectiveStore()
 const notificationStore = useNotificationStore()
 const sessionStore = useSessionStore()
+const settingsStore = useSettingsStore()
 
 describe('Test CollectiveList', () => {
   beforeEach(() => {
     collectiveStore.clear()
     sessionStore.clear()
+    settingsStore.usersCanCreateCollectives = true
   }),
   it('shows collective titles', async () => {
     // The render method returns a collection of utilities to query your component.

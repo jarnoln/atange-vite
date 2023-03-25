@@ -33,7 +33,7 @@
           {{ $t('editProfile') }}
         </router-link>
       </li>
-      <li v-if="!isLoggedIn()">
+      <li v-if="!isLoggedIn() && settingsStore.allowRegister">
         <router-link id="navbar-register" active-class="active" :to="{ name: 'register' }">
           {{ $t('register') }}
         </router-link>
