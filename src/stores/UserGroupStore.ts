@@ -1,6 +1,25 @@
 import { defineStore } from 'pinia'
 import { UserGroup, Candidate } from '../types'
 
+function compareCandidates(a: Candidate, b: Candidate) {
+  // Order candidates by first by district and then by name
+  if (a.district && b.district) {
+    if (a.district.title > b.district.title) {
+      return 1
+    } else if (a.district.title < b.district.title) {
+      return -1
+    }
+  }
+  const aFullName = a.lastName + a.firstName
+  const bFullName = b.lastName + b.firstName
+  if (aFullName > bFullName) {
+    return 1
+  } else if (aFullName < bFullName) {
+    return -1
+  }
+  return 0
+}
+
 export const useUserGroupStore = defineStore('UserGroupStore', {
   state: () => ({
     userGroups: [] as UserGroup[],
@@ -76,6 +95,10 @@ export const useUserGroupStore = defineStore('UserGroupStore', {
         description: '',
         answers: []
       })
+      console.log('Unsorted candidates:', this.candidates)
+      console.log('Helsinki > Ahvnenanmaa:', 'Helsinki' > 'Ahvenanmaa')
+      this.candidates.sort(compareCandidates)
+      console.log('Sorted candidates:', this.candidates)
     },
     updateCandidateDescription(username: string, description: string, homepage: string, candidateNumber: number) {
       const index = this.candidates.findIndex(candidate => candidate.username === username)
