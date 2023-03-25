@@ -35,7 +35,7 @@
       </thead>
       <td>
         <div v-for="yea in questionStore.getYeas(question.name)" :key="yea.user">
-          <div>{{ yea.user }}</div>
+          <div>{{ getUserString(yea.user) }}</div>
           <div v-if="yea.comment" class="comment">
             {{ yea.comment }}
           </div>
@@ -43,7 +43,7 @@
       </td>
       <td>
         <div v-for="abstain in questionStore.getAbstains(question.name)" :key="abstain.user">
-          <div>{{ abstain.user }}</div>
+          <div>{{ getUserString(abstain.user) }}</div>
           <div v-if="abstain.comment" class="comment">
             {{ abstain.comment }}
           </div>
@@ -51,7 +51,7 @@
       </td>
       <td>
         <div v-for="nay in questionStore.getNays(question.name)" :key="nay.user">
-          <div>{{ nay.user }}</div>
+          <div>{{ getUserString(nay.user) }}</div>
           <div v-if="nay.comment" class="comment">
             {{ nay.comment }}
           </div>
@@ -68,6 +68,8 @@ import { RouterLink } from 'vue-router'
 import { useCollectiveStore } from '../stores/CollectiveStore'
 import { useQuestionStore } from '../stores/QuestionStore'
 import { useSessionStore } from '../stores/SessionStore'
+import { useSettingsStore } from '../stores/SettingsStore'
+import { useUserGroupStore } from '../stores/UserGroupStore'
 import { EventService } from '../services/EventService'
 import { Question } from '../types'
 
@@ -78,6 +80,8 @@ const props = defineProps<{
 const collectiveStore = useCollectiveStore()
 const questionStore = useQuestionStore()
 const sessionStore = useSessionStore()
+const settingsStore = useSettingsStore()
+const userGroupStore = useUserGroupStore()
 const approval = reactive(questionStore.getApproval(props.questionName))
 const approvalText = ref('-')
 const answerComment = ref('')
@@ -85,6 +89,15 @@ const question : Question = reactive(questionStore.getQuestionSkeleton())
 
 onMounted(async () => {
   console.log('QuestionView mounted')
+  if (!userGroupStore.loaded) {
+    await EventService.fetchUserGroups()
+  }
+  if (!userGroupStore.membersLoaded) {
+    await EventService.fetchAllUserGroupMembers()
+  }
+  if (userGroupStore.candidates.length === 0) {
+    EventService.fetchCandidates()
+  }
   if (questionStore.count === 0) {
     if (collectiveStore.currentCollective) {
       console.log('QuestionView:fetch questions')
@@ -131,6 +144,14 @@ function updateAnswer(vote: number) {
   questionStore.setAnswer(props.questionName, sessionStore.username, vote, answerComment.value)
   updateApproval()
   EventService.updateAnswer(props.questionName, sessionStore.username, vote, answerComment.value)
+}
+
+function getUserString(username: string) {
+  const candidate = userGroupStore.getCandidate(username)
+  if (candidate) {
+    return candidate.firstName + ' ' + candidate.lastName
+  }
+  return username
 }
 
 function voteYes() {
