@@ -7,10 +7,15 @@
   "back": "Back",
   "candidates": "Candidates",
   "candidateNumber": "Number",
+  "deleteAccount": "Delete account",
+  "deletingAccount": "Deleting account",
+  "deletingAccountWarning": "Warning: Deleting account is irreversible action. When it is gone it is gone, no backsies.",
+  "candidateListInstructions": "You can get more information about a candidate by clicking name.",
   "description": "Description",
   "district": "District",
   "doVote": "Vote",
   "editProfile": "Edit profile",
+  "editUserInfo": "Edit your profile information",
   "firstName": "First name",
   "home": "Home",
   "homepage": "Homepage",
@@ -26,5 +31,6 @@
   "register": "Register",
   "save": "Save",
   "username": "Username",
-  "yes": "Yes"
+  "yes": "Yes",
+  "-": "-"
 }

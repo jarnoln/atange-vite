@@ -47,11 +47,11 @@
     </p> -->
     <p>
       <router-link id="edit-user-link" :to="{ name: 'user-edit' }">
-        Edit user information
+        {{ $t('editUserInfo') }}
       </router-link>
     </p>
-    <h2> Deleting account</h2>
-    <p>Warning: Deleting account is irreversible action. When it is gone it is gone, no backsies.</p>
+    <h2>{{ $t('deletingAccount') }}</h2>
+    <p>{{ $t('deletingAccountWarning') }}</p>
     <form @submit.prevent="submitForm">
       <div class="form-control">
         <label for="password">{{ $t('password') }}</label>
@@ -63,7 +63,9 @@
         />
       </div>
       <p>
-        <button id="delete-user-button" class="btn btn-danger" :disabled="!currentPassword">Delete account</button>
+        <button id="delete-user-button" class="btn btn-danger" :disabled="!currentPassword">
+          {{ $t('deleteAccount') }}
+        </button>
       </p>
     </form>
   </div>

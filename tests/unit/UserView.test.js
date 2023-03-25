@@ -20,9 +20,13 @@ const pinia = createTestingPinia({
   stubActions: false
 })
 
+const messages = {
+  'en': en
+}
+
 const i18n = createI18n({
   locale: 'en',
-  'en': en
+  messages
 })
 
 const sessionStore = useSessionStore()
