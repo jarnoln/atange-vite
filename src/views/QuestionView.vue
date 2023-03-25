@@ -2,27 +2,35 @@
   <div v-if="question && question.name">
     <h2 id="question-title">{{ question.title }}</h2>
     <p id="question-description" v-html="question.description"></p>
-    <h3 id="approval-title">Approval: {{ approvalText }} %</h3>
+    <h3 id="approval-title">{{ $t('approval')}}: {{ approvalText }} %</h3>
     <div v-if="sessionStore.isLoggedIn">
       <p>
-        <button class="btn" id="answer-yes-btn" @click="voteYes">Yes</button>
-        <button class="btn" id="answer-abstain-btn" @click="voteAbstain">Abstain</button>
-        <button class="btn" id="answer-no-btn" @click="voteNo">No</button>
+        <button class="btn" id="answer-yes-btn" @click="voteYes">
+          {{ $t('yes')}}
+        </button>
+        <button class="btn" id="answer-abstain-btn" @click="voteAbstain">
+          {{ $t('abstain')}}
+        </button>
+        <button class="btn" id="answer-no-btn" @click="voteNo">
+          {{ $t('no')}}
+        </button>
       </p>
-      <div style="font-weight: bold; text-align: center">Comment (optional):</div>
+      <div style="font-weight: bold; text-align: center">{{ $t('commentAnswer')}}:</div>
       <p>
         <textarea id="answer-comment-input" rows="2" cols="40" v-model.trim="answerComment" />
       </p>
     </div>
     <p v-if="collectiveStore.currentCollective">
-      <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">Back</router-link>
+      <router-link :to="{ name: 'collective-view', params: { collectiveName: collectiveStore.currentCollective.name }}">
+        {{ $t('back')}}
+      </router-link>
     </p>
     <table>
       <thead>
         <tr>
-          <th id="yes-header" class="light-background">Yes: {{ approval.yes }}</th>
-          <th id="abstain-header" class="light-background">Abstain: {{ approval.abstain }}</th>
-          <th id="no-header" class="light-background">No: {{ approval.no }}</th>
+          <th id="yes-header" class="light-background">{{ $t('yes')}}: {{ approval.yes }}</th>
+          <th id="abstain-header" class="light-background">{{ $t('abstain')}}: {{ approval.abstain }}</th>
+          <th id="no-header" class="light-background">{{ $t('no')}}: {{ approval.no }}</th>
         </tr>
       </thead>
       <td>

@@ -2,6 +2,8 @@ import { nextTick } from 'vue'
 import { mount } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { createTestingPinia } from '@pinia/testing'
+import { createI18n } from 'vue-i18n'
+import en from '../../src/locales/en.json'
 import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from '../../src/routes'
 import { useCollectiveStore } from '../../src/stores/CollectiveStore'
@@ -18,6 +20,15 @@ const pinia = createTestingPinia({
 const router = createRouter({
   history: createWebHistory(), // Use browser built-in history
   routes: routes
+})
+
+const messages = {
+  'en': en
+}
+
+const i18n = createI18n({
+  locale: 'en',
+  messages
 })
 
 vi.mock('axios')
@@ -43,7 +54,7 @@ describe('Test QuestionView', () => {
         questionName: 'q1'
       },
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     await nextTick()
@@ -58,7 +69,7 @@ describe('Test QuestionView', () => {
         questionName: 'qq'
       },
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     expect(wrapper.text()).toContain('Unknown question')
@@ -71,7 +82,7 @@ describe('Test QuestionView', () => {
         questionName: 'q1'
       },
       global: {
-        plugins: [pinia, router]
+        plugins: [i18n, pinia, router]
       }
     })
     await nextTick()
