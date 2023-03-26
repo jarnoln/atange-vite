@@ -376,14 +376,9 @@ export const EventService = {
       return null
     }
     notificationStore.notifyWaitOn('fetching_user_description', 'Fetching user description')
-    const config = {
-      headers: {
-        'Authorization': 'Token ' + sessionStore.token
-      }
-    }
     const path: string = '/api/user/' + username + '/description/'
     console.log('GET', path)
-    return apiClient.get(path, config)
+    return apiClient.get(path)
       .then(response => {
         notificationStore.notifyWaitOff('fetching_user_description')
         if (response.status === 200) {
