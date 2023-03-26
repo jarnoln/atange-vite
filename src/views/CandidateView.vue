@@ -29,10 +29,18 @@
     <table>
       <tr v-for="question in questionStore.questionItems" :key="question.name">
         <td>{{ question.order }}</td>
-        <td>{{ question.title }}</td>
+        <td>
+          <router-link v-if="collectiveStore.currentCollective" :to="{ name: 'question', params: { collectiveName: collectiveStore.currentCollective.name, questionName: question.name }}">
+            {{ question.title }}
+          </router-link>
+          <span v-else>{{ question.title }}</span>
+        </td>
         <td :class="'answer' + questionStore.getUserAnswerLetter(question.name, candidate.username)"
             class="answerCell">
-            {{ questionStore.getUserAnswerString(question.name, candidate.username) }}
+            {{ $t(questionStore.getUserAnswerString(question.name, candidate.username)) }}
+        </td>
+        <td v-if="questionStore.getUserAnswer(question.name, candidate.username)">
+          {{ questionStore.getUserAnswer(question.name, candidate.username)?.comment }}
         </td>
       </tr>
     </table>
@@ -83,6 +91,20 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+a:visited {
+  color: black;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 .answerCell {
   text-align: center;
   padding-left: 10px;
