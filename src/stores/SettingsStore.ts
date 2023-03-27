@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useSettingsStore = defineStore('SettingsStore', {
   state: () => ({
-    title: '',
+    title: 'Atange',
     allowRegister: false,
     oneCollective: false,
     usersCanCreateCollectives: false,

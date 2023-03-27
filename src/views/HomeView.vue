@@ -12,11 +12,11 @@ import { EventService } from '../services/EventService';
 
 const settingsStore = useSettingsStore()
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   if (!settingsStore.settingsLoaded) {
-    EventService.fetchGlobalSettings()
+    await EventService.fetchGlobalSettings()
+    document.title = settingsStore.title
   }
 })
-
 
 </script>
