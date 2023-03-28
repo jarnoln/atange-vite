@@ -6,7 +6,7 @@
     <table id="candidate-list-table">
       <thead>
         <tr>
-            <th>{{ $t('name') }}</th>
+            <th>{{ $t('candidate') }}</th>
             <th>{{ $t('party') }}</th>
             <th>{{ $t('district') }}</th>
             <th v-for="question in questionStore.questionItems" :key="question.name" class="text-center">
@@ -112,5 +112,4 @@ a:hover {
 .answerN {
   background-color: rgb(255, 100, 100);
 }
-
 </style>

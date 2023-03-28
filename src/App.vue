@@ -104,4 +104,13 @@ th {
   background-color: rgb(255, 50, 50);
   border-color: rgb(255, 50, 50);
 }
+
+tr:nth-child(even) {
+  background-color: rgb(240, 220, 255);
+}
+
+td {
+  padding: 2px 5px;
+}
+
 </style>
